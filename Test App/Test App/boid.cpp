@@ -6,6 +6,8 @@ boid::boid(gef::Platform& platform) :
 	platform_(platform),
 	mesh_(nullptr)
 {
+	curr_vel_.x = 0.0f;
+	curr_vel_.y = 0.0f;
 }
 
 
@@ -19,13 +21,20 @@ void boid::Initialise()
 	cube_.set_mesh(mesh_);
 }
 
+void boid::Update(float frame_time)
+{
+	//1. 
+}
+
+void boid::UpdatePosition(float frame_time)
+{
+
+}
+
 void boid::CleanUp()
 {
 	delete mesh_;
 	mesh_ = nullptr;
-
-	//delete cube_;
-	//cube_ = nullptr;
 }
 
 gef::Mesh* boid::CreateCubeMesh()
