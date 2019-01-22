@@ -42,8 +42,6 @@ private:
 
 	class gef::Renderer3D* renderer_3d_;
 
-	//boid* boid_;
-
 	flock* flock_1_;
 	int flock_size_1_;
 

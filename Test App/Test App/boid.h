@@ -7,8 +7,11 @@
 
 struct Vector2
 {
-	float x;
-	float y;
+	Vector2() { x_ = 0; y_ = 0; };
+	Vector2(float x, float y) { x_ = x; y_ = y; };
+
+	float x_;
+	float y_;
 };
 
 
@@ -36,10 +39,8 @@ private:
 
 	// Linear Motion Variables (SUVAT)
 	Vector2 accel_;
-	Vector2 prev_vel_;
-	Vector2 curr_vel_;
-	Vector2 prev_pos_;
-	Vector2 curr_pos_;
+	Vector2 prev_vel_, curr_vel_;
+	Vector2 prev_pos_, curr_pos_;
 	Vector2 displacement_;
 
 

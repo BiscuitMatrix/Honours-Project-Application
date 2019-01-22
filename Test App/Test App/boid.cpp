@@ -4,10 +4,9 @@
 
 boid::boid(gef::Platform& platform) :
 	platform_(platform),
-	mesh_(nullptr)
+	mesh_(nullptr),
+	curr_vel_(0.0f, 0.0f)
 {
-	curr_vel_.x = 0.0f;
-	curr_vel_.y = 0.0f;
 }
 
 
@@ -23,7 +22,7 @@ void boid::Initialise()
 
 void boid::Update(float frame_time)
 {
-	//1. 
+	
 }
 
 void boid::UpdatePosition(float frame_time)
