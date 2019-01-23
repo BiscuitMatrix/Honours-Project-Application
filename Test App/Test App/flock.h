@@ -15,8 +15,6 @@ public:
 	void Update(float frame_time);
 	void CleanUp();
 
-	float CalcDist();
-
 	int GetFlockSize() { return flock_size_; }
 
 	std::vector<boid>* boids_;

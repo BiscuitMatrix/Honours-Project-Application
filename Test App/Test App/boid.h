@@ -22,7 +22,7 @@ public:
 
 	gef::MeshInstance GetMeshInstance() { return cube_; };
 
-	Vector2 GetCurrPos() { return curr_pos_; };
+	gef::Vector2 GetCurrPos() { return curr_pos_; };
 
 private:
 	gef::Mesh* CreateCubeMesh();
@@ -31,10 +31,10 @@ private:
 
 
 	// Linear Motion Variables (SUVAT)
-	Vector2 accel_;
-	Vector2 prev_vel_, curr_vel_;
-	Vector2 prev_pos_, curr_pos_;
-	Vector2 displacement_;
+	gef::Vector2 accel_;
+	gef::Vector2 prev_vel_, curr_vel_;
+	gef::Vector2 prev_pos_, curr_pos_;
+	gef::Vector2 displacement_;
 
 
 	// 

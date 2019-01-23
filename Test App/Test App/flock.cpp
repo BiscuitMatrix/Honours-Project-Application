@@ -30,47 +30,40 @@ void flock::Update(float frame_time)
 	for (iterator_ = boids_->begin(); iterator_ != boids_->end(); iterator_++)
 	{
 		// Define the vectors for separation, cohesion and alignment
-		gef::Vector2 sep, coh, ali;
+		gef::Vector2 sep(0.0f, 0.0f), coh(0.0f, 0.0f), ali(0.0f, 0.0f);
 
 		// Define vectors to take the sume of positions and velocities of neighbouring boids respectively
 		gef::Vector2 sum_of_positions(0,0), sum_of_velocities(0, 0);
 		// Define counters to use to take the mean values of each of the primary vectors (sep, coh and ali)
-		int sep_counter, ali_counter, coh_counter = 0;
+		int sep_counter = 0, ali_counter = 0, coh_counter = 0;
 
 		// For every other boid in the flock
 		for (iterator_2_ = boids_->begin(); iterator_2_ != boids_->end(); iterator_2_++)
 		{
-			// 0. Take the difference position of the two boids
-			float dist = abs(CalcDist());
+			// 0. Find the Euclidean distance between the two boids
+			float distance = sqrtf(pow((iterator_2_->GetCurrPos().x - iterator_->GetCurrPos().x), 2) + pow((iterator_2_->GetCurrPos().y - iterator_->GetCurrPos().y), 2));
 			// 0.1. If the positions are close enough to interact
-			if (dist < 50.0f) 
+			if (distance < 50.0f) 
 			{
 				// 0.1.1. Check that we are not calculating against itself
 				if (iterator_ != iterator_2_)
 				{
 					// 1. Separation
-					if (dist < desired_separation_)
+					if (distance < desired_separation_)
 					{
-						// 1.1. Calculate the magnitude of the vector pointing away from the neighbour
-						// 1.1.1. Take the difference in position
+						// 1.1. Take the difference in position
 						gef::Vector2 difference;
-						difference.x_ = iterator_->GetCurrPos().x_ - iterator_2_->GetCurrPos().x_;
-						difference.y_ = iterator_->GetCurrPos().y_ - iterator_2_->GetCurrPos().y_;
-						// 1.1.2. Find the unit vector (or v hat) values in x and y 
-						float absolute_difference;
-						absolute_difference = std::sqrt(pow(difference.x_, 2) + pow(difference.y_, 2));
-						difference.x_ /= absolute_difference;
-						difference.y_ /= absolute_difference;
-
-						// 1.1.3. Weight by the distance between the two (Not sure why this is done but ok)
-						difference.x_ /= absolute_difference;
-						difference.y_ /= absolute_difference;
-						// 1.2. Calculate the direction of the vector pointing away from the neighbour
-
-						// 1.3. 
+						difference = (iterator_2_->GetCurrPos() - iterator_->GetCurrPos());
+						// 1.2. Find the unit vector (or v hat) values in x and y 
+						difference.Normalise();
+						// 1.3. Weight by the distance between the two
+						difference /= distance;
+						// 1.4. Add this difference to the separation value
+						sep += difference;
+						// 1.5. Increase the counter to use for division later
+						sep_counter++;
 					}
 					
-
 					// 2. Cohesion
 					// 2.1. Add the position of the neighbour to the sum of all neighbours positions
 					//sum_of_positions += neighbour_pos;
@@ -92,18 +85,33 @@ void flock::Update(float frame_time)
 			
 		}
 
+		// 1. Separation Part 2
+		if (sep_counter > 0)
+		{
+			// Calculate the mean of the acted forces
+			sep /= sep_counter;
+		}
+
+		if (sep.Length() < 0.0f)
+		{
+			// 1.1 Set the magnitude of the vector to "maxspeed"
+
+			// 1.2. Implement Reynolds: Steering = Desired - Velocity
+			sep.Normalise();
+			//sep *= maxspeed;
+			//sep -= velocity;
+			// limit the magnitude of the sep vector
+		}
+
+		// 2. Cohesion Part 2
+
+
+		// 3. Alignment Part 2
+
+
 		// Update the boid now all the information surrounding it has been updated
 		iterator_->Update(frame_time);
 	}
-}
-
-float flock::CalcDist()
-{
-	float result;
-	
-
-
-	return result;
 }
 
 void flock::CleanUp()
