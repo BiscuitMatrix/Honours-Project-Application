@@ -1,8 +1,2 @@
-﻿  app_camera.cpp
-  boid.cpp
-  flock.cpp
-  flocking_app.cpp
-  main.cpp
-  Generating Code...
-  LINK : \\StuHome\HomeDrive2$\1401562\HA_proj\Test App\Debug\Test App.exe not found or not built by the last incremental link; performing full link
+﻿  flocking_app.cpp
   Test App.vcxproj -> \\StuHome\HomeDrive2$\1401562\HA_proj\Test App\Debug\Test App.exe
