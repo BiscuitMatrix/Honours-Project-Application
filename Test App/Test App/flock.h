@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <maths/vector2.h>
 
 #include "boid.h"
 

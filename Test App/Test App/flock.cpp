@@ -30,10 +30,10 @@ void flock::Update(float frame_time)
 	for (iterator_ = boids_->begin(); iterator_ != boids_->end(); iterator_++)
 	{
 		// Define the vectors for separation, cohesion and alignment
-		Vector2 sep, coh, ali;
+		gef::Vector2 sep, coh, ali;
 
 		// Define vectors to take the sume of positions and velocities of neighbouring boids respectively
-		Vector2 sum_of_positions(0,0), sum_of_velocities(0, 0);
+		gef::Vector2 sum_of_positions(0,0), sum_of_velocities(0, 0);
 		// Define counters to use to take the mean values of each of the primary vectors (sep, coh and ali)
 		int sep_counter, ali_counter, coh_counter = 0;
 
@@ -52,7 +52,19 @@ void flock::Update(float frame_time)
 					if (dist < desired_separation_)
 					{
 						// 1.1. Calculate the magnitude of the vector pointing away from the neighbour
+						// 1.1.1. Take the difference in position
+						gef::Vector2 difference;
+						difference.x_ = iterator_->GetCurrPos().x_ - iterator_2_->GetCurrPos().x_;
+						difference.y_ = iterator_->GetCurrPos().y_ - iterator_2_->GetCurrPos().y_;
+						// 1.1.2. Find the unit vector (or v hat) values in x and y 
+						float absolute_difference;
+						absolute_difference = std::sqrt(pow(difference.x_, 2) + pow(difference.y_, 2));
+						difference.x_ /= absolute_difference;
+						difference.y_ /= absolute_difference;
 
+						// 1.1.3. Weight by the distance between the two (Not sure why this is done but ok)
+						difference.x_ /= absolute_difference;
+						difference.y_ /= absolute_difference;
 						// 1.2. Calculate the direction of the vector pointing away from the neighbour
 
 						// 1.3. 

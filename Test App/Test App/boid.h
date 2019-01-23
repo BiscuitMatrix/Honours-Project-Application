@@ -5,15 +5,7 @@
 #include <graphics/mesh.h>
 #include <graphics/primitive.h>
 
-struct Vector2
-{
-	Vector2() { x_ = 0; y_ = 0; };
-	Vector2(float x, float y) { x_ = x; y_ = y; };
-
-	float x_;
-	float y_;
-};
-
+#include <maths/vector2.h>
 
 class boid
 {
@@ -24,12 +16,13 @@ public:
 	void Initialise();
 
 	void Update(float frame_time);
-
 	void UpdatePosition(float frame_time);
 
 	void CleanUp();
 
 	gef::MeshInstance GetMeshInstance() { return cube_; };
+
+	Vector2 GetCurrPos() { return curr_pos_; };
 
 private:
 	gef::Mesh* CreateCubeMesh();

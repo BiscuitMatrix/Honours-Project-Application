@@ -75,7 +75,7 @@ void flocking_app::Render()
 	// draw meshes here
 	renderer_3d_->Begin();
 	// Iterate through the vector list of boids within the flock in order to render them all
-	for (flock_1_->iterator_ = flock_1_->boids_.begin(); flock_1_->iterator_ != flock_1_->boids_.end(); flock_1_->iterator_++)
+	for (flock_1_->iterator_ = flock_1_->boids_->begin(); flock_1_->iterator_ != flock_1_->boids_->end(); flock_1_->iterator_++)
 	{
 		renderer_3d_->DrawMesh(flock_1_->iterator_->GetMeshInstance());
 	}
