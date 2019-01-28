@@ -14,7 +14,9 @@ flock::~flock()
 
 void flock::Initialise(int flock_size)
 {
-	boids_ = &std::vector<boid>();
+	boid_ref_ = new boid(platform_);
+
+	boids_ = new std::vector<boid>();
 	boids_->begin();
 
 	for (int i = 0; i < flock_size; i++)
@@ -23,13 +25,14 @@ void flock::Initialise(int flock_size)
 		boid_->Initialise();
 		boids_->push_back(*boid_);
 	}
+	int size = boids_->size();
 }
 
 void flock::Update(float frame_time)
 {
-	// Run boids algoirthm
-	RunBoidsAlgorithm();
-
+	// Run boids algorithm
+	boid_ref_->RunBoidsAlgorithm(boids_, frame_time);
+	
 	// Run the Genetic Algorithm
 
 }

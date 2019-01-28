@@ -6,6 +6,7 @@ namespace gef
 	const Vector2 Vector2::kZero(0.0f, 0.0f);
 	const Vector2 Vector2::kOne(1.0f, 1.0f);
 
+	
 
 	void Vector2::Normalise()
 	{
@@ -40,4 +41,20 @@ namespace gef
 		return x*_vec.x + y*_vec.y;
 	}
 
+#pragma region Additional Functionality for Flocking
+	void Vector2::Limit(float lim)
+	{
+		// Reference: https://forum.libcinder.org/topic/limit-the-magnitude-of-vector
+
+		float length = Length();
+
+		if ((length > lim) && (length > 0.0f) && (lim > 0.0f))
+		{
+			float ratio = lim / length;
+
+			x *= ratio;
+			y *= ratio;
+		}
+	}
+#pragma endregion
 }

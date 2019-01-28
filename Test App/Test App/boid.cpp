@@ -30,9 +30,12 @@ void boid::Initialise()
 
 	desired_separation_ = 0.05f;
 	// Reynolds Weights
-	sep_wgt_, coh_wgt_, ali_wgt = 1.5f;
+	sep_wgt_ = 1.5f, coh_wgt_ = 1.5f, ali_wgt = 1.5f;
 	// Reynolds Counters
 	sep_counter_, ali_counter_, coh_counter_ = 0;
+	// Limits
+	max_speed_ = 2.0f;
+	max_force_ = 0.03f;
 
 	scale_.SetIdentity();
 	rotation_.SetIdentity();
@@ -59,13 +62,13 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 		// For every other boid in the flock
 		for (iterator_2_ = boid->begin(); iterator_2_ != boid->end(); iterator_2_++)
 		{
-			// 0. Find the Euclidean distance between the two boids
-			float distance = sqrtf(pow((iterator_2_->GetCurrPos().x - iterator_->GetCurrPos().x), 2) + pow((iterator_2_->GetCurrPos().y - iterator_->GetCurrPos().y), 2));
-			// 0.1. If the positions are close enough to interact
-			if (distance < 50.0f)
+			// 0.1.1. Check that we are not calculating against itself
+			if (iterator_ != iterator_2_)
 			{
-				// 0.1.1. Check that we are not calculating against itself
-				if (iterator_ != iterator_2_)
+				// 0. Find the Euclidean distance between the two boids
+				float distance = sqrtf(pow((iterator_2_->GetCurrPos().x - iterator_->GetCurrPos().x), 2) + pow((iterator_2_->GetCurrPos().y - iterator_->GetCurrPos().y), 2));
+				// 0.1. If the positions are close enough to interact
+				if (distance < 50.0f)
 				{
 					// 1. Separation
 					if (distance < desired_separation_)
@@ -107,13 +110,14 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 
 		if (sep.Length() < 0.0f)
 		{
-			// 1.1 Set the magnitude of the vector to "maxspeed"
-
-			// 1.2. Implement Reynolds: Steering = Desired - Velocity
+			// Implement Reynolds: Steering = Desired - Velocity
 			sep.Normalise();
-			//sep *= maxspeed;
-			//sep -= velocity;
-			// limit the magnitude of the sep vector -> sep.limit(maxforce);
+			// Multiply the force by the max speed variable
+			sep *= max_speed_;
+			// Minus the current velocity of the boid
+			sep -= curr_vel_;
+			// limit the magnitude of the sep vector
+			sep.Limit(max_force_);
 		}
 
 
@@ -133,14 +137,12 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 		{
 			// Calculate the mean of the acted forces
 			ali /= (float)ali_counter_;
-#
-			// 1.1 Set the magnitude of the vector to "maxspeed"
 
-			// 1.2. Implement Reynolds: Steering = Desired - Velocity
+			// Implement Reynolds: Steering = Desired - Velocity
 			ali.Normalise();
-			//ali *= maxspeed;
-			//ali -= velocity;
-			// limit the magnitude of the sep vector -> ali.limit(maxforce);
+			ali *= max_speed_;
+			ali -= curr_vel_;
+			ali.Limit(max_force_);
 		}
 		else
 		{
@@ -158,16 +160,18 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 		iterator_->SetAlignmentVector(&ali);
 
 		// Update the boid now all the information surrounding it has been updated
-		//iterator_->Update(frame_time);
+		iterator_->Update(frame_time);
 	}
 }
 
 void boid::UpdatePosition(float frame_time)
 {
 	// Add the accelerativew forces together
-	accel_ = *separation_ + *cohesion_ + *alignment_;
+	accel_ = *separation_ + *cohesion_;// +*alignment_;
 	// s = ut + 1/2(a(t^2))
 	curr_pos_ = (prev_pos_ * frame_time) + ((accel_*pow(frame_time, 2)) / 2);
+
+	prev_pos_ = curr_pos_;
 
 	gef::Vector4 pos = gef::Vector4(curr_pos_.x, curr_pos_.y, 0.0f);
 	translation_.SetTranslation(pos);

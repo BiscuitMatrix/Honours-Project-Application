@@ -34,7 +34,7 @@ void flocking_app::Init()
 	InitFont();
 
 	flock_1_ = new flock(platform_);
-	flock_size_1_ = 2;
+	flock_size_1_ = 10;
 	flock_1_->Initialise(flock_size_1_);
 
 	SetupCamera();
@@ -58,6 +58,8 @@ void flocking_app::CleanUp()
 bool flocking_app::Update(float frame_time)
 {
 	fps_ = 1.0f / frame_time;
+
+	flock_1_->Update(frame_time);
 
 	return true;
 }

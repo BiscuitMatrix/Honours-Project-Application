@@ -48,6 +48,10 @@ private:
 	float sep_wgt_, coh_wgt_, ali_wgt;
 	// Reynolds Counters
 	int sep_counter_, ali_counter_, coh_counter_;
+	// Limits
+	float max_force_, max_speed_;
+
+	int id_;
 
 	// Linear Motion Variables (SUVAT)
 	gef::Vector2 accel_;

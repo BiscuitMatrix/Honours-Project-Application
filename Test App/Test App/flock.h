@@ -25,6 +25,8 @@ public:
 private:
 	int flock_size_;
 
+	boid* boid_ref_;
+
 	gef::Platform& platform_;
 };
 

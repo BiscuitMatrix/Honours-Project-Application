@@ -20,6 +20,9 @@ public:
 	Vector2& operator *= (const float scalar);
 	Vector2& operator /= (const float scalar);
 
+
+	void Limit(float lim);
+
 	void Normalise();
 	float LengthSqr() const;
 	float Length() const;
