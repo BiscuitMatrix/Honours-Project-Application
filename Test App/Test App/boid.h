@@ -6,6 +6,7 @@
 #include <graphics/scene.h>
 #include <graphics/primitive.h>
 
+#include <maths/vector4.h>
 #include <maths/vector2.h>
 
 class boid
@@ -20,6 +21,8 @@ public:
 
 	void RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time);
 
+	void CollDetect();
+
 	void UpdatePosition(float frame_time);
 
 	void CleanUp();
@@ -31,6 +34,15 @@ public:
 	void SetSeparationVector(gef::Vector2* sep) { separation_ = sep; };
 	void SetCohesionVector(gef::Vector2* coh) { cohesion_ = coh; };
 	void SetAlignmentVector(gef::Vector2* ali) { alignment_ = ali; };
+
+	void SetTranslation(gef::Vector4 pos) 
+	{ 
+		prev_pos_ = curr_pos_;
+		translation_.SetTranslation(pos); 
+		curr_pos_.x = translation_.m(3, 0);
+		curr_pos_.y = translation_.m(3, 2);
+	};
+	gef::Matrix44 GetTranslation() { return translation_; };
 
 private:
 	gef::Mesh* CreateCubeMesh();
