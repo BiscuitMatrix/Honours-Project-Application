@@ -29,10 +29,10 @@ void boid::Initialise()
 	alignment_ = &gef::Vector2(0.0f, 0.0f);
 
 	// Desired amount of separation
-	desired_separation_ = 1.5f;
+	desired_separation_ = 8.0f;
 
 	// Reynolds Weights
-	sep_wgt_ = 1.5f, coh_wgt_ = 1.5f, ali_wgt_ = 1.5f;
+	sep_wgt_ = 5.5f, coh_wgt_ = 5.5f, ali_wgt_ = 1.5f;
 	// Reynolds Counters
 	sep_counter_, ali_counter_, coh_counter_ = 0;
 	// Limits
@@ -46,7 +46,7 @@ void boid::Initialise()
 
 void boid::Update(float frame_time)
 {
-	UpdatePosition(frame_time);
+	//UpdatePosition(frame_time);
 }
 
 void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
@@ -75,7 +75,7 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 				// 0. Find the Euclidean distance between the two boids
 				float distance = sqrtf(pow((iterator_2_->GetCurrPos().x - iterator_->GetCurrPos().x), 2) + pow((iterator_2_->GetCurrPos().y - iterator_->GetCurrPos().y), 2));
 				// 0.1. If the positions are close enough to interact
-				if (distance < 50.0f)
+				if (distance < 30.0f)
 				{
 					// 1. Separation
 					if (distance < iterator_->desired_separation_)
@@ -174,7 +174,8 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 
 		iterator_->curr_pos_ += iterator_->displacement_;
 
-		iterator_->WrapAround(30.0f, 30.0f);
+		//iterator_->WrapAround(30.0f, 30.0f);
+		iterator_->Bounds(30.0f, 30.0f);
 		
 		// Set the boids prev values so we can reference the values of the previous frame in the next frame
 		iterator_->prev_vel_ = iterator_->curr_vel_;
@@ -183,9 +184,11 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 		gef::Vector4 pos = gef::Vector4(iterator_->curr_pos_.x, 0.0f, iterator_->curr_pos_.y);
 		iterator_->translation_.SetTranslation(pos);
 
-		//gef::Matrix44 final_transform = iterator_->scale_ * iterator_->rotation_ * iterator_->translation_;
-		gef::Matrix44 final_transform = iterator_->translation_;
+		gef::Matrix44 final_transform = iterator_->scale_ * iterator_->rotation_ * iterator_->translation_;
+		//gef::Matrix44 final_transform = iterator_->translation_;
 		iterator_->cube_->set_transform(final_transform);
+
+		//iterator_->UpdatePosition(frame_time);
 	}
 }
 
@@ -213,19 +216,29 @@ void boid::WrapAround(float x, float z)
 void boid::UpdatePosition(float frame_time)
 {
 	// Add the accelerativew forces together
-	accel_ = *separation_;// -*cohesion_ - *alignment_;
+	//accel_ = *separation_ + *cohesion_ + *alignment_;
+
+	// v = u + at
+	//curr_vel_ = (prev_vel_) + (accel_ * frame_time);
+
 	// s = ut + 1/2(a(t^2))
-	displacement_ = (prev_pos_ * frame_time) + ((accel_*pow(frame_time, 2)) / 2);
+	//displacement_ = (prev_vel_ * frame_time) + ((accel_*pow(frame_time, 2)) / 2.0f);
 
-	curr_pos_ += displacement_;
+	//curr_pos_ += displacement_;
 
-	prev_pos_ = curr_pos_;
+	//WrapAround(30.0f, 30.0f);
+	//Bounds(30.0f, 30.0f);
 
-	gef::Vector4 pos = gef::Vector4(curr_pos_.x, 0.0f, curr_pos_.y);
-	translation_.SetTranslation(pos);
+	// Set the boids prev values so we can reference the values of the previous frame in the next frame
+	//prev_vel_ = curr_vel_;
+	//prev_pos_ = curr_pos_;
 
-	gef::Matrix44 final_transform = scale_ * rotation_ * translation_;
-	cube_->set_transform(final_transform);
+	//gef::Vector4 pos = gef::Vector4(curr_pos_.x, 0.0f, curr_pos_.y);
+	//translation_.SetTranslation(pos);
+
+	//gef::Matrix44 final_transform = iterator_->scale_ * iterator_->rotation_ * iterator_->translation_;
+	//gef::Matrix44 final_transform = translation_;
+	//cube_->set_transform(final_transform);
 }
 
 void boid::CleanUp()

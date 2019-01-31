@@ -33,9 +33,15 @@ void flocking_app::Init()
 
 	InitFont();
 
+	
+
 	flock_1_ = new flock(platform_);
 	flock_size_1_ = 30;
 	flock_1_->Initialise(flock_size_1_);
+
+	//flock_2_ = new flock(platform_);
+	//flock_size_2_ = 10;
+	//flock_2_->Initialise(flock_size_2_);
 
 	cam_1_.SetupCamera();
 	SetupLights();
@@ -60,6 +66,7 @@ bool flocking_app::Update(float frame_time)
 	fps_ = 1.0f / frame_time;
 
 	flock_1_->Update(frame_time);
+	//flock_2_->Update(frame_time);
 
 	return true;
 }
@@ -83,7 +90,11 @@ void flocking_app::Render()
 	{
 		renderer_3d_->DrawMesh(*flock_1_->iterator_->GetMeshInstance());
 	}
-	//renderer_3d_->DrawMesh(boid_->GetMeshInstance());
+	// Iterate through the vector list of boids within the flock in order to render them all
+	//for (flock_2_->iterator_ = flock_2_->boids_->begin(); flock_2_->iterator_ != flock_2_->boids_->end(); flock_2_->iterator_++)
+	//{
+	//	renderer_3d_->DrawMesh(*flock_2_->iterator_->GetMeshInstance());
+	//}
 	renderer_3d_->End();
 
 	// setup the sprite renderer, but don't clear the frame buffer

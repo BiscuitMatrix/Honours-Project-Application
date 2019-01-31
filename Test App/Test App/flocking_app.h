@@ -44,9 +44,13 @@ private:
 
 	flock* flock_1_;
 	int flock_size_1_;
+	std::vector<boid>* boids_1_;
+	boid* boid_ref_1_;
 
 	flock* flock_2_;
 	int flock_size_2_;
+	std::vector<boid>* boids_2_;
+	boid* boid_ref_2_;
 
 	app_camera cam_1_;
 };
