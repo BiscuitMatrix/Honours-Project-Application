@@ -28,14 +28,16 @@ void boid::Initialise()
 	cohesion_ = &gef::Vector2(0.0f, 0.0f);
 	alignment_ = &gef::Vector2(0.0f, 0.0f);
 
-	desired_separation_ = 1.0f;
+	// Desired amount of separation
+	desired_separation_ = 1.5f;
+
 	// Reynolds Weights
-	sep_wgt_ = 1.5f, coh_wgt_ = 1.5f, ali_wgt = 1.5f;
+	sep_wgt_ = 1.5f, coh_wgt_ = 1.5f, ali_wgt_ = 1.5f;
 	// Reynolds Counters
 	sep_counter_, ali_counter_, coh_counter_ = 0;
 	// Limits
-	max_speed_ = 2.0f;
-	max_force_ = 0.03f;
+	max_speed_ = 5.0f;
+	max_force_ = 1.0f;
 
 	scale_.SetIdentity();
 	rotation_.SetIdentity();
@@ -51,9 +53,6 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 {
 	for (iterator_ = boid->begin(); iterator_ != boid->end(); iterator_++)
 	{
-		// Define the vectors for separation, cohesion and alignment
-		//gef::Vector2  sep(0.0f, 0.0f), coh(0.0f, 0.0f), ali(0.0f, 0.0f);
-
 		// Set the vectors for separation cohesion and alignment for this boid to zero
 		iterator_->separation_->x = 0.0f;
 		iterator_->separation_->y = 0.0f;
@@ -83,7 +82,7 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 					{
 						// 1.1. Take the difference in position
 						gef::Vector2 difference;
-						difference = (iterator_2_->GetCurrPos() - iterator_->GetCurrPos());
+						difference = (iterator_->GetCurrPos() - iterator_2_->GetCurrPos());
 						// 1.2. Find the unit vector (or v hat) values in x and y 
 						difference.Normalise();
 						// 1.3. Weight by the distance between the two
@@ -110,13 +109,13 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 		}
 
 		// 1. Separation Part 2
-		if (iterator_->sep_counter_ > 0)
+		if (iterator_->sep_counter_ > 1)
 		{
 			// Calculate the mean of the acted forces
 			*iterator_->separation_ /= (float)iterator_->sep_counter_;
 		}
 
-		if (iterator_->separation_->Length() < 0.0f)
+		if (iterator_->separation_->Length() > 0.0f)
 		{
 			// Implement Reynolds: Steering = Desired - Velocity
 			iterator_->separation_->Normalise();
@@ -130,7 +129,7 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 
 
 		// 2. Cohesion Part 2
-		if (iterator_->coh_counter_ > 0)
+		if (iterator_->coh_counter_ > 1)
 		{
 			// Calculate the mean of the acted forces
 			*iterator_->cohesion_ /= (float)iterator_->coh_counter_;
@@ -143,9 +142,11 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 		// 3. Alignment Part 2
 		if (iterator_->ali_counter_ > 0)
 		{
-			// Calculate the mean of the acted forces
-			*iterator_->alignment_ /= (float)iterator_->ali_counter_;
-
+			if (iterator_->ali_counter_ > 1)
+			{
+				// Calculate the mean of the acted forces
+				*iterator_->alignment_ /= (float)iterator_->ali_counter_;
+			}
 			// Implement Reynolds: Steering = Desired - Velocity
 			iterator_->alignment_->Normalise();
 			*iterator_->alignment_ *= max_speed_;
@@ -158,17 +159,33 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 		}
 
 		// Weight the final value
-		*iterator_->separation_ *= sep_wgt_;
-		*iterator_->cohesion_ *= 1.5f;
-		*iterator_->alignment_ *= 1.5f;
+		*iterator_->separation_ *= iterator_->sep_wgt_;
+		*iterator_->cohesion_ *= iterator_->coh_wgt_;
+		*iterator_->alignment_ *= iterator_->ali_wgt_;
 
-		// Update the boids values with the changes
-		//iterator_->SetSeparationVector(&sep);
-		//iterator_->SetCohesionVector(&coh);
-		//iterator_->SetAlignmentVector(&ali);
+		// Add the accelerativew forces together
+		iterator_->accel_ = *iterator_->separation_ + *iterator_->cohesion_ + *iterator_->alignment_;
 
-		// Update the boid now all the information surrounding it has been updated
-		iterator_->Update(frame_time);
+		// v = u + at
+		iterator_->curr_vel_ = (iterator_->prev_vel_) + (iterator_->accel_ * frame_time);
+
+		// s = ut + 1/2(a(t^2))
+		iterator_->displacement_ = (iterator_->prev_vel_ * frame_time) + ((iterator_->accel_*pow(frame_time, 2)) / 2.0f);
+
+		iterator_->curr_pos_ += iterator_->displacement_;
+
+		iterator_->WrapAround(30.0f, 30.0f);
+		
+		// Set the boids prev values so we can reference the values of the previous frame in the next frame
+		iterator_->prev_vel_ = iterator_->curr_vel_;
+		iterator_->prev_pos_ = iterator_->curr_pos_;
+
+		gef::Vector4 pos = gef::Vector4(iterator_->curr_pos_.x, 0.0f, iterator_->curr_pos_.y);
+		iterator_->translation_.SetTranslation(pos);
+
+		//gef::Matrix44 final_transform = iterator_->scale_ * iterator_->rotation_ * iterator_->translation_;
+		gef::Matrix44 final_transform = iterator_->translation_;
+		iterator_->cube_->set_transform(final_transform);
 	}
 }
 
@@ -176,10 +193,27 @@ void boid::CollDetect()
 {
 }
 
+void boid::Bounds(float x, float z)
+{
+	if (curr_pos_.x > x) curr_pos_.x = x;
+	if (curr_pos_.x < -x) curr_pos_.x = -x;
+	if (curr_pos_.y > z) curr_pos_.y = z;
+	if (curr_pos_.y < -z) curr_pos_.y = -z;
+}
+
+void boid::WrapAround(float x, float z)
+{
+	if (curr_pos_.x < -x) curr_pos_.x = x;
+	if (curr_pos_.y < -z) curr_pos_.y = z;
+	if (curr_pos_.x > x) curr_pos_.x = -x;
+	if (curr_pos_.y > z) curr_pos_.y = -z;
+}
+
+
 void boid::UpdatePosition(float frame_time)
 {
 	// Add the accelerativew forces together
-	accel_ = *separation_ + *cohesion_ + *alignment_;
+	accel_ = *separation_;// -*cohesion_ - *alignment_;
 	// s = ut + 1/2(a(t^2))
 	displacement_ = (prev_pos_ * frame_time) + ((accel_*pow(frame_time, 2)) / 2);
 

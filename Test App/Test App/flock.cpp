@@ -24,7 +24,21 @@ void flock::Initialise(int flock_size)
 	{
 		boid* boid_ = new boid(platform_);
 		boid_->Initialise();
-		gef::Vector4 pos = gef::Vector4((float)i / 2.0f, 0.0f, (float)i / 2.0f);
+		float x = ((float)i / 5.0f) * 3.14159f;
+		float y = ((float)i / 5.0f) * 3.14159f;
+		gef::Vector4 pos;
+		if (i <= 10)
+		{
+			pos = gef::Vector4(sin(x), 0.0f, cos(y));
+		}
+		else if (i > 10 && i <= 20)
+		{
+			pos = gef::Vector4(2.0f*sin(x), 0.0f, 2.0f*cos(y));
+		}
+		else if (i > 20 && i <= 30)
+		{
+			pos = gef::Vector4(3.0f*sin(x), 0.0f, 3.0f*cos(y));
+		}
 		boid_->SetTranslation(pos);
 		boid_->GetMeshInstance()->set_transform(boid_->GetTranslation());
 		boids_->push_back(*boid_);

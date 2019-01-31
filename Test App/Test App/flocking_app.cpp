@@ -34,10 +34,10 @@ void flocking_app::Init()
 	InitFont();
 
 	flock_1_ = new flock(platform_);
-	flock_size_1_ = 10;
+	flock_size_1_ = 30;
 	flock_1_->Initialise(flock_size_1_);
 
-	SetupCamera();
+	cam_1_.SetupCamera();
 	SetupLights();
 }
 
@@ -67,10 +67,12 @@ bool flocking_app::Update(float frame_time)
 void flocking_app::Render()
 {
 	gef::Matrix44 projection_matrix;
+	//gef::Matrix44 orthographic_matrix;
 	gef::Matrix44 view_matrix;
 
-	projection_matrix = platform_.PerspectiveProjectionFov(camera_fov, (float)platform_.width() / (float)platform_.height(), near_plane, far_plane);
-	view_matrix.LookAt(camera_eye, camera_lookat, camera_up);
+	//orthographic_matrix = platform_.OrthographicFrustum();
+	projection_matrix = platform_.PerspectiveProjectionFov(cam_1_.camera_fov, (float)platform_.width() / (float)platform_.height(), cam_1_.near_plane, cam_1_.far_plane);
+	view_matrix.LookAt(cam_1_.camera_eye, cam_1_.camera_lookat, cam_1_.camera_up);
 	renderer_3d_->set_projection_matrix(projection_matrix);
 	renderer_3d_->set_view_matrix(view_matrix);
 
@@ -121,15 +123,6 @@ void flocking_app::SetupLights()
 	default_shader_data.AddPointLight(default_point_light);
 }
 
-void flocking_app::SetupCamera()
-{
-	// initialise the camera settings
-	camera_eye = gef::Vector4(5.0f, 5.0f, 5.0f);
-	camera_lookat = gef::Vector4(0.0f, 0.0f, 0.0f);
-	camera_up = gef::Vector4(0.0f, 1.0f, 0.0f);
-	camera_fov = gef::DegToRad(45.0f);
-	near_plane = 0.01f;
-	far_plane = 1000.f;
-}
+
 
 

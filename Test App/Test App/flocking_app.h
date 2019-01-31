@@ -8,6 +8,7 @@
 #include <graphics/mesh_instance.h>
 
 #include "flock.h"
+#include "app_camera.h"
 
 namespace gef
 {
@@ -33,7 +34,6 @@ private:
 	void CleanUpFont();
 	void DrawHUD();
 	void SetupLights();
-	void SetupCamera();
 
 	gef::SpriteRenderer* sprite_renderer_;
 	gef::Font* font_;
@@ -48,11 +48,6 @@ private:
 	flock* flock_2_;
 	int flock_size_2_;
 
-	gef::Vector4 camera_eye;
-	gef::Vector4 camera_lookat;
-	gef::Vector4 camera_up;
-	float camera_fov;
-	float near_plane;
-	float far_plane;
+	app_camera cam_1_;
 };
 

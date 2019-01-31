@@ -22,6 +22,8 @@ public:
 	void RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time);
 
 	void CollDetect();
+	void Bounds(float x, float z);
+	void WrapAround(float x, float z);
 
 	void UpdatePosition(float frame_time);
 
@@ -57,7 +59,7 @@ private:
 	gef::Vector2 *separation_, *cohesion_, *alignment_;
 	float desired_separation_;
 	// Reynolds Weights
-	float sep_wgt_, coh_wgt_, ali_wgt;
+	float sep_wgt_, coh_wgt_, ali_wgt_;
 	// Reynolds Counters
 	int sep_counter_, ali_counter_, coh_counter_;
 	// Limits
