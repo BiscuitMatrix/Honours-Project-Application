@@ -19,18 +19,12 @@ public:
 
 	int GetFlockSize() { return flock_size_; }
 
-	std::vector<boid>::iterator GetIterator() { return iterator_; }
-	std::vector<boid>* GetBoids() { return boids_; }
-
-	std::vector<boid>* boids_;
-	std::vector<boid>::iterator iterator_;
+	std::vector<boid> boids_;
 
 private:
 	int flock_size_;
 
-	
-
-	boid* boid_ref_;
+	float desired_separation_;
 
 	gef::Platform& platform_;
 };

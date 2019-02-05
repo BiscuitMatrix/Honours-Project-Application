@@ -56,5 +56,11 @@ namespace gef
 			y *= ratio;
 		}
 	}
+
+	void Vector2::Reset()
+	{
+		x = 0.0f;
+		y = 0.0f;
+	}
 #pragma endregion
 }

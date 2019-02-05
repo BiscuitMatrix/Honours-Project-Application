@@ -22,6 +22,7 @@ public:
 
 
 	void Limit(float lim);
+	void Reset();
 
 	void Normalise();
 	float LengthSqr() const;

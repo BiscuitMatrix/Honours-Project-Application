@@ -1,6 +1,7 @@
 #include "boid.h"
 
-
+float boid::max_speed_ = 5.0f;
+float boid::max_force_ = 1.0f;
 
 boid::boid(gef::Platform& platform) :
 	platform_(platform),
@@ -34,10 +35,10 @@ void boid::Initialise()
 	// Reynolds Weights
 	sep_wgt_ = 5.5f, coh_wgt_ = 1.5f, ali_wgt_ = 1.5f;
 	// Reynolds Counters
-	sep_counter_, ali_counter_, coh_counter_ = 0;
+	//sep_counter_, ali_counter_, coh_counter_ = 0;
 	// Limits
-	max_speed_ = 5.0f;
-	max_force_ = 1.0f;
+	//max_speed_ = 5.0f;
+	//max_force_ = 1.0f;
 
 	scale_.SetIdentity();
 	rotation_.SetIdentity();
@@ -49,9 +50,12 @@ void boid::Update(float frame_time)
 	//UpdatePosition(frame_time);
 }
 
-void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
+void boid::RunBoidsAlgorithm(std::vector<boid>* boid_, float frame_time)
 {
-	for (iterator_ = boid->begin(); iterator_ != boid->end(); iterator_++)
+	int sep_counter_, ali_counter_, coh_counter_;
+
+
+	for (std::vector<boid>::iterator iterator_ = boid_->begin(); iterator_ != boid_->end(); iterator_++)
 	{
 		// Set the vectors for separation cohesion and alignment for this boid to zero
 		iterator_->separation_->x = 0.0f;
@@ -62,12 +66,12 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 		iterator_->alignment_->y = 0.0f;
 
 		// Define vectors to take the sume of positions and velocities of neighbouring boids respectively
-		gef::Vector2 sum_of_positions(0, 0), sum_of_velocities(0, 0);
+		//gef::Vector2 sum_of_positions(0, 0), sum_of_velocities(0, 0);
 		// Define counters to use to take the mean values of each of the primary vectors (sep, coh and ali)
 		sep_counter_ = 0, ali_counter_ = 0, coh_counter_ = 0;
 
 		// For every other boid in the flock
-		for (iterator_2_ = boid->begin(); iterator_2_ != boid->end(); iterator_2_++)
+		for (std::vector<boid>::iterator iterator_2_ = boid_->begin(); iterator_2_ != boid_->end(); iterator_2_++)
 		{
 			// 0.1.1. Check that we are not calculating against itself
 			if (iterator_ != iterator_2_)
@@ -90,29 +94,29 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 						// 1.4. Add this difference to the separation value
 						*iterator_->separation_ += difference;
 						// 1.5. Increase the counter to use for division later
-						iterator_->sep_counter_++;
+						sep_counter_++;
 					}
 
 					// 2. Cohesion
 					// 2.1. Add the position of the neighbour to the sum of all neighbours positions
 					*iterator_->cohesion_ += iterator_2_->GetCurrPos();
 					// 2.2. increase the counter to use for division later
-					iterator_->coh_counter_++;
+					coh_counter_++;
 
 					// 3. Alignment
 					// 3.1. add the velocity of the neighbour to the sum of all neighbours velocities
 					*iterator_->alignment_ += iterator_2_->GetCurrPos();
 					// 3.2. increase the counter to for division later
-					iterator_->ali_counter_++;
+					ali_counter_++;
 				}
 			}
 		}
 
 		// 1. Separation Part 2
-		if (iterator_->sep_counter_ > 1)
+		if (sep_counter_ > 1)
 		{
 			// Calculate the mean of the acted forces
-			*iterator_->separation_ /= (float)iterator_->sep_counter_;
+			*iterator_->separation_ /= (float)sep_counter_;
 		}
 
 		if (iterator_->separation_->Length() > 0.0f)
@@ -129,10 +133,10 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 
 
 		// 2. Cohesion Part 2
-		if (iterator_->coh_counter_ > 1)
+		if (coh_counter_ > 1)
 		{
 			// Calculate the mean of the acted forces
-			*iterator_->cohesion_ /= (float)iterator_->coh_counter_;
+			*iterator_->cohesion_ /= (float)coh_counter_;
 		}
 		else
 		{
@@ -140,12 +144,12 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 		}
 
 		// 3. Alignment Part 2
-		if (iterator_->ali_counter_ > 0)
+		if (ali_counter_ > 0)
 		{
-			if (iterator_->ali_counter_ > 1)
+			if (ali_counter_ > 1)
 			{
 				// Calculate the mean of the acted forces
-				*iterator_->alignment_ /= (float)iterator_->ali_counter_;
+				*iterator_->alignment_ /= (float)ali_counter_;
 			}
 			// Implement Reynolds: Steering = Desired - Velocity
 			iterator_->alignment_->Normalise();

@@ -19,7 +19,7 @@ public:
 
 	void Update(float frame_time);
 
-	void RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time);
+	static void RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time);
 
 	void CollDetect();
 	void Bounds(float x, float z);
@@ -52,18 +52,15 @@ private:
 	class gef::Mesh* mesh_;
 	gef::MeshInstance* cube_;
 
-	std::vector<boid>::iterator iterator_;
-	std::vector<boid>::iterator iterator_2_;
-
 	// Reynolds Forces
 	gef::Vector2 *separation_, *cohesion_, *alignment_;
 	float desired_separation_;
 	// Reynolds Weights
 	float sep_wgt_, coh_wgt_, ali_wgt_;
 	// Reynolds Counters
-	int sep_counter_, ali_counter_, coh_counter_;
+	//int sep_counter_, ali_counter_, coh_counter_;
 	// Limits
-	float max_force_, max_speed_;
+	static float max_force_, max_speed_;
 
 	int id_;
 
