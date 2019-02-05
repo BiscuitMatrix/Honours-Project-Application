@@ -39,6 +39,14 @@ void flock::Initialise(int flock_size)
 		{
 			pos = gef::Vector4(3.0f*sin(x), 0.0f, 3.0f*cos(y));
 		}
+		else if (i > 30 && i <= 40)
+		{
+			pos = gef::Vector4(4.0f*sin(x), 0.0f, 4.0f*cos(y));
+		}
+		else if (i > 40 && i <= 50)
+		{
+			pos = gef::Vector4(5.0f*sin(x), 0.0f, 5.0f*cos(y));
+		}
 		boid_->SetTranslation(pos);
 		boid_->GetMeshInstance()->set_transform(boid_->GetTranslation());
 		boids_->push_back(*boid_);

@@ -32,7 +32,7 @@ void boid::Initialise()
 	desired_separation_ = 8.0f;
 
 	// Reynolds Weights
-	sep_wgt_ = 5.5f, coh_wgt_ = 5.5f, ali_wgt_ = 1.5f;
+	sep_wgt_ = 5.5f, coh_wgt_ = 1.5f, ali_wgt_ = 1.5f;
 	// Reynolds Counters
 	sep_counter_, ali_counter_, coh_counter_ = 0;
 	// Limits
@@ -163,7 +163,7 @@ void boid::RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time)
 		*iterator_->cohesion_ *= iterator_->coh_wgt_;
 		*iterator_->alignment_ *= iterator_->ali_wgt_;
 
-		// Add the accelerativew forces together
+		// Add the accelerative forces together
 		iterator_->accel_ = *iterator_->separation_ + *iterator_->cohesion_ + *iterator_->alignment_;
 
 		// v = u + at

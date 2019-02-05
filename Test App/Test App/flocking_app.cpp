@@ -36,10 +36,10 @@ void flocking_app::Init()
 	
 
 	flock_1_ = new flock(platform_);
-	flock_size_1_ = 30;
+	flock_size_1_ = 50;
 	flock_1_->Initialise(flock_size_1_);
 
-	//flock_2_ = new flock(platform_);
+	flock_2_ = new flock(platform_);
 	//flock_size_2_ = 10;
 	//flock_2_->Initialise(flock_size_2_);
 
