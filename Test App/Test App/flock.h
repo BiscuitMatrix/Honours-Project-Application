@@ -15,7 +15,9 @@ public:
 	void Update(float frame_time);
 	void CleanUp();
 
-	void RunBoidsAlgorithm();
+	void RunBoidsAlgorithm(float frame_time);
+
+	void PhysicsCalculations();
 
 	int GetFlockSize() { return flock_size_; }
 
@@ -25,6 +27,11 @@ private:
 	int flock_size_;
 
 	float desired_separation_;
+	float interaction_distance_;
+	// Limits
+	static float max_force_, max_speed_;
+	// Reynolds Weights
+	float sep_wgt_, coh_wgt_, ali_wgt_;
 
 	gef::Platform& platform_;
 };
