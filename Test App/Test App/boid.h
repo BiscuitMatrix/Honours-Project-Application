@@ -5,6 +5,7 @@
 #include <graphics/mesh.h>
 #include <graphics/scene.h>
 #include <graphics/primitive.h>
+#include <graphics/material.h>
 
 #include <maths/vector4.h>
 #include <maths/vector2.h>
@@ -62,11 +63,15 @@ public:
 
 	gef::MeshInstance* GetCube() { return cube_; };
 
+	UInt32 GetColour() { return colour_; }
+	void SetColour(UInt32 abgr) { colour_ = abgr; }
+
 private:
 	gef::Mesh* CreateCubeMesh();
 
 	class gef::Mesh* mesh_;
 	gef::MeshInstance* cube_;
+	UInt32 colour_;
 
 	// Linear Motion Variables (SUVAT)
 	gef::Vector2 accel_;
@@ -80,5 +85,7 @@ private:
 	gef::Matrix44 translation_;
 
 	gef::Platform& platform_;
+
+	gef::Material* material_;
 };
 

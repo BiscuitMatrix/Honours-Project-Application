@@ -42,12 +42,16 @@ private:
 
 	class gef::Renderer3D* renderer_3d_;
 
+	gef::Sprite* environment_;
+
 	flock* flock_1_;
+	gef::Vector2 flock_1_pos_;
 	int flock_size_1_;
 	std::vector<boid>* boids_1_;
 	boid* boid_ref_1_;
 
 	flock* flock_2_;
+	gef::Vector2 flock_2_pos_;
 	int flock_size_2_;
 	std::vector<boid>* boids_2_;
 	boid* boid_ref_2_;

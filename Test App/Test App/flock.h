@@ -11,7 +11,7 @@ public:
 	flock(gef::Platform& platform);
 	~flock();
 
-	void Initialise(int flock_size);
+	void Initialise(gef::Vector2 flock_centre, int flock_size);
 	void Update(float frame_time);
 	void CleanUp();
 

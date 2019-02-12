@@ -13,22 +13,22 @@ flock::~flock()
 }
 
 
-void flock::Initialise(int flock_size)
+void flock::Initialise(gef::Vector2 flock_centre, int flock_size)
 {
 	for (int i = 0; i < flock_size; i++)
 	{
-		desired_separation_ = 4.0f;
-		interaction_distance_ = 10.0f;
+		desired_separation_ = 5.0f;
+		interaction_distance_ = 50.0f;
 
 		// Reynolds Weights
-		sep_wgt_ = 1.5f, coh_wgt_ = 1.5f, ali_wgt_ = 1.5f;
+		sep_wgt_ = 5.5f, coh_wgt_ = 1.5f, ali_wgt_ = 1.5f;
 
 		boid boid_(platform_);
 		boid_.Initialise();
 
 		#pragma region boid_placement
-		float x = ((float)i / 5.0f) * 3.14159f;
-		float y = ((float)i / 5.0f) * 3.14159f;
+		float x = ((float)i / 10.0f) * 3.14159f;
+		float y = ((float)i / 10.0f) * 3.14159f;
 
 		gef::Vector2 pos;
 
@@ -37,11 +37,11 @@ void flock::Initialise(int flock_size)
 		// Generate the concentric cirles of boids
 		if (mult > 0)
 		{
-			pos = gef::Vector2( ((float)(mult + 1))*sin(x), ((float)(mult + 1))*cos(y) );
+			pos = gef::Vector2( flock_centre.x + ((float)(mult + 1))*sin(x), flock_centre.y + ((float)(mult + 1))*cos(y) );
 		}
 		else
 		{
-			pos = gef::Vector2(sin(x), cos(y));
+			pos = gef::Vector2(flock_centre.x + sin(x), flock_centre.y + cos(y));
 		}
 		
 		boid_.SetTranslation(pos);
@@ -66,8 +66,6 @@ void flock::RunBoidsAlgorithm(float frame_time)
 {
 	// Reynolds Forces
 	gef::Vector2 separation_(0.0f, 0.0f), cohesion_(0.0f, 0.0f), alignment_(0.0f, 0.0f);
-	// Define vectors to take the sume of positions and velocities of neighbouring boids respectively
-	gef::Vector2 sum_of_positions(0.0f, 0.0f), sum_of_velocities(0.0f, 0.0f);
 	// Reynolds Counters
 	int sep_counter_ = 0, ali_counter_ = 0, coh_counter_ = 0;
 
@@ -77,8 +75,6 @@ void flock::RunBoidsAlgorithm(float frame_time)
 		#pragma region Reset_Values 
 		// Reset the vectors for separation cohesion and alignment for this boid to zero
 		separation_.Reset(), cohesion_.Reset(), alignment_.Reset();
-		// Define vectors to take the sume of positions and velocities of neighbouring boids respectively
-		sum_of_positions.Reset(), sum_of_velocities.Reset();
 		// Define counters to use to take the mean values of each of the primary vectors (sep, coh and ali)
 		sep_counter_ = 0, ali_counter_ = 0, coh_counter_ = 0;
 		#pragma endregion
@@ -139,7 +135,7 @@ void flock::RunBoidsAlgorithm(float frame_time)
 			// Multiply the force by the max speed variable
 			separation_ *= max_speed_;
 			// Minus the current velocity of the boid
-			separation_ -= iterator_->GetCurrPos();
+			separation_ -= iterator_->GetCurrVel();
 			// limit the magnitude of the sep vector
 			separation_.Limit(max_force_);
 		}
@@ -167,7 +163,7 @@ void flock::RunBoidsAlgorithm(float frame_time)
 			// Implement Reynolds: Steering = Desired - Velocity
 			alignment_.Normalise();
 			alignment_ *= max_speed_;
-			alignment_ -= iterator_->GetCurrPos();
+			alignment_ -= iterator_->GetCurrVel();
 			alignment_.Limit(max_force_);
 		}
 		else
@@ -185,19 +181,19 @@ void flock::RunBoidsAlgorithm(float frame_time)
 		iterator_->SetAccel(acceleration);
 
 		// v = u + at
-		gef::Vector2 v = (iterator_->GetPrevVel()) + (iterator_->GetAccel() * frame_time);
-		iterator_->SetCurrVel(v);
+		gef::Vector2 velocity = (iterator_->GetPrevVel()) + (acceleration * frame_time);
+		iterator_->SetCurrVel(velocity);
 
 		// s = ut + 1/2(a(t^2))
-		gef::Vector2 s = (iterator_->GetPrevVel() * frame_time) + ((iterator_->GetAccel()*pow(frame_time, 2)) / 2.0f);
-		iterator_->SetDisplacement(s);
+		gef::Vector2 displacement = (iterator_->GetPrevVel() * frame_time) + ((acceleration*pow(frame_time, 2)) / 2.0f);
+		iterator_->SetDisplacement(displacement);
 
 		// x1 = x0 + s
 		gef::Vector2 new_pos = iterator_->GetCurrPos() + iterator_->GetDisplacement();
 		iterator_->SetCurrPos(new_pos);
 
-		//iterator_->WrapAround(30.0f, 30.0f);
-		iterator_->Bounds(30.0f, 30.0f);
+		//iterator_->WrapAround(55.0f, 30.0f);
+		iterator_->Bounds(55.0f, 30.0f);
 
 		// Set the boids prev values so we can reference the values of the previous frame in the next frame
 		iterator_->SetPrevVel(iterator_->GetCurrVel());
@@ -207,10 +203,7 @@ void flock::RunBoidsAlgorithm(float frame_time)
 		iterator_->SetTranslation(iterator_->GetCurrPos());
 
 		gef::Matrix44 final_transform = iterator_->GetScale() * iterator_->GetRotation() * iterator_->GetTranslation();
-		//gef::Matrix44 final_transform = iterator_->translation_;
 		iterator_->GetCube()->set_transform(final_transform);
-
-		//iterator_->UpdatePosition(frame_time);
 	}
 }
 

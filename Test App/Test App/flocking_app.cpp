@@ -33,14 +33,25 @@ void flocking_app::Init()
 
 	InitFont();
 
+	// Environment setup
+	environment_ = new gef::Sprite();
+	environment_->set_position(960.0f / 2.0f, 544.0f / 2.0f, 100.0f);
+	environment_->set_width(940.0f);
+	environment_->set_height(524.0f);
+
+	// Flock 1 settings
 	flock_1_ = new flock(platform_);
-	flock_size_1_ = 80;
-	flock_1_->Initialise(flock_size_1_);
+	flock_1_pos_ = gef::Vector2(-40.0f, 20.0f);
+	flock_size_1_ = 40;
+	flock_1_->Initialise(flock_1_pos_, flock_size_1_);
 
-	/*flock_2_ = new flock(platform_);
-	flock_size_2_ = 10;
-	flock_2_->Initialise(flock_size_2_);*/
+	// Flock 2 settings
+	flock_2_ = new flock(platform_);
+	flock_2_pos_ = gef::Vector2(40.0f, -20.0f);
+	flock_size_2_ = 40;
+	flock_2_->Initialise(flock_2_pos_, flock_size_2_);
 
+	// Camera Setup
 	cam_1_.SetupCamera();
 	SetupLights();
 }
@@ -50,6 +61,13 @@ void flocking_app::CleanUp()
 	flock_1_->CleanUp();
 	delete flock_1_;
 	flock_1_ = nullptr;
+
+	flock_2_->CleanUp();
+	delete flock_2_;
+	flock_2_ = nullptr;
+
+	delete environment_;
+	environment_ = nullptr;
 
 	CleanUpFont();
 	delete sprite_renderer_;
@@ -64,7 +82,7 @@ bool flocking_app::Update(float frame_time)
 	fps_ = 1.0f / frame_time;
 
 	flock_1_->Update(frame_time);
-	//flock_2_->Update(frame_time);
+	flock_2_->Update(frame_time);
 
 	return true;
 }
@@ -75,6 +93,9 @@ void flocking_app::Render()
 	//gef::Matrix44 orthographic_matrix;
 	gef::Matrix44 view_matrix;
 
+	gef::Material object_colour;
+	UInt32 colour;
+
 	//orthographic_matrix = platform_.OrthographicFrustum();
 	projection_matrix = platform_.PerspectiveProjectionFov(cam_1_.camera_fov, (float)platform_.width() / (float)platform_.height(), cam_1_.near_plane, cam_1_.far_plane);
 	view_matrix.LookAt(cam_1_.camera_eye, cam_1_.camera_lookat, cam_1_.camera_up);
@@ -83,21 +104,33 @@ void flocking_app::Render()
 
 	// draw meshes here
 	renderer_3d_->Begin();
+	
+	// Set the colour of flock 1
+	colour = 0xFF0000FF;
+	object_colour.set_colour(colour);
+	renderer_3d_->set_override_material(&object_colour);
 	// Iterate through the vector list of boids within the flock in order to render them all
 	for (std::vector<boid>::iterator iterator_ = flock_1_->boids_.begin(); iterator_ != flock_1_->boids_.end(); iterator_++)
 	{
 		renderer_3d_->DrawMesh(*iterator_->GetMeshInstance());
 	}
+
+	// Set the colour of the flock 2
+	colour = 0xFFFF0000;
+	object_colour.set_colour(colour);
+	renderer_3d_->set_override_material(&object_colour);
 	// Iterate through the vector list of boids within the flock in order to render them all
-	/*for (std::vector<boid>::iterator iterator_ = flock_2_->boids_.begin(); iterator_ != flock_2_->boids_.end(); iterator_++)
+	for (std::vector<boid>::iterator iterator_ = flock_2_->boids_.begin(); iterator_ != flock_2_->boids_.end(); iterator_++)
 	{
 		renderer_3d_->DrawMesh(*iterator_->GetMeshInstance());
-	}*/
+	}
+
 	renderer_3d_->End();
 
 	// setup the sprite renderer, but don't clear the frame buffer
 	// draw 2D sprites here
 	sprite_renderer_->Begin(false);
+	sprite_renderer_->DrawSprite(*environment_);
 	DrawHUD();
 	sprite_renderer_->End();
 }
@@ -117,7 +150,7 @@ void flocking_app::DrawHUD()
 	if (font_)
 	{
 		// display frame rate
-		font_->RenderText(sprite_renderer_, gef::Vector4(850.0f, 510.0f, -0.9f), 1.0f, 0xffffffff, gef::TJ_LEFT, "FPS: %.1f", fps_);
+		font_->RenderText(sprite_renderer_, gef::Vector4(850.0f, 510.0f, -0.9f), 1.0f, 0xffff00ff, gef::TJ_LEFT, "FPS: %.1f", fps_);
 	}
 }
 
