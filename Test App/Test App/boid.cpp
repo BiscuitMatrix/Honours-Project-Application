@@ -275,24 +275,24 @@ gef::Mesh* boid::CreateCubeMesh()
 	gef::Primitive* primitive = mesh->GetPrimitive(0);
 
 	const UInt32 indices[] = {
-		// Back
-		0, 1, 2,
-		2, 3, 0,
-		// Front
-		6, 5, 4,
-		4, 7, 6,
-		// Left
-		2, 7, 3,
-		2, 6, 7,
+		//// Back
+		//0, 1, 2,
+		//2, 3, 0,
+		//// Front
+		//6, 5, 4,
+		//4, 7, 6,
+		//// Left
+		//2, 7, 3,
+		//2, 6, 7,
 		// Right
-		0, 4, 1,
-		5, 1, 4,
+		//0, 4, 1,
+		//5, 1, 4,
 		// Top
 		6, 2, 1,
-		5, 6, 1,
+		5, 6, 1
 		// Bottom
-		0, 3, 7,
-		0, 7, 4
+		//0, 3, 7,
+		//0, 7, 4
 	};
 
 	primitive->InitIndexBuffer(platform_, static_cast<const void*>(indices), sizeof(indices) / sizeof(UInt32), sizeof(UInt32));

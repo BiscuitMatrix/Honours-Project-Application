@@ -9,6 +9,7 @@
 
 #include <maths/vector4.h>
 #include <maths/vector2.h>
+#include <maths/math_utils.h>
 
 class boid
 {
@@ -59,6 +60,10 @@ public:
 	};
 	gef::Matrix44 GetTranslation() { return translation_; };
 	gef::Matrix44 GetScale() { return scale_; };
+	void SetRotation(float angle)
+	{
+		rotation_.RotationY(gef::DegToRad(angle));
+	};
 	gef::Matrix44 GetRotation() { return rotation_; };
 
 	gef::MeshInstance* GetCube() { return cube_; };

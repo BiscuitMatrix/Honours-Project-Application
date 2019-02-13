@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <math.h>
 #include <maths/vector2.h>
 
 #include "boid.h"
@@ -17,7 +18,8 @@ public:
 
 	void RunBoidsAlgorithm(float frame_time);
 
-	void PhysicsCalculations();
+	void PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time);
+	gef::Vector2 AvoidBoundary(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time);
 
 	int GetFlockSize() { return flock_size_; }
 

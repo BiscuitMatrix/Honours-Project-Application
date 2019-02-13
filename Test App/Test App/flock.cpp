@@ -45,7 +45,7 @@ void flock::Initialise(gef::Vector2 flock_centre, int flock_size)
 		}
 		
 		boid_.SetTranslation(pos);
-		boid_.GetMeshInstance()->set_transform(boid_.GetTranslation());
+		boid_.GetMeshInstance()->set_transform(boid_.GetRotation()*boid_.GetTranslation());
 		#pragma endregion
 
 		boids_.push_back(boid_);
@@ -171,45 +171,73 @@ void flock::RunBoidsAlgorithm(float frame_time)
 			alignment_ = gef::Vector2(0.0f, 0.0f);
 		}
 
-		// Weight the final value
-		separation_ *= sep_wgt_;
-		cohesion_ *= coh_wgt_;
-		alignment_ *= ali_wgt_;
+		// Weight the final values for each force
+		separation_ *= sep_wgt_, cohesion_ *= coh_wgt_, alignment_ *= ali_wgt_;
 
 		// Add the accelerative forces together
 		gef::Vector2 acceleration = separation_ + cohesion_ + alignment_;
-		iterator_->SetAccel(acceleration);
 
-		// v = u + at
-		gef::Vector2 velocity = (iterator_->GetPrevVel()) + (acceleration * frame_time);
-		iterator_->SetCurrVel(velocity);
-
-		// s = ut + 1/2(a(t^2))
-		gef::Vector2 displacement = (iterator_->GetPrevVel() * frame_time) + ((acceleration*pow(frame_time, 2)) / 2.0f);
-		iterator_->SetDisplacement(displacement);
-
-		// x1 = x0 + s
-		gef::Vector2 new_pos = iterator_->GetCurrPos() + iterator_->GetDisplacement();
-		iterator_->SetCurrPos(new_pos);
-
-		//iterator_->WrapAround(55.0f, 30.0f);
-		iterator_->Bounds(55.0f, 30.0f);
-
-		// Set the boids prev values so we can reference the values of the previous frame in the next frame
-		iterator_->SetPrevVel(iterator_->GetCurrVel());
-		iterator_->SetPrevPos(iterator_->GetCurrPos());
-
-		// Update the translation of the object within the scene
-		iterator_->SetTranslation(iterator_->GetCurrPos());
-
-		gef::Matrix44 final_transform = iterator_->GetScale() * iterator_->GetRotation() * iterator_->GetTranslation();
-		iterator_->GetCube()->set_transform(final_transform);
+		// Update Physics
+		PhysicsCalculations(iterator_, acceleration, frame_time);
 	}
 }
 
-void flock::PhysicsCalculations()
+void flock::PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time)
 {
+	iterator_->SetAccel(accel);
 
+	// v = u + at
+	gef::Vector2 velocity = (iterator_->GetPrevVel()) + (accel * frame_time);
+	iterator_->SetCurrVel(velocity);
+
+	// s = ut + 1/2(a(t^2))
+	gef::Vector2 displacement = (iterator_->GetPrevVel() * frame_time) + ((accel*pow(frame_time, 2)) / 2.0f);
+	iterator_->SetDisplacement(displacement);
+
+	// x1 = x0 + s
+	gef::Vector2 new_pos = iterator_->GetCurrPos() + iterator_->GetDisplacement();
+	iterator_->SetCurrPos(new_pos);
+
+	//iterator_->WrapAround(55.0f, 30.0f);
+	iterator_->Bounds(55.0f, 30.0f);
+
+	// Set the boids prev values so we can reference the values of the previous frame in the next frame
+	iterator_->SetPrevVel(iterator_->GetCurrVel());
+	iterator_->SetPrevPos(iterator_->GetCurrPos());
+
+	// Update the translation of the object within the scene
+	iterator_->SetTranslation(iterator_->GetCurrPos());
+
+	gef::Matrix44 final_transform = iterator_->GetScale() * iterator_->GetRotation() * iterator_->GetTranslation();
+	iterator_->GetCube()->set_transform(final_transform);
+}
+
+gef::Vector2 flock::AvoidBoundary(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time)
+{
+	float x_boundary = 55.0f;
+	float z_boundary = 30.0f;
+
+	gef::Vector2 result = accel;
+
+	if (iterator_->GetCurrPos().x > (x_boundary - 5.0f))
+	{
+		result.x = accel.x - (1.0f / (x_boundary - iterator_->GetCurrPos().x));
+	}
+	else if (iterator_->GetCurrPos().x < -(x_boundary - 5.0f))
+	{
+		result.x = accel.x + (1.0f / (x_boundary - iterator_->GetCurrPos().x));
+	}
+
+	if (iterator_->GetCurrPos().y >(z_boundary - 3.0f))
+	{
+		result.y = accel.y - (1.0f / (z_boundary - iterator_->GetCurrPos().y));
+	}
+	else if (iterator_->GetCurrPos().y < -(z_boundary - 3.0f))
+	{
+		result.y = accel.y + (1.0f / (z_boundary - iterator_->GetCurrPos().y));
+	}
+
+	return result;
 }
 
 void flock::CleanUp()
