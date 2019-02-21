@@ -30,6 +30,9 @@
     <ClCompile Include="app_camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="food.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="flocking_app.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="app_camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="food.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

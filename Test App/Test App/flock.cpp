@@ -184,6 +184,9 @@ void flock::RunBoidsAlgorithm(float frame_time)
 
 void flock::PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time)
 {
+	//iterator_->WrapAround(55.0f, 30.0f);
+	iterator_->Bounds(55.0f, 30.0f);
+
 	iterator_->SetAccel(accel);
 
 	// v = u + at
@@ -198,8 +201,7 @@ void flock::PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vect
 	gef::Vector2 new_pos = iterator_->GetCurrPos() + iterator_->GetDisplacement();
 	iterator_->SetCurrPos(new_pos);
 
-	//iterator_->WrapAround(55.0f, 30.0f);
-	iterator_->Bounds(55.0f, 30.0f);
+	
 
 	// Set the boids prev values so we can reference the values of the previous frame in the next frame
 	iterator_->SetPrevVel(iterator_->GetCurrVel());
