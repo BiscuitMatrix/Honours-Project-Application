@@ -18,7 +18,7 @@ void flock::Initialise(gef::Vector2 flock_centre, int flock_size)
 	for (int i = 0; i < flock_size; i++)
 	{
 		desired_separation_ = 5.0f;
-		interaction_distance_ = 50.0f;
+		interaction_distance_ = 10.0f;
 
 		// Reynolds Weights
 		sep_wgt_ = 5.5f, coh_wgt_ = 1.5f, ali_wgt_ = 1.5f;
