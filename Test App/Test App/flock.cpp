@@ -184,10 +184,11 @@ void flock::RunBoidsAlgorithm(float frame_time)
 
 void flock::PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time)
 {
+	// This calculates the updated position using semi-implicit Euler
+	iterator_->SetAccel(accel);
+
 	//iterator_->WrapAround(55.0f, 30.0f);
 	iterator_->Bounds(55.0f, 30.0f);
-
-	iterator_->SetAccel(accel);
 
 	// v = u + at
 	gef::Vector2 velocity = (iterator_->GetPrevVel()) + (accel * frame_time);
@@ -200,8 +201,6 @@ void flock::PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vect
 	// x1 = x0 + s
 	gef::Vector2 new_pos = iterator_->GetCurrPos() + iterator_->GetDisplacement();
 	iterator_->SetCurrPos(new_pos);
-
-	
 
 	// Set the boids prev values so we can reference the values of the previous frame in the next frame
 	iterator_->SetPrevVel(iterator_->GetCurrVel());

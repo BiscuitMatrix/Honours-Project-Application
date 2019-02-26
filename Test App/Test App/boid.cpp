@@ -36,16 +36,40 @@ void boid::CollDetect()
 
 void boid::Bounds(float x, float z)
 {
-	//if (curr_pos_.x > x) curr_pos_.x = x;
-	//if (curr_pos_.x < -x) curr_pos_.x = -x;
-	//if (curr_pos_.y > z) curr_pos_.y = z;
-	//if (curr_pos_.y < -z) curr_pos_.y = -z;
-
-	if (curr_pos_.x > x && curr_vel_.x > 0.0f && accel_.x >= 0.0f)
+	if (curr_pos_.x > x)
 	{
-		//curr_vel_.x = -(curr_vel_.x);
-		accel_.x = -(accel_.x);
+		curr_pos_.x = x;
+		prev_pos_.x = x;
+		curr_vel_.x = 0.0f;
+		accel_.x = -accel_.x;
 	}
+	if (curr_pos_.x < -x)
+	{
+		curr_pos_.x = -x;
+		prev_pos_.x = -x;
+		curr_vel_.x = 0.0f;
+		accel_.x = -accel_.x;
+	}
+	if (curr_pos_.y > z)
+	{
+		curr_pos_.y = z;
+		prev_pos_.y = z;
+		curr_vel_.y = 0.0f;
+		accel_.y = -accel_.y;
+	}
+	if (curr_pos_.y < -z)
+	{
+		curr_pos_.y = -z;
+		prev_pos_.y = -z;
+		curr_vel_.y = 0.0f;
+		accel_.y = -accel_.y;
+	}
+
+	//if (curr_pos_.x > x && curr_vel_.x > 0.0f && accel_.x >= 0.0f)
+	//{
+	//	//curr_vel_.x = -(curr_vel_.x);
+	//	accel_.x = -(accel_.x);
+	//}
 	//if (curr_pos_.x < -x && curr_vel_.x < 0.0f) 
 	//	curr_pos_.x = -(curr_vel_.x);
 	//if (curr_pos_.y > z && curr_vel_.y > 0.0f) curr_vel_.y = -(curr_vel_.y);

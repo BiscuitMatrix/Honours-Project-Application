@@ -128,6 +128,7 @@
     <ClCompile Include="flock.cpp" />
     <ClCompile Include="flocking_app.cpp" />
     <ClCompile Include="food.cpp" />
+    <ClCompile Include="genetic_algorithm.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +137,7 @@
     <ClInclude Include="flock.h" />
     <ClInclude Include="flocking_app.h" />
     <ClInclude Include="food.h" />
+    <ClInclude Include="genetic_algorithm.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\gef\d3d11\default_3d_shader_ps.hlsl">
