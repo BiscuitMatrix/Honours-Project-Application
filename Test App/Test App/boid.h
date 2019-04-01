@@ -46,9 +46,6 @@ public:
 	// Acceleration Mutators
 	gef::Vector2 GetAccel() { return accel_; };
 	void SetAccel(gef::Vector2 new_accel) { accel_ = new_accel; };
-	// Displacement Mutators
-	gef::Vector2 GetDisplacement() { return displacement_; };
-	void SetDisplacement(gef::Vector2 new_displacement) { displacement_ = new_displacement; };
 
 
 	void SetTranslation(gef::Vector2 pos) 
@@ -82,7 +79,6 @@ private:
 	gef::Vector2 accel_;
 	gef::Vector2 prev_vel_, curr_vel_;
 	gef::Vector2 prev_pos_, curr_pos_;
-	gef::Vector2 displacement_;
 
 	// Transformation Matrices
 	gef::Matrix44 scale_;

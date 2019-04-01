@@ -29,11 +29,12 @@ private:
 	int flock_size_;
 
 	float desired_separation_;
+	float food_detection_;
 	float interaction_distance_;
 	// Limits
 	static float max_force_, max_speed_;
-	// Reynolds Weights
-	float sep_wgt_, coh_wgt_, ali_wgt_;
+	// Flocking Weights
+	float sep_wgt_, coh_wgt_, ali_wgt_, feed_wgt_, neut_wgt_, free_wgt_, bnd_wgt_, ob_av_wgt_;
 
 	gef::Platform& platform_;
 };

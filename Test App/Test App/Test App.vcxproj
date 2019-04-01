@@ -124,20 +124,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="app_camera.cpp" />
+    <ClCompile Include="barnes_hut.cpp" />
     <ClCompile Include="boid.cpp" />
+    <ClCompile Include="bsp_tree.cpp" />
     <ClCompile Include="flock.cpp" />
     <ClCompile Include="flocking_app.cpp" />
     <ClCompile Include="food.cpp" />
     <ClCompile Include="genetic_algorithm.cpp" />
+    <ClCompile Include="leaf.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_camera.h" />
+    <ClInclude Include="barnes_hut.h" />
     <ClInclude Include="boid.h" />
+    <ClInclude Include="bsp_tree.h" />
     <ClInclude Include="flock.h" />
     <ClInclude Include="flocking_app.h" />
     <ClInclude Include="food.h" />
     <ClInclude Include="genetic_algorithm.h" />
+    <ClInclude Include="leaf.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\gef\d3d11\default_3d_shader_ps.hlsl">

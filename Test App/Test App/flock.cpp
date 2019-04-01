@@ -18,6 +18,7 @@ void flock::Initialise(gef::Vector2 flock_centre, int flock_size)
 	for (int i = 0; i < flock_size; i++)
 	{
 		desired_separation_ = 5.0f;
+		food_detection_ = 4.0f;
 		interaction_distance_ = 10.0f;
 
 		// Reynolds Weights
@@ -65,16 +66,16 @@ void flock::Update(float frame_time)
 void flock::RunBoidsAlgorithm(float frame_time)
 {
 	// Reynolds Forces
-	gef::Vector2 separation_(0.0f, 0.0f), cohesion_(0.0f, 0.0f), alignment_(0.0f, 0.0f);
+	gef::Vector2 separation_(0.0f, 0.0f), cohesion_(0.0f, 0.0f), alignment_(0.0f, 0.0f), food_attraction_(0.0f, 0.0f);
 	// Reynolds Counters
-	int sep_counter_ = 0, ali_counter_ = 0, coh_counter_ = 0;
+	int sep_counter_ = 0, ali_counter_ = 0, coh_counter_ = 0, food_counter_ = 0;
 
 
 	for (std::vector<boid>::iterator iterator_ = boids_.begin(); iterator_ != boids_.end(); iterator_++)
 	{
 		#pragma region Reset_Values 
 		// Reset the vectors for separation cohesion and alignment for this boid to zero
-		separation_.Reset(), cohesion_.Reset(), alignment_.Reset();
+		separation_.Reset(), cohesion_.Reset(), alignment_.Reset(), food_attraction_.kZero;
 		// Define counters to use to take the mean values of each of the primary vectors (sep, coh and ali)
 		sep_counter_ = 0, ali_counter_ = 0, coh_counter_ = 0;
 		#pragma endregion
@@ -86,12 +87,12 @@ void flock::RunBoidsAlgorithm(float frame_time)
 			if (iterator_ != iterator_2_)
 			{
 				// 0. Find the Euclidean distance between the two boids
-				float distance = sqrtf(pow((iterator_2_->GetCurrPos().x - iterator_->GetCurrPos().x), 2) + pow((iterator_2_->GetCurrPos().y - iterator_->GetCurrPos().y), 2));
+				float euclidean_distance = sqrtf(pow((iterator_2_->GetCurrPos().x - iterator_->GetCurrPos().x), 2) + pow((iterator_2_->GetCurrPos().y - iterator_->GetCurrPos().y), 2));
 				// 0.1. If the positions are close enough to interact
-				if (distance < interaction_distance_)
+				if (euclidean_distance < interaction_distance_)
 				{
 					// 1. Separation
-					if (distance < desired_separation_)
+					if (euclidean_distance < desired_separation_)
 					{
 						// 1.1. Take the difference in position
 						gef::Vector2 difference;
@@ -99,7 +100,7 @@ void flock::RunBoidsAlgorithm(float frame_time)
 						// 1.2. Find the unit vector (or v hat) values in x and y 
 						difference.Normalise();
 						// 1.3. Weight by the distance between the two
-						difference /= distance;
+						difference /= euclidean_distance;
 						// 1.4. Add this difference to the separation value
 						separation_ += difference;
 						// 1.5. Increase the counter to use for division later
@@ -118,6 +119,25 @@ void flock::RunBoidsAlgorithm(float frame_time)
 					// 3.2. increase the counter to for division later
 					ali_counter_++;
 				}
+			}
+		}
+
+		// For each food item in the scene
+		for (std::vector<boid>::iterator iterator_2_ = food_.begin(); iterator_2_ != food_.end(); iterator_2_++)
+		{
+			// 0. Find the Euclidean distance between the boid and the food resource
+			float euclidean_distance = sqrtf(pow((iterator_2_->GetCurrPos().x - iterator_->GetCurrPos().x), 2) + pow((iterator_2_->GetCurrPos().y - iterator_->GetCurrPos().y), 2));
+
+			// 4. Food attraction
+			if (euclidean_distance < food_detection_) // Boid would like to know your location
+			{
+				// 4.1 Take a vector for the difference in position
+				gef::Vector2 difference;
+				difference = (iterator_2_->GetCurrPos() - iterator_->GetCurrPos());
+
+
+				// 4.?. Increase the counter to use for division later
+				food_counter_++;
 			}
 		}
 
@@ -190,16 +210,13 @@ void flock::PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vect
 	//iterator_->WrapAround(55.0f, 30.0f);
 	iterator_->Bounds(55.0f, 30.0f);
 
+	// Semi-Impicit Euler Method for updated position calculations:
 	// v = u + at
 	gef::Vector2 velocity = (iterator_->GetPrevVel()) + (accel * frame_time);
 	iterator_->SetCurrVel(velocity);
 
-	// s = ut + 1/2(a(t^2))
-	gef::Vector2 displacement = (iterator_->GetPrevVel() * frame_time) + ((accel*pow(frame_time, 2)) / 2.0f);
-	iterator_->SetDisplacement(displacement);
-
-	// x1 = x0 + s
-	gef::Vector2 new_pos = iterator_->GetCurrPos() + iterator_->GetDisplacement();
+	// x1 = x0 + s     (s = ut + 1/2(a(t^2)))
+	gef::Vector2 new_pos = iterator_->GetCurrPos() + (iterator_->GetPrevVel() * frame_time) + ((accel*pow(frame_time, 2)) / 2.0f);
 	iterator_->SetCurrPos(new_pos);
 
 	// Set the boids prev values so we can reference the values of the previous frame in the next frame
