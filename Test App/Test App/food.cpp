@@ -2,7 +2,8 @@
 
 
 
-food::food()
+food::food(gef::Platform& platform) :
+	platform_(platform)
 {
 }
 
@@ -10,3 +11,9 @@ food::food()
 food::~food()
 {
 }
+
+void food::Initialise(int resource_count)
+{
+}
+
+

@@ -4,7 +4,7 @@ boid::boid(gef::Platform& platform) :
 	platform_(platform),
 	mesh_(nullptr),
 	cube_(nullptr),
-	curr_vel_(0.0f, 0.0f)
+	vel_(0.0f, 0.0f)
 {
 }
 
@@ -36,32 +36,28 @@ void boid::CollDetect()
 
 void boid::Bounds(float x, float z)
 {
-	if (curr_pos_.x > x)
+	if (pos_.x > x)
 	{
-		curr_pos_.x = x;
-		prev_pos_.x = x;
-		curr_vel_.x = 0.0f;
+		pos_.x = x;
+		vel_.x = 0.0f;
 		accel_.x = -accel_.x;
 	}
-	if (curr_pos_.x < -x)
+	if (pos_.x < -x)
 	{
-		curr_pos_.x = -x;
-		prev_pos_.x = -x;
-		curr_vel_.x = 0.0f;
+		pos_.x = -x;
+		vel_.x = 0.0f;
 		accel_.x = -accel_.x;
 	}
-	if (curr_pos_.y > z)
+	if (pos_.y > z)
 	{
-		curr_pos_.y = z;
-		prev_pos_.y = z;
-		curr_vel_.y = 0.0f;
+		pos_.y = z;
+		vel_.y = 0.0f;
 		accel_.y = -accel_.y;
 	}
-	if (curr_pos_.y < -z)
+	if (pos_.y < -z)
 	{
-		curr_pos_.y = -z;
-		prev_pos_.y = -z;
-		curr_vel_.y = 0.0f;
+		pos_.y = -z;
+		vel_.y = 0.0f;
 		accel_.y = -accel_.y;
 	}
 
@@ -78,10 +74,10 @@ void boid::Bounds(float x, float z)
 
 void boid::WrapAround(float x, float z)
 {
-	if (curr_pos_.x < -x) curr_pos_.x = x;
-	if (curr_pos_.y < -z) curr_pos_.y = z;
-	if (curr_pos_.x > x) curr_pos_.x = -x;
-	if (curr_pos_.y > z) curr_pos_.y = -z;
+	if (pos_.x < -x) pos_.x = x;
+	if (pos_.y < -z) pos_.y = z;
+	if (pos_.x > x) pos_.x = -x;
+	if (pos_.y > z) pos_.y = -z;
 }
 
 void boid::CleanUp()

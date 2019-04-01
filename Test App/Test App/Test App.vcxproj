@@ -133,6 +133,7 @@
     <ClCompile Include="genetic_algorithm.cpp" />
     <ClCompile Include="leaf.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="resource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_camera.h" />
@@ -144,6 +145,7 @@
     <ClInclude Include="food.h" />
     <ClInclude Include="genetic_algorithm.h" />
     <ClInclude Include="leaf.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\gef\d3d11\default_3d_shader_ps.hlsl">

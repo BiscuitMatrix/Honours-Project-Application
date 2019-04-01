@@ -1,6 +1,6 @@
 ﻿  flock.cpp
-m:\github\ha_proj\test app\test app\flock.cpp(139): error C2065: 'food_': undeclared identifier
-m:\github\ha_proj\test app\test app\flock.cpp(139): error C2228: left of '.begin' must have class/struct/union
-  m:\github\ha_proj\test app\test app\flock.cpp(139): note: type is 'unknown-type'
-m:\github\ha_proj\test app\test app\flock.cpp(139): error C2228: left of '.end' must have class/struct/union
-  m:\github\ha_proj\test app\test app\flock.cpp(139): note: type is 'unknown-type'
+  flocking_app.cpp
+  food.cpp
+  main.cpp
+  Generating Code...
+  Test App.vcxproj -> M:\GitHub\HA_proj\Test App\Debug\Test App.exe

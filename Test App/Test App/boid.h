@@ -34,15 +34,11 @@ public:
 	gef::MeshInstance* GetMeshInstance() { return cube_; };
 
 	// Position Mutators
-	gef::Vector2 GetCurrPos() { return curr_pos_; };
-	void SetCurrPos(gef::Vector2 new_curr_pos) { curr_pos_ = new_curr_pos; };
-	gef::Vector2 GetPrevPos() { return prev_pos_; };
-	void SetPrevPos(gef::Vector2 new_prev_pos) { curr_pos_ = new_prev_pos; };
+	gef::Vector2 GetPos() { return pos_; };
+	void SetPos(gef::Vector2 new_pos) { pos_ = new_pos; };
 	// Velocity Mutators
-	gef::Vector2 GetCurrVel() { return curr_vel_; };
-	void SetCurrVel(gef::Vector2 new_curr_vel) { curr_vel_ = new_curr_vel; };
-	gef::Vector2 GetPrevVel() { return prev_vel_; };
-	void SetPrevVel(gef::Vector2 new_prev_vel) { curr_vel_ = new_prev_vel; };
+	gef::Vector2 GetVel() { return vel_; };
+	void SetVel(gef::Vector2 new_vel) { vel_ = new_vel; };
 	// Acceleration Mutators
 	gef::Vector2 GetAccel() { return accel_; };
 	void SetAccel(gef::Vector2 new_accel) { accel_ = new_accel; };
@@ -52,8 +48,8 @@ public:
 	{ 
 		gef::Vector4 v4_pos = gef::Vector4(pos.x, 0.0f, pos.y);
 		translation_.SetTranslation(v4_pos);
-		curr_pos_.x = translation_.m(3, 0);
-		curr_pos_.y = translation_.m(3, 2);
+		pos_.x = translation_.m(3, 0);
+		pos_.y = translation_.m(3, 2);
 	};
 	gef::Matrix44 GetTranslation() { return translation_; };
 	gef::Matrix44 GetScale() { return scale_; };
@@ -77,8 +73,8 @@ private:
 
 	// Linear Motion Variables (SUVAT)
 	gef::Vector2 accel_;
-	gef::Vector2 prev_vel_, curr_vel_;
-	gef::Vector2 prev_pos_, curr_pos_;
+	gef::Vector2 vel_;
+	gef::Vector2 pos_;
 
 	// Transformation Matrices
 	gef::Matrix44 scale_;

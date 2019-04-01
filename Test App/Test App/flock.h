@@ -2,9 +2,11 @@
 
 #include <vector>
 #include <math.h>
+#include <thread>
 #include <maths/vector2.h>
 
 #include "boid.h"
+#include "food.h"
 
 class flock
 {
@@ -24,6 +26,8 @@ public:
 	int GetFlockSize() { return flock_size_; }
 
 	std::vector<boid> boids_;
+	//std::vector<food> food_;
+	//std::vector<boid> enemy_boids_;
 
 private:
 	int flock_size_;
