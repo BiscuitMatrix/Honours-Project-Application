@@ -1,8 +1,6 @@
 ﻿  flock.cpp
+m:\github\ha_proj\test app\test app\flock.cpp(279): error C2676: binary '<': 'gef::Vector2' does not define this operator or a conversion to a type acceptable to the predefined operator
   flocking_app.cpp
 m:\github\ha_proj\test app\test app\flocking_app.cpp(30): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  food.cpp
   main.cpp
-  resource.cpp
   Generating Code...
-  Test App.vcxproj -> M:\GitHub\HA_proj\Test App\Debug\Test App.exe

@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Extra">
+      <UniqueIdentifier>{609a0e78-a5de-411d-994a-55d88ec74646}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Extra">
+      <UniqueIdentifier>{980312e2-2628-4a85-be29-03c7c51406e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -36,17 +42,17 @@
     <ClCompile Include="genetic_algorithm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bsp_tree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="leaf.cpp">
+    <ClCompile Include="resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="barnes_hut.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Extra</Filter>
     </ClCompile>
-    <ClCompile Include="resource.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="bsp_tree.cpp">
+      <Filter>Source Files\Extra</Filter>
+    </ClCompile>
+    <ClCompile Include="leaf.cpp">
+      <Filter>Source Files\Extra</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,17 +74,17 @@
     <ClInclude Include="genetic_algorithm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="bsp_tree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="leaf.h">
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="barnes_hut.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Extra</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="bsp_tree.h">
+      <Filter>Header Files\Extra</Filter>
+    </ClInclude>
+    <ClInclude Include="leaf.h">
+      <Filter>Header Files\Extra</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

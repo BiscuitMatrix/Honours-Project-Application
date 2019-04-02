@@ -21,13 +21,9 @@ public:
 
 	void Update(float frame_time);
 
-	static void RunBoidsAlgorithm(std::vector<boid>* boid, float frame_time);
-
 	void CollDetect();
 	void Bounds(float x, float z);
 	void WrapAround(float x, float z);
-
-	void UpdatePosition(float frame_time);
 
 	void CleanUp();
 
@@ -35,24 +31,19 @@ public:
 
 	// Position Mutators
 	gef::Vector2 GetPos() { return pos_; };
-	void SetPos(gef::Vector2 new_pos) { pos_ = new_pos; };
+	gef::Matrix44 GetTranslationMatrix() { return translation_; };
+	void SetPos(gef::Vector2 pos)
+	{
+		gef::Vector4 v4_pos = gef::Vector4(pos.x, 0.0f, pos.y);
+		translation_.SetTranslation(v4_pos);
+		pos_ = pos;
+	};
 	// Velocity Mutators
 	gef::Vector2 GetVel() { return vel_; };
 	void SetVel(gef::Vector2 new_vel) { vel_ = new_vel; };
 	// Acceleration Mutators
 	gef::Vector2 GetAccel() { return accel_; };
 	void SetAccel(gef::Vector2 new_accel) { accel_ = new_accel; };
-
-
-	void SetTranslation(gef::Vector2 pos) 
-	{ 
-		gef::Vector4 v4_pos = gef::Vector4(pos.x, 0.0f, pos.y);
-		translation_.SetTranslation(v4_pos);
-		pos_ = pos;
-	};
-	gef::Matrix44 GetTranslation() { return translation_; };
-	gef::Matrix44 GetScale() { return scale_; };
-	gef::Matrix44 GetRotation() { return rotation_; };
 
 
 	gef::MeshInstance* GetCube() { return cube_; };

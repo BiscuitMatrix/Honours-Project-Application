@@ -18,7 +18,8 @@ public:
 	void Update(float frame_time);
 	void CleanUp();
 
-	void RunBoidsAlgorithm(float frame_time);
+	void RunBoidsAlgorithm1(float frame_time);
+	void RunBoidsAlgorithm2(float frame_time);
 
 	void PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time);
 	gef::Vector2 AvoidBoundary(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time);
@@ -30,6 +31,9 @@ public:
 	//std::vector<boid> enemy_boids_;
 
 private:
+	gef::Vector2 Cohesion(gef::Vector2, gef::Vector2, int);
+	gef::Vector2 Alignment(gef::Vector2, int);
+
 	int flock_size_;
 
 	float desired_separation_;
