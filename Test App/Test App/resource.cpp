@@ -3,13 +3,38 @@
 
 
 resource::resource(gef::Platform& platform) :
-	platform_(platform)
+	platform_(platform),
+	active_(false)
 {
 }
 
 
 resource::~resource()
 {
+}
+
+void resource::Initialise()
+{
+	mesh_ = new gef::Mesh(platform_);
+	mesh_ = CreateCubeMesh();
+
+	cube_ = new gef::MeshInstance();
+	cube_->set_mesh(mesh_);
+
+	scale_.SetIdentity();
+	rotation_.SetIdentity();
+	translation_.SetIdentity();
+
+	active_ = true;
+}
+
+void resource::CleanUp()
+{
+	delete mesh_;
+	mesh_ = nullptr;
+
+	delete cube_;
+	cube_ = nullptr;
 }
 
 gef::Mesh* resource::CreateCubeMesh()

@@ -1,6 +1,8 @@
 ﻿  flock.cpp
   flocking_app.cpp
+m:\github\ha_proj\test app\test app\flocking_app.cpp(30): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   food.cpp
   main.cpp
+  resource.cpp
   Generating Code...
   Test App.vcxproj -> M:\GitHub\HA_proj\Test App\Debug\Test App.exe

@@ -27,6 +27,8 @@ flocking_app::~flocking_app()
 
 void flocking_app::Init()
 {
+	srand(time(NULL));
+
 	// These are required for the setup of the 3D scene.
 	sprite_renderer_ = gef::SpriteRenderer::Create(platform_);
 	renderer_3d_ = gef::Renderer3D::Create(platform_);
@@ -51,6 +53,11 @@ void flocking_app::Init()
 	flock_size_2_ = 40;
 	flock_2_->Initialise(flock_2_pos_, flock_size_2_);
 
+	// Food settings
+	food_ = new food(platform_);
+	resource_count_ = 50;
+	food_->Initialise(resource_count_);
+
 	// Camera Setup
 	cam_1_.SetupCamera();
 	SetupLights();
@@ -65,6 +72,10 @@ void flocking_app::CleanUp()
 	flock_2_->CleanUp();
 	delete flock_2_;
 	flock_2_ = nullptr;
+
+	food_->CleanUp();
+	delete food_;
+	food_ = nullptr;
 
 	delete environment_;
 	environment_ = nullptr;
@@ -105,7 +116,7 @@ void flocking_app::Render()
 	// draw meshes here
 	renderer_3d_->Begin();
 	
-	// Set the colour of flock 1
+	// Set the colour of flock 1 - Blue
 	colour = 0xFF0000FF;
 	object_colour.set_colour(colour);
 	renderer_3d_->set_override_material(&object_colour);
@@ -115,12 +126,22 @@ void flocking_app::Render()
 		renderer_3d_->DrawMesh(*iterator_->GetMeshInstance());
 	}
 
-	// Set the colour of the flock 2
+	// Set the colour of the flock 2 - Red
 	colour = 0xFFFF0000;
 	object_colour.set_colour(colour);
 	renderer_3d_->set_override_material(&object_colour);
 	// Iterate through the vector list of boids within the flock in order to render them all
 	for (std::vector<boid>::iterator iterator_ = flock_2_->boids_.begin(); iterator_ != flock_2_->boids_.end(); iterator_++)
+	{
+		renderer_3d_->DrawMesh(*iterator_->GetMeshInstance());
+	}
+
+	// Set the colour of the food - Green
+	colour = 0xFF00FF00;
+	object_colour.set_colour(colour);
+	renderer_3d_->set_override_material(&object_colour);
+	// Iterate through the vector list of boids within the flock in order to render them all
+	for (std::vector<resource>::iterator iterator_ = food_->resources_.begin(); iterator_ != food_->resources_.end(); iterator_++)
 	{
 		renderer_3d_->DrawMesh(*iterator_->GetMeshInstance());
 	}

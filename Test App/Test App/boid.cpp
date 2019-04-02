@@ -84,6 +84,9 @@ void boid::CleanUp()
 {
 	delete mesh_;
 	mesh_ = nullptr;
+
+	delete cube_;
+	cube_ = nullptr;
 }
 
 gef::Mesh* boid::CreateCubeMesh()

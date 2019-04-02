@@ -48,21 +48,14 @@ public:
 	{ 
 		gef::Vector4 v4_pos = gef::Vector4(pos.x, 0.0f, pos.y);
 		translation_.SetTranslation(v4_pos);
-		pos_.x = translation_.m(3, 0);
-		pos_.y = translation_.m(3, 2);
+		pos_ = pos;
 	};
 	gef::Matrix44 GetTranslation() { return translation_; };
 	gef::Matrix44 GetScale() { return scale_; };
-	void SetRotation(float angle)
-	{
-		rotation_.RotationY(gef::DegToRad(angle));
-	};
 	gef::Matrix44 GetRotation() { return rotation_; };
 
-	gef::MeshInstance* GetCube() { return cube_; };
 
-	UInt32 GetColour() { return colour_; }
-	void SetColour(UInt32 abgr) { colour_ = abgr; }
+	gef::MeshInstance* GetCube() { return cube_; };
 
 private:
 	gef::Mesh* CreateCubeMesh();
@@ -82,7 +75,5 @@ private:
 	gef::Matrix44 translation_;
 
 	gef::Platform& platform_;
-
-	gef::Material* material_;
 };
 

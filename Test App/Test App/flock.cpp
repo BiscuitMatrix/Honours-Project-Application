@@ -3,6 +3,9 @@
 float flock::max_speed_ = 5.0f;
 float flock::max_force_ = 3.0f;
 
+float flock::bound_x_ = 55.0f;
+float flock::bound_y_ = 30.0f;
+
 flock::flock(gef::Platform& platform) :
 	platform_(platform)
 {
@@ -234,8 +237,8 @@ void flock::PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vect
 	// This calculates the updated position using semi-implicit Euler
 	iterator_->SetAccel(accel);
 
-	//iterator_->WrapAround(55.0f, 30.0f);
-	iterator_->Bounds(55.0f, 30.0f);
+	//iterator_->WrapAround(bound_x_, bound_y_);
+	//iterator_->Bounds(bound_x_, bound_y_);
 
 	// Semi-Impicit Euler Method for updated position calculations:
 	// v = u + at
@@ -254,27 +257,24 @@ void flock::PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vect
 
 gef::Vector2 flock::AvoidBoundary(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time)
 {
-	float x_boundary = 55.0f;
-	float z_boundary = 30.0f;
-
 	gef::Vector2 result = accel;
 
-	if (iterator_->GetPos().x > (x_boundary - 5.0f))
+	if (iterator_->GetPos().x > (bound_x_ - 5.0f))
 	{
-		result.x = accel.x - (1.0f / (x_boundary - iterator_->GetPos().x));
+		result.x = accel.x - (1.0f / (bound_x_ - iterator_->GetPos().x));
 	}
-	else if (iterator_->GetPos().x < -(x_boundary - 5.0f))
+	else if (iterator_->GetPos().x < -(bound_x_ - 5.0f))
 	{
-		result.x = accel.x + (1.0f / (x_boundary - iterator_->GetPos().x));
+		result.x = accel.x + (1.0f / (bound_x_ - iterator_->GetPos().x));
 	}
 
-	if (iterator_->GetPos().y >(z_boundary - 3.0f))
+	if (iterator_->GetPos().y >(bound_y_ - 3.0f))
 	{
-		result.y = accel.y - (1.0f / (z_boundary - iterator_->GetPos().y));
+		result.y = accel.y - (1.0f / (bound_y_ - iterator_->GetPos().y));
 	}
-	else if (iterator_->GetPos().y < -(z_boundary - 3.0f))
+	else if (iterator_->GetPos().y < -(bound_y_ - 3.0f))
 	{
-		result.y = accel.y + (1.0f / (z_boundary - iterator_->GetPos().y));
+		result.y = accel.y + (1.0f / (bound_y_ - iterator_->GetPos().y));
 	}
 
 	return result;
@@ -282,4 +282,8 @@ gef::Vector2 flock::AvoidBoundary(std::vector<boid>::iterator iterator_, gef::Ve
 
 void flock::CleanUp()
 {
+	for (std::vector<boid>::iterator iterator_ = boids_.begin(); iterator_ != boids_.end(); iterator_++)
+	{
+		iterator_->CleanUp();
+	}
 }
