@@ -41,10 +41,6 @@ public:
 	// Velocity Mutators
 	gef::Vector2 GetVel() { return vel_; };
 	void SetVel(gef::Vector2 new_vel) { vel_ = new_vel; };
-	// Acceleration Mutators
-	gef::Vector2 GetAccel() { return accel_; };
-	void SetAccel(gef::Vector2 new_accel) { accel_ = new_accel; };
-
 
 	gef::MeshInstance* GetCube() { return cube_; };
 
@@ -55,8 +51,7 @@ private:
 	gef::MeshInstance* cube_;
 	UInt32 colour_;
 
-	// Linear Motion Variables (SUVAT)
-	gef::Vector2 accel_;
+	// Linear Motion Variables:
 	gef::Vector2 vel_;
 	gef::Vector2 pos_;
 

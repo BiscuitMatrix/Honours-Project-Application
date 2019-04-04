@@ -32,18 +32,18 @@ public:
 
 private:
 	gef::Vector2 Cohesion(gef::Vector2, gef::Vector2, int);
-	gef::Vector2 Alignment(gef::Vector2, int);
+	gef::Vector2 Alignment(gef::Vector2, gef::Vector2, gef::Vector2, int);
+	gef::Vector2 Separation(gef::Vector2, gef::Vector2, int);
 
 	int flock_size_;
 
 	float desired_separation_;
 	float food_detection_;
 	float interaction_distance_;
+
 	// Limits
 	static float max_force_, max_speed_;
 	static float bound_x_, bound_y_;
-	// Flocking Weights
-	float sep_wgt_, coh_wgt_, ali_wgt_, feed_wgt_, neut_wgt_, free_wgt_, bnd_wgt_, ob_av_wgt_;
 
 	gef::Platform& platform_;
 };

@@ -40,25 +40,25 @@ void boid::Bounds(float x, float z)
 	{
 		pos_.x = x;
 		vel_.x = 0.0f;
-		accel_.x = -accel_.x;
+		//accel_.x = -accel_.x;
 	}
 	if (pos_.x < -x)
 	{
 		pos_.x = -x;
 		vel_.x = 0.0f;
-		accel_.x = -accel_.x;
+		//accel_.x = -accel_.x;
 	}
 	if (pos_.y > z)
 	{
 		pos_.y = z;
 		vel_.y = 0.0f;
-		accel_.y = -accel_.y;
+		//accel_.y = -accel_.y;
 	}
 	if (pos_.y < -z)
 	{
 		pos_.y = -z;
 		vel_.y = 0.0f;
-		accel_.y = -accel_.y;
+		//accel_.y = -accel_.y;
 	}
 
 	//if (curr_pos_.x > x && curr_vel_.x > 0.0f && accel_.x >= 0.0f)

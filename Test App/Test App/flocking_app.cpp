@@ -95,6 +95,8 @@ bool flocking_app::Update(float frame_time)
 	flock_1_->Update(frame_time);
 	flock_2_->Update(frame_time);
 
+	food_->Update(frame_time);
+
 	return true;
 }
 

@@ -1,6 +1,6 @@
 #include "flock.h"
 
-float flock::max_speed_ = 5.0f;
+float flock::max_speed_ = 0.5f;
 float flock::max_force_ = 3.0f;
 
 float flock::bound_x_ = 55.0f;
@@ -24,15 +24,17 @@ void flock::Initialise(gef::Vector2 flock_centre, int flock_size)
 		food_detection_ = 4.0f;
 		interaction_distance_ = 10.0f;
 
-		// Reynolds Weights
-		sep_wgt_ = 1.5f, coh_wgt_ = 1.5f, ali_wgt_ = 1.5f;
+		
 
 		boid boid_(platform_);
 		boid_.Initialise();
 
+		// Slightly randomise positions: (Surprisingly tiny variations away from a result of 5.0f create a large difference)
+		float rand_jiggle = (float)(rand() % 100 + 4950) / 1000.0f;
+
 		#pragma region boid_placement
-		float x = ((float)i / 5.0f) * 3.14159f;
-		float y = ((float)i / 5.0f) * 3.14159f;
+		float x = ((float)i / rand_jiggle) * 3.14159f;
+		float y = ((float)i / rand_jiggle) * 3.14159f;
 
 		gef::Vector2 pos;
 
@@ -225,7 +227,7 @@ void flock::RunBoidsAlgorithm1(float frame_time)
 
 
 		// Weight the final values for each force
-		separation_ *= sep_wgt_, cohesion_ *= coh_wgt_, alignment_ *= ali_wgt_;
+		//separation_ *= sep_wgt_, cohesion_ *= coh_wgt_, alignment_ *= ali_wgt_;
 
 		// Add the accelerative forces together
 		gef::Vector2 acceleration = separation_ + cohesion_ + alignment_;
@@ -238,7 +240,9 @@ void flock::RunBoidsAlgorithm1(float frame_time)
 void flock::RunBoidsAlgorithm2(float frame_time)
 {
 	// Reynolds Forces
-	gef::Vector2 separation(0.0f, 0.0f), cohesion(0.0f, 0.0f), alignment(0.0f, 0.0f);
+	gef::Vector2 separation, cohesion, alignment;
+	// Reynolds Weights
+	float coh_wgt, ali_wgt, sep_wgt;
 	// Reynolds Counters
 	//int sep_counter_ = 0, ali_counter_ = 0, coh_counter_ = 0, food_counter_ = 0;
 	gef::Vector2 avg_neighbour_pos(0.0f, 0.0f);
@@ -250,11 +254,6 @@ void flock::RunBoidsAlgorithm2(float frame_time)
 	for (std::vector<boid>::iterator iterator = boids_.begin(); iterator != boids_.end(); iterator++)
 	{
 		#pragma region Reset_Values 
-		// Reset the vectors for separation cohesion and alignment for this boid to zero
-		separation.Reset(), cohesion.Reset(), alignment.Reset();
-		// Define counters to use to take the mean values of each of the primary vectors (sep, coh and ali)
-		//sep_counter_ = 0, ali_counter_ = 0, coh_counter_ = 0;
-
 		avg_neighbour_pos.Reset(), avg_neighbour_vel.Reset(), closest_neighbour.Reset();
 		distance_to_neighbour = 0.0f;
 		neighbour_count = 0;
@@ -268,73 +267,132 @@ void flock::RunBoidsAlgorithm2(float frame_time)
 			// If the positions are close enough to interact
 			if (euclidean_distance < interaction_distance_)
 			{
-				// Add the position of the neighbour to the sum of all neighbours positions
-				avg_neighbour_pos += iterator2->GetPos();
-				// Add the velocity of the neighbour to the sum of all neighbours positions
-				avg_neighbour_vel += iterator2->GetVel();
-				// Increase the number of neighbours by 1
-				neighbour_count++;
-
 				// Check that we are not calculating against itself
-				if (iterator != iterator2)
+				if ((iterator->GetPos() - iterator2->GetPos()).Length() != 0.0f)
 				{
+					// Add the position of the neighbour to the sum of all neighbours positions
+					avg_neighbour_pos += iterator2->GetPos();
+					// Add the velocity of the neighbour to the sum of all neighbours positions
+					avg_neighbour_vel += iterator2->GetVel();
+					// Increase the number of neighbours by 1
+					neighbour_count++;
+				
+					// Find the vector to the nearest flock member
 					if ( closest_neighbour.Length() < ( iterator2->GetPos().Length() - iterator->GetPos().Length() ) )
 					{
-
+						closest_neighbour = iterator2->GetPos();
 					}
 				}
 			}
 		}
 
-		cohesion = Cohesion(avg_neighbour_pos, iterator->GetPos(), neighbour_count);
-		alignment = Alignment(avg_neighbour_vel, neighbour_count);
+		if (neighbour_count != 0)
+		{ 
+			// Calculate the average(mean) of the positions:
+			avg_neighbour_pos /= (float)neighbour_count;
+			// Calculate the average(mean) of the velocities:
+			avg_neighbour_vel /= (float)neighbour_count;
+		}
+		
+		// Calculate the basic boids forces:
+		cohesion   =   Cohesion(avg_neighbour_pos,                    iterator->GetPos(), neighbour_count);
+		alignment  =  Alignment(avg_neighbour_pos, avg_neighbour_vel, iterator->GetPos(), neighbour_count);
+		separation = Separation(closest_neighbour,                    iterator->GetPos(), neighbour_count);
 
+		// Calculate the final force vector on the boid:
+		gef::Vector2 acceleration = separation + cohesion + alignment;
+
+		// Update Physics
+		PhysicsCalculations(iterator, acceleration, frame_time);
 	}
 }
 
 gef::Vector2 flock::Cohesion(gef::Vector2 avg_neighbour_pos, gef::Vector2 boid_pos, int neighbour_count)
 {
 	gef::Vector2 result;
-	// Calculate the average(mean) of the positions:
-	avg_neighbour_pos /= (float)neighbour_count;
+	float weight;
+
 	// Find the vector to the local flock centre:
-	gef::Vector2 lfc_vec = avg_neighbour_pos - boid_pos;
-	// Calculate the cohesion unit vector:
-	result = lfc_vec / lfc_vec.Length();
+	if ((avg_neighbour_pos - boid_pos).Length() != 0)
+	{
+		result = gef::Vector2(0.0f, 0.0f);
+		return result;
+	}
+	gef::Vector2 lfc_vec = boid_pos - avg_neighbour_pos;
+	// Calculate the appropriate weighting:
+	weight = (boid_pos.Length() - avg_neighbour_pos.Length() ) * ( 1.0f / (30.0f * (neighbour_count * neighbour_count)) );
+	// Calculate the cohesion vector active for this boid:
+	result = (lfc_vec / lfc_vec.Length()) * weight;
+
+	// Error Check:
+	if (result.x != result.x || result.y != result.y)
+	{
+		int hello_there = 1;
+	}
 	return result;
 }
 
-gef::Vector2 flock::Alignment(gef::Vector2 avg_neighbour_vel, int neighbour_count)
+gef::Vector2 flock::Alignment(gef::Vector2 avg_neighbour_pos, gef::Vector2 avg_neighbour_vel, gef::Vector2 boid_pos, int neighbour_count)
 {
 	gef::Vector2 result;
-	// Calculate the average(mean) of the velocities:
-	avg_neighbour_vel /= (float)neighbour_count;
-	// Calculate the alignment unit vector:
-	result = avg_neighbour_vel / avg_neighbour_vel.Length();
+	float weight;
+
+	// Calculate the appropriate weighting:
+	weight = 1.0f / (10.0f * ((avg_neighbour_pos - boid_pos).Length()));
+	// Calculate the alignment vector active for this boid:
+	if (avg_neighbour_vel.Length() != 0.0f)
+	{
+		result = (avg_neighbour_vel / avg_neighbour_vel.Length()) * weight;
+	}
+	else
+	{
+		result = gef::Vector2(0.0f, 0.0f);
+	}
+
+	// Error Check:
+	if (result.x != result.x || result.y != result.y)
+	{
+		int hello_there = 1;
+	}
+
+	return result;
+}
+
+gef::Vector2 flock::Separation(gef::Vector2 closest_neighbour, gef::Vector2 boid_pos, int neighbour_count)
+{
+	gef::Vector2 result;
+	float weight = 0.0f;
+
+	// Calculate the vector to the nearest schoolmate
+	gef::Vector2 nearest_neighbour_vec = closest_neighbour - boid_pos;
+	// Calculate the appropriate weighting:
+	if (neighbour_count != 0 && closest_neighbour.Length() != 0)
+	{
+		weight = pow(((float)neighbour_count / closest_neighbour.Length()), 2);
+	}
+	// Calculate the separation vector active for this boid:
+	result = ( nearest_neighbour_vec / (-nearest_neighbour_vec.Length()) ) * weight;
+
+	// Error Check:
+	if (result.x != result.x || result.y != result.y)
+	{
+		int hello_there = 1;
+	}
+
 	return result;
 }
 
 void flock::PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time)
 {
-	// This calculates the updated position using semi-implicit Euler
-	iterator_->SetAccel(accel);
-
 	//iterator_->WrapAround(bound_x_, bound_y_);
-	//iterator_->Bounds(bound_x_, bound_y_);
+	iterator_->Bounds(bound_x_, bound_y_);
 
-	// Questions:
-	// What is a reasonable velocity in this framework?
-	// What does a velocity of 1 look like?
-	// How does this compare to the values we get for the acceleration?
-	// How can we fix this via the use of damping and weights?
+	gef::Vector2 drag = iterator_->GetVel();
 
-
-	// Semi-Impicit Euler Method for updated position calculations:
+	// Semi-Impicit Euler Method for updated position calculations: (With Drag)
 	// v = u + at
-	gef::Vector2 velocity = (iterator_->GetVel()) + (accel * frame_time);
-	//if (velocity.Length() > max_speed_) 
-	//	velocity.Limit(max_speed_);
-	
+	gef::Vector2 velocity = iterator_->GetVel() + (accel * frame_time);
+
 	// x1 = x0 + vt
 	gef::Vector2 new_pos = iterator_->GetPos() + (velocity * frame_time);
 
@@ -368,8 +426,6 @@ gef::Vector2 flock::AvoidBoundary(std::vector<boid>::iterator iterator_, gef::Ve
 
 	return result;
 }
-
-
 
 void flock::CleanUp()
 {
