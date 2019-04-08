@@ -42,7 +42,7 @@ public:
 	gef::Vector2 GetVel() { return vel_; };
 	void SetVel(gef::Vector2 new_vel) { vel_ = new_vel; };
 
-	gef::MeshInstance* GetCube() { return cube_; };
+	gef::Mesh* GetMesh() { return mesh_; };
 
 private:
 	gef::Mesh* CreateCubeMesh();

@@ -136,6 +136,8 @@ gef::Mesh* boid::CreateCubeMesh()
 	primitive->InitIndexBuffer(platform_, static_cast<const void*>(indices), sizeof(indices) / sizeof(UInt32), sizeof(UInt32));
 	primitive->set_type(gef::TRIANGLE_LIST);
 
+	// We can make the half-size smaller here to make the collision detection occur a lot closer.
+
 	// set size of bounds, we need this for collision detection routines
 	gef::Aabb aabb(gef::Vector4(-half_size, -half_size, -half_size), gef::Vector4(half_size, half_size, half_size));
 	gef::Sphere sphere(aabb);
