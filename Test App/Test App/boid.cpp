@@ -40,36 +40,22 @@ void boid::Bounds(float x, float z)
 	{
 		pos_.x = x;
 		vel_.x = 0.0f;
-		//accel_.x = -accel_.x;
 	}
 	if (pos_.x < -x)
 	{
 		pos_.x = -x;
 		vel_.x = 0.0f;
-		//accel_.x = -accel_.x;
 	}
 	if (pos_.y > z)
 	{
 		pos_.y = z;
 		vel_.y = 0.0f;
-		//accel_.y = -accel_.y;
 	}
 	if (pos_.y < -z)
 	{
 		pos_.y = -z;
 		vel_.y = 0.0f;
-		//accel_.y = -accel_.y;
 	}
-
-	//if (curr_pos_.x > x && curr_vel_.x > 0.0f && accel_.x >= 0.0f)
-	//{
-	//	//curr_vel_.x = -(curr_vel_.x);
-	//	accel_.x = -(accel_.x);
-	//}
-	//if (curr_pos_.x < -x && curr_vel_.x < 0.0f) 
-	//	curr_pos_.x = -(curr_vel_.x);
-	//if (curr_pos_.y > z && curr_vel_.y > 0.0f) curr_vel_.y = -(curr_vel_.y);
-	//if (curr_pos_.y < -z && curr_vel_.y < 0.0f) curr_pos_.y = -(curr_vel_.y);
 }
 
 void boid::WrapAround(float x, float z)
@@ -87,6 +73,12 @@ void boid::CleanUp()
 
 	delete cube_;
 	cube_ = nullptr;
+}
+
+void boid::HasEaten()
+{
+	hunger_bar_ += 50.0f;
+	//if (health_)
 }
 
 gef::Mesh* boid::CreateCubeMesh()

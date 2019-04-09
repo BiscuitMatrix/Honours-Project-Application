@@ -6,6 +6,9 @@ float flock::max_force_ = 3.0f;
 float flock::bound_x_ = 55.0f;
 float flock::bound_y_ = 30.0f;
 
+float flock::food_detection_sqr_ = 225.0f;
+float flock::interaction_distance_sqr_ = 100.0f;
+
 flock::flock(gef::Platform& platform) :
 	platform_(platform)
 {
@@ -20,12 +23,6 @@ void flock::Initialise(gef::Vector2 flock_centre, int flock_size)
 {
 	for (int i = 0; i < flock_size; i++)
 	{
-		desired_separation_ = 8.0f;
-		food_detection_ = 4.0f;
-		interaction_distance_ = 10.0f;
-
-		
-
 		boid boid_(platform_);
 		boid_.Initialise();
 
@@ -58,11 +55,14 @@ void flock::Initialise(gef::Vector2 flock_centre, int flock_size)
 	}
 }
 
-void flock::Update(float frame_time)
+void flock::Update(std::vector<boid> *enemy_boids, std::vector<resource> *resources, float frame_time)
 {
+	// Take copies of the vector lists of the other entities within the program:
+	//enemy_boids_ = enemy_boids;
+	resources_ = resources;
+
 	// Run boids algorithm
 	//boid::RunBoidsAlgorithm(&boids_, frame_time); <- This is a good reference, but dont use it in this program
-	//RunBoidsAlgorithm1(frame_time);
 	RunBoidsAlgorithm(frame_time);
 
 	// Run the Genetic Algorithm
@@ -74,36 +74,37 @@ void flock::RunBoidsAlgorithm(float frame_time)
 {
 	// Reynolds Forces
 	gef::Vector2 separation, cohesion, alignment;
+	// Expanded Forces
+	gef::Vector2 food_attraction, relation, free_movement, boundary;
 	// Neighbour variables for boids calculations:
 	gef::Vector2 avg_neighbour_pos(0.0f, 0.0f);
 	gef::Vector2 avg_neighbour_vel(0.0f, 0.0f);
 	gef::Vector2 closest_neighbour(0.0f, 0.0f);
-	float distance_to_closest_neighbour;
+	float distance_to_closest_neighbour_sqr;
 	int neighbour_count;
 	// Unit vector for collisions:
 	gef::Vector2 collision_vector;
 
 	for (std::vector<boid>::iterator iterator = boids_.begin(); iterator != boids_.end(); iterator++)
 	{
-		#pragma region Reset_Values 
+		#pragma region Reynolds Boids
 		avg_neighbour_pos.Reset(), avg_neighbour_vel.Reset(), closest_neighbour.Reset(), collision_vector.Reset();
 		// Arbitrarily large unobtainable number:
-		distance_to_closest_neighbour = 10000.0f;
+		distance_to_closest_neighbour_sqr = 1000000.0f;
 		neighbour_count = 0;
-		#pragma endregion
 
 		// For every other boid in the flock...
 		for (std::vector<boid>::iterator iterator2 = boids_.begin(); iterator2 != boids_.end(); iterator2++)
 		{
 			// Identify the distance between the two boids:
 			gef::Vector2 distance_vector = gef::Vector2(iterator2->GetPos().x - iterator->GetPos().x, iterator2->GetPos().y - iterator->GetPos().y);
-			float shortest_distance = distance_vector.Length();
+			float shortest_distance_sqr = distance_vector.LengthSqr();
 
 			// If the positions are close enough to interact
-			if (shortest_distance < interaction_distance_)
+			if (shortest_distance_sqr < interaction_distance_sqr_)
 			{
 				// Check that we are not calculating against itself
-				if ((iterator->GetPos() - iterator2->GetPos()).Length() != 0.0f)
+				if ((iterator->GetPos() - iterator2->GetPos()).LengthSqr() != 0.0f)
 				{
 					// Add the position of the neighbour to the sum of all neighbours positions
 					avg_neighbour_pos += iterator2->GetPos();
@@ -113,16 +114,16 @@ void flock::RunBoidsAlgorithm(float frame_time)
 					neighbour_count++;
 				
 					// Find the vector to the nearest flock member
-					if (distance_to_closest_neighbour > shortest_distance)
+					if (distance_to_closest_neighbour_sqr > shortest_distance_sqr)
 					{
 						closest_neighbour = iterator2->GetPos();
-						distance_to_closest_neighbour = shortest_distance;
+						distance_to_closest_neighbour_sqr = shortest_distance_sqr;
 					}
 
 					// Produces a unit vector with force inversely proportional to the distance away from its neighbour:
-					if (CollisionDetection(iterator->GetMesh()->bounding_sphere().radius(), shortest_distance))
+					if (CollisionDetection(iterator->GetMesh()->bounding_sphere().radius(), shortest_distance_sqr))
 					{
-						collision_vector += ( ((distance_vector * 2.5f) / shortest_distance) / shortest_distance);
+						collision_vector += ( ((distance_vector * 2.5f) / shortest_distance_sqr) / shortest_distance_sqr);
 					}
 				}
 			}
@@ -145,13 +146,17 @@ void flock::RunBoidsAlgorithm(float frame_time)
 			// There is no flocking behaviour:
 			cohesion.Reset(), alignment.Reset(), separation.Reset();
 		}
+		#pragma endregion
+
+		food_attraction = FoodAttraction(iterator);
 		
 		// Calculate the final force vector on the boid:
-		gef::Vector2 acceleration = separation + cohesion + alignment - collision_vector;
+		gef::Vector2 acceleration = separation + cohesion + alignment - collision_vector + food_attraction;
 		// Update Physics
 		PhysicsCalculations(iterator, acceleration, frame_time);
 	}
 }
+
 
 gef::Vector2 flock::Cohesion(gef::Vector2 avg_neighbour_pos, gef::Vector2 boid_pos, int neighbour_count)
 {
@@ -166,7 +171,7 @@ gef::Vector2 flock::Cohesion(gef::Vector2 avg_neighbour_pos, gef::Vector2 boid_p
 	}
 	gef::Vector2 lfc_vec = boid_pos - avg_neighbour_pos;
 	// Calculate the appropriate weighting:
-	weight = 20.0f * (boid_pos.Length() - avg_neighbour_pos.Length()) / (1.0f * (neighbour_count * neighbour_count));
+	weight = 15.0f * (boid_pos.Length() - avg_neighbour_pos.Length()) / (neighbour_count * neighbour_count);
 	// Calculate the cohesion vector active for this boid:
 	result = (lfc_vec / lfc_vec.Length()) * weight;
 
@@ -179,7 +184,6 @@ gef::Vector2 flock::Cohesion(gef::Vector2 avg_neighbour_pos, gef::Vector2 boid_p
 	}
 	return result;
 }
-
 gef::Vector2 flock::Alignment(gef::Vector2 avg_neighbour_pos, gef::Vector2 avg_neighbour_vel, gef::Vector2 boid_pos, int neighbour_count)
 {
 	gef::Vector2 result;
@@ -207,7 +211,6 @@ gef::Vector2 flock::Alignment(gef::Vector2 avg_neighbour_pos, gef::Vector2 avg_n
 
 	return result;
 }
-
 gef::Vector2 flock::Separation(gef::Vector2 closest_neighbour, gef::Vector2 boid_pos, int neighbour_count)
 {
 	gef::Vector2 result;
@@ -218,7 +221,7 @@ gef::Vector2 flock::Separation(gef::Vector2 closest_neighbour, gef::Vector2 boid
 	// Calculate the appropriate weighting:
 	if (neighbour_count != 0 && closest_neighbour.Length() != 0)
 	{
-		weight = 0.25 * pow(((float)neighbour_count / closest_neighbour.Length()), 2);
+		weight = 0.25f * pow(((float)neighbour_count / closest_neighbour.Length()), 2);
 	}
 	// Calculate the separation vector active for this boid:
 	result = ( nearest_neighbour_vec / (-nearest_neighbour_vec.Length()) ) * weight;
@@ -234,26 +237,127 @@ gef::Vector2 flock::Separation(gef::Vector2 closest_neighbour, gef::Vector2 boid
 	return result;
 }
 
+gef::Vector2 flock::FoodAttraction(std::vector<boid>::iterator iterator)
+{
+	gef::Vector2 result;
+	float weight = 0.0f;
+	// Resource variables for boids calculations:
+	gef::Vector2 closest_resource(0.0f, 0.0f);
+	float distance_to_closest_resource_sqr = 1000000.0f;
+
+	// For each resource in the environment:
+	for (std::vector<resource>::iterator iterator2 = resources_->begin(); iterator2 != resources_->end(); iterator2++)
+	{
+		// Identify the distance between the two boids:
+		gef::Vector2 distance_vector = gef::Vector2(iterator2->GetPos().x - iterator->GetPos().x, iterator2->GetPos().y - iterator->GetPos().y);
+		float shortest_distance_sqr = distance_vector.LengthSqr();
+
+		// If the positions are close enough to interact
+		if (shortest_distance_sqr < food_detection_sqr_)
+		{
+			// Find the vector to the nearest resource:
+			if (distance_to_closest_resource_sqr > shortest_distance_sqr)
+			{
+				closest_resource = iterator2->GetPos();
+				distance_to_closest_resource_sqr = shortest_distance_sqr;
+			}
+
+			if (CollisionDetection((iterator->GetMesh()->bounding_sphere().radius() - 0.3f), shortest_distance_sqr))
+			{
+				iterator2->SetActive(false);
+				iterator->HasEaten();
+			}
+		}
+	}
+
+	// Calculate the vector to the nearest resource:
+	gef::Vector2 nearest_resource_vec = closest_resource - iterator->GetPos();
+	// Calculate the appropriate weighting:
+	weight = (0.0025f * distance_to_closest_resource_sqr) + (36.0f / distance_to_closest_resource_sqr);
+
+	// Calculate the food attraction vector active for this boid:
+	result = (nearest_resource_vec / nearest_resource_vec.Length()) * weight;
+
+	// Error Check:
+	if (result.x != result.x || result.y != result.y)
+	{
+		int hello_there = 1;
+		result = gef::Vector2(0.0f, 0.0f);
+		return result;
+	}
+
+	return result;
+}
+
+gef::Vector2 flock::FlockAvoidance(std::vector<boid>::iterator iterator)
+{
+	gef::Vector2 result;
+	float weight = 0.0f;
+	// Resource variables for boids calculations:
+	gef::Vector2 closest_resource(0.0f, 0.0f);
+	float distance_to_closest_resource_sqr = 1000000.0f;
+
+	// For each resource in the environment:
+	for (std::vector<resource>::iterator iterator2 = resources_->begin(); iterator2 != resources_->end(); iterator2++)
+	{
+		// Identify the distance between the two boids:
+		gef::Vector2 distance_vector = gef::Vector2(iterator2->GetPos().x - iterator->GetPos().x, iterator2->GetPos().y - iterator->GetPos().y);
+		float shortest_distance_sqr = distance_vector.LengthSqr();
+
+		// If the positions are close enough to interact
+		if (shortest_distance_sqr < food_detection_sqr_)
+		{
+			// Find the vector to the nearest resource:
+			if (distance_to_closest_resource_sqr > shortest_distance_sqr)
+			{
+				closest_resource = iterator2->GetPos();
+				distance_to_closest_resource_sqr = shortest_distance_sqr;
+			}
+
+			if (CollisionDetection((iterator->GetMesh()->bounding_sphere().radius() - 0.3f), shortest_distance_sqr))
+			{
+				iterator2->SetActive(false);
+				iterator->HasEaten();
+			}
+		}
+	}
+
+	// Calculate the vector to the nearest resource:
+	gef::Vector2 nearest_resource_vec = closest_resource - iterator->GetPos();
+	// Calculate the appropriate weighting:
+	weight = (0.0025f * distance_to_closest_resource_sqr) + (36.0f / distance_to_closest_resource_sqr);
+
+	// Calculate the food attraction vector active for this boid:
+	result = (nearest_resource_vec / nearest_resource_vec.Length()) * weight;
+
+	// Error Check:
+	if (result.x != result.x || result.y != result.y)
+	{
+		int hello_there = 1;
+		result = gef::Vector2(0.0f, 0.0f);
+		return result;
+	}
+
+	return result;
+}
+
+
 bool flock::CollisionDetection(float combined_radii_length, float shortest_distance)
 {
-	//float combined_radii_length = iterator->GetMesh()->bounding_sphere().radius() + iterator2->GetMesh()->bounding_sphere().radius();
-
-	if (shortest_distance < (combined_radii_length*2.0f))
+	if (shortest_distance < ((combined_radii_length + combined_radii_length)*(combined_radii_length + combined_radii_length)))
 	{
 		return true;
 	}
-
 	return false;
 }
-
 void flock::PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time)
 {
 	//iterator_->WrapAround(bound_x_, bound_y_);
 	iterator_->Bounds(bound_x_, bound_y_);
 
-	gef::Vector2 drag = iterator_->GetVel();
+	//gef::Vector2 drag = iterator_->GetVel();
 
-	// Semi-Impicit Euler Method for updated position calculations: (With Drag)
+	// Semi-Impicit Euler Method for updated position calculations: 
 	// v = u + at
 	gef::Vector2 velocity = iterator_->GetVel() + (accel * frame_time);
 	velocity.Limit(max_speed_);
@@ -267,30 +371,6 @@ void flock::PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vect
 	iterator_->GetMeshInstance()->set_transform(iterator_->GetTranslationMatrix());
 }
 
-gef::Vector2 flock::AvoidBoundary(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time)
-{
-	gef::Vector2 result = accel;
-
-	if (iterator_->GetPos().x > (bound_x_ - 5.0f))
-	{
-		result.x = accel.x - (1.0f / (bound_x_ - iterator_->GetPos().x));
-	}
-	else if (iterator_->GetPos().x < -(bound_x_ - 5.0f))
-	{
-		result.x = accel.x + (1.0f / (bound_x_ - iterator_->GetPos().x));
-	}
-
-	if (iterator_->GetPos().y >(bound_y_ - 3.0f))
-	{
-		result.y = accel.y - (1.0f / (bound_y_ - iterator_->GetPos().y));
-	}
-	else if (iterator_->GetPos().y < -(bound_y_ - 3.0f))
-	{
-		result.y = accel.y + (1.0f / (bound_y_ - iterator_->GetPos().y));
-	}
-
-	return result;
-}
 
 void flock::CleanUp()
 {

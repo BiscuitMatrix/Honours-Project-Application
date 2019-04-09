@@ -34,6 +34,20 @@ void food::Initialise(int resource_count)
 void food::Update(float frame_time)
 {
 	// This will update the position of resources located within the simulation
+	// For each resource in the environment:
+	for (std::vector<resource>::iterator iterator = resources_.begin(); iterator != resources_.end(); iterator++)
+	{
+		if (!iterator->GetActive())
+		{
+			iterator->SetActive(true);
+
+			float x = (float)(rand() % (int)(bound_x_*2.0f + 1)) - bound_x_;
+			float y = (float)(rand() % (int)(bound_y_*2.0f + 1)) - bound_y_;
+
+			iterator->SetPos(gef::Vector2(x, y));
+			iterator->GetMeshInstance()->set_transform(iterator->GetTranslationMatrix());
+		}
+	}
 }
 
 void food::CleanUp()

@@ -27,7 +27,7 @@ public:
 
 	void CleanUp();
 
-	gef::MeshInstance* GetMeshInstance() { return cube_; };
+	void HasEaten();
 
 	// Position Mutators
 	gef::Vector2 GetPos() { return pos_; };
@@ -41,15 +41,21 @@ public:
 	// Velocity Mutators
 	gef::Vector2 GetVel() { return vel_; };
 	void SetVel(gef::Vector2 new_vel) { vel_ = new_vel; };
-
+	// Framework Mutators
 	gef::Mesh* GetMesh() { return mesh_; };
+	gef::MeshInstance* GetMeshInstance() { return cube_; };
 
 private:
 	gef::Mesh* CreateCubeMesh();
 
+	// Render Properties:
 	class gef::Mesh* mesh_;
 	gef::MeshInstance* cube_;
 	UInt32 colour_;
+
+	// Health variables:
+	int health_;
+	float hunger_bar_;
 
 	// Linear Motion Variables:
 	gef::Vector2 vel_;

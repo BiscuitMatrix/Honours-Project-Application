@@ -92,8 +92,8 @@ bool flocking_app::Update(float frame_time)
 {
 	fps_ = 1.0f / frame_time;
 
-	flock_1_->Update(frame_time);
-	flock_2_->Update(frame_time);
+	flock_1_->Update(&flock_2_->boids_, &food_->resources_, frame_time);
+	flock_2_->Update(&flock_1_->boids_, &food_->resources_, frame_time);
 
 	food_->Update(frame_time);
 

@@ -1,3 +1,2 @@
 ﻿  flock.cpp
-m:\github\ha_proj\test app\test app\flock.cpp(221): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Test App.vcxproj -> M:\GitHub\HA_proj\Test App\Debug\Test App.exe
