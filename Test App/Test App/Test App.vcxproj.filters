@@ -19,11 +19,14 @@
     <Filter Include="Header Files\Extra">
       <UniqueIdentifier>{980312e2-2628-4a85-be29-03c7c51406e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Complete">
+      <UniqueIdentifier>{f9d7dddd-9021-44c4-8f18-c1cf01516562}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Complete">
+      <UniqueIdentifier>{81d21324-4166-4607-ab42-58404f1b0a62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="flocking_app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,16 +36,7 @@
     <ClCompile Include="boid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="app_camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="food.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="genetic_algorithm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="barnes_hut.cpp">
@@ -53,6 +47,18 @@
     </ClCompile>
     <ClCompile Include="leaf.cpp">
       <Filter>Source Files\Extra</Filter>
+    </ClCompile>
+    <ClCompile Include="app_camera.cpp">
+      <Filter>Source Files\Complete</Filter>
+    </ClCompile>
+    <ClCompile Include="food.cpp">
+      <Filter>Source Files\Complete</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\Complete</Filter>
+    </ClCompile>
+    <ClCompile Include="resource.cpp">
+      <Filter>Source Files\Complete</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,16 +71,7 @@
     <ClInclude Include="boid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="app_camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="food.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="genetic_algorithm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="barnes_hut.h">
@@ -85,6 +82,15 @@
     </ClInclude>
     <ClInclude Include="leaf.h">
       <Filter>Header Files\Extra</Filter>
+    </ClInclude>
+    <ClInclude Include="app_camera.h">
+      <Filter>Header Files\Complete</Filter>
+    </ClInclude>
+    <ClInclude Include="food.h">
+      <Filter>Header Files\Complete</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files\Complete</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

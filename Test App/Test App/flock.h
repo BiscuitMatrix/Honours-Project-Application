@@ -38,7 +38,7 @@ private:
 	gef::Vector2 FoodAttraction(std::vector<boid>::iterator);
 	gef::Vector2 FlockAvoidance(std::vector<boid>::iterator);
 
-	bool CollisionDetection(float combined_radii_length, float shortest_distance);
+	bool CollisionDetection(float combined_radii_length, float shortest_distance_sqr);
 
 	int flock_size_;
 

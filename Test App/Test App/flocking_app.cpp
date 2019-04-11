@@ -44,12 +44,14 @@ void flocking_app::Init()
 	// Flock 1 settings
 	flock_1_ = new flock(platform_);
 	flock_1_pos_ = gef::Vector2(-40.0f, 20.0f);
+	flock_1_pos_ = gef::Vector2(-10.0f, 5.0f);
 	flock_size_1_ = 40;
 	flock_1_->Initialise(flock_1_pos_, flock_size_1_);
 
 	// Flock 2 settings
 	flock_2_ = new flock(platform_);
 	flock_2_pos_ = gef::Vector2(40.0f, -20.0f);
+	flock_2_pos_ = gef::Vector2(10.0f, -5.0f);
 	flock_size_2_ = 40;
 	flock_2_->Initialise(flock_2_pos_, flock_size_2_);
 
