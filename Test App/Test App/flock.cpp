@@ -108,7 +108,7 @@ void flock::RunBoidsAlgorithm(float frame_time)
 				{
 					// Add the position of the neighbour to the sum of all neighbours positions
 					avg_neighbour_pos += iterator2->GetPos();
-					// Add the velocity of the neighbour to the sum of all neighbours positions
+					// Add the velocity of the neighbour to the sum of all neighbours velocities
 					avg_neighbour_vel += iterator2->GetVel();
 					// Increase the number of neighbours by 1
 					neighbour_count++;
@@ -172,7 +172,7 @@ gef::Vector2 flock::Cohesion(gef::Vector2 avg_neighbour_pos, gef::Vector2 boid_p
 	}
 	gef::Vector2 lfc_vec = boid_pos - avg_neighbour_pos;
 	// Calculate the appropriate weighting:
-	weight = 15.0f * (boid_pos.LengthSqr() - avg_neighbour_pos.LengthSqr()) / neighbour_count;
+	weight = (pow(boid_pos.Length() - avg_neighbour_pos.Length(), 2)) / neighbour_count;
 	// Calculate the cohesion vector active for this boid:
 	result = (lfc_vec / lfc_vec.Length()) * weight;
 
@@ -207,7 +207,7 @@ gef::Vector2 flock::Separation(gef::Vector2 closest_neighbour, gef::Vector2 boid
 	// Calculate the appropriate weighting:
 	if (neighbour_count != 0 && closest_neighbour.LengthSqr() != 0)
 	{
-		weight = 0.25f * pow(((float)neighbour_count / closest_neighbour.LengthSqr()), 2);
+		weight = 0.025f * pow(((float)neighbour_count / closest_neighbour.Length()), 2);
 	}
 	// Calculate the separation vector active for this boid:
 	result = ( nearest_neighbour_vec / (-nearest_neighbour_vec.Length()) ) * weight;
@@ -254,7 +254,7 @@ gef::Vector2 flock::FoodAttraction(std::vector<boid>::iterator iterator)
 		// Calculate the vector to the nearest resource:
 		gef::Vector2 nearest_resource_vec = closest_resource - iterator->GetPos();
 		// Calculate the appropriate weighting:
-		weight = (0.25f * distance_to_closest_resource_sqr) + (6.0f / distance_to_closest_resource_sqr);
+		weight = (0.0025f * distance_to_closest_resource_sqr) + (6.0f / distance_to_closest_resource_sqr);
 
 		// Calculate the food attraction vector active for this boid:
 		result = (nearest_resource_vec / nearest_resource_vec.Length()) * weight;
@@ -307,16 +307,40 @@ gef::Vector2 flock::FlockAvoidance(std::vector<boid>::iterator iterator)
 		// Calculate the force applied by the other flock:
 		gef::Vector2 other_flock_vec = avg_other_flock_pos - iterator->GetPos();
 		// Calculate the appropriate weighting:
-		weight = 100.0f / (avg_other_flock_pos.LengthSqr());
+		weight = 300.0f / (avg_other_flock_pos.Length());
 
 		// Calculate the repelling force vector active for this boid from the other flock:
-		result = ((other_flock_vec / -other_flock_vec.Length()) * weight) - other_collision_vector;
+		result = ((other_flock_vec / -other_flock_vec.Length()) * weight);// -other_collision_vector;
 	}
 	else
 	{
 		// There is no flocking behaviour:
 		result.Reset();
 	}
+
+	return result;
+}
+
+gef::Vector2 flock::Boundary(std::vector<boid>::iterator iterator)
+{
+	gef::Vector2 result; 
+	float weight;
+	gef::Vector2 c1(bound_x_, bound_y_);
+	gef::Vector2 c2(-bound_x_, -bound_y_);
+	gef::Vector2 nearest_boundary_vec;
+
+	// Calculate the vector to the nearest border:
+	if ((c1 - iterator->GetPos()).LengthSqr() < (c2 - iterator->GetPos()).LengthSqr())
+	{
+		nearest_boundary_vec = c1 - iterator->GetPos();
+		//weight = pow(((float)neighbour_count / closest_neighbour.Length()), 2);
+	}
+	else
+	{
+		nearest_boundary_vec = c2 - iterator->GetPos();
+	}
+	
+
 
 	return result;
 }
@@ -341,9 +365,10 @@ void flock::PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vect
 	// v = u + at
 	gef::Vector2 velocity = iterator_->GetVel() + (accel * frame_time);
 	velocity.Limit(max_speed_);
+	gef::Vector2 drag = (velocity / -velocity.Length()) * (velocity.Length() / 2.f);
 
 	// x1 = x0 + vt
-	gef::Vector2 new_pos = iterator_->GetPos() + (velocity * frame_time);
+	gef::Vector2 new_pos = iterator_->GetPos() + ((velocity - drag) * frame_time);
 
 	// Update the transform of the object within the scene:
 	iterator_->SetVel(velocity);

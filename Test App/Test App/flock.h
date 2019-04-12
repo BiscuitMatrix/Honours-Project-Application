@@ -37,6 +37,7 @@ private:
 	gef::Vector2 Separation(gef::Vector2, gef::Vector2, int);
 	gef::Vector2 FoodAttraction(std::vector<boid>::iterator);
 	gef::Vector2 FlockAvoidance(std::vector<boid>::iterator);
+	gef::Vector2 Boundary(std::vector<boid>::iterator);
 
 	bool CollisionDetection(float combined_radii_length, float shortest_distance_sqr);
 

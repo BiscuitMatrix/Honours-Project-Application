@@ -1,2 +1,3 @@
 ﻿  flock.cpp
+m:\github\ha_proj\test app\test app\flock.cpp(327): warning C4101: 'weight': unreferenced local variable
   Test App.vcxproj -> M:\GitHub\HA_proj\Test App\Debug\Test App.exe
