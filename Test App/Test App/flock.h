@@ -5,22 +5,27 @@
 #include <thread>
 #include <maths/vector2.h>
 
+#include "Globals.h"
+
 #include "boid.h"
 #include "food.h"
+#include "genetic_algorithm.h"
+#include "DNA.h"
 
 class flock
 {
 public:
 	flock(gef::Platform& platform);
+	//flock(gef::Platform&, );
 	~flock();
 
-	void Initialise(gef::Vector2 flock_centre, int flock_size);
-	void Update(std::vector<boid> *enemy_boids, std::vector<resource> *food, float frame_time);
+	void Initialise(gef::Vector2);
+	void Update(std::vector<boid>*, std::vector<resource>*, float);
 	void CleanUp();
 
-	void RunBoidsAlgorithm(float frame_time);
+	void RunBoidsAlgorithm(float);
 
-	void PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time);
+	void PhysicsCalculations(std::vector<boid>::iterator, gef::Vector2, float);
 
 	int GetFlockSize() { return flock_size_; }
 
@@ -39,7 +44,7 @@ private:
 	gef::Vector2 FlockAvoidance(std::vector<boid>::iterator);
 	gef::Vector2 Boundary(std::vector<boid>::iterator);
 
-	bool CollisionDetection(float combined_radii_length, float shortest_distance_sqr);
+	bool CollisionDetection(float, float);
 
 	int flock_size_;
 

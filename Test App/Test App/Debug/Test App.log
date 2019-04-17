@@ -1,3 +1,9 @@
-﻿  flock.cpp
+﻿  boid.cpp
+m:\github\ha_proj\test app\test app\boid.cpp(17): error C2059: syntax error: ';'
+  flock.cpp
 m:\github\ha_proj\test app\test app\flock.cpp(327): warning C4101: 'weight': unreferenced local variable
-  Test App.vcxproj -> M:\GitHub\HA_proj\Test App\Debug\Test App.exe
+  flocking_app.cpp
+m:\github\ha_proj\test app\test app\flocking_app.cpp(32): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  genetic_algorithm.cpp
+  main.cpp
+  Generating Code...

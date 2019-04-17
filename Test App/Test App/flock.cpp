@@ -19,9 +19,9 @@ flock::~flock()
 }
 
 
-void flock::Initialise(gef::Vector2 flock_centre, int flock_size)
+void flock::Initialise(gef::Vector2 flock_centre)
 {
-	for (int i = 0; i < flock_size; i++)
+	for (int i = 0; i < glo_flock_size; i++)
 	{
 		boid boid_(platform_);
 		boid_.Initialise();
@@ -202,7 +202,7 @@ gef::Vector2 flock::Separation(gef::Vector2 closest_neighbour, gef::Vector2 boid
 	gef::Vector2 result;
 	float weight = 0.0f;
 
-	// Calculate the vector to the nearest schoolmate
+	// Calculate the vector to the nearest flock member
 	gef::Vector2 nearest_neighbour_vec = closest_neighbour - boid_pos;
 	// Calculate the appropriate weighting:
 	if (neighbour_count != 0 && closest_neighbour.LengthSqr() != 0)
@@ -254,7 +254,7 @@ gef::Vector2 flock::FoodAttraction(std::vector<boid>::iterator iterator)
 		// Calculate the vector to the nearest resource:
 		gef::Vector2 nearest_resource_vec = closest_resource - iterator->GetPos();
 		// Calculate the appropriate weighting:
-		weight = (0.0025f * distance_to_closest_resource_sqr) + (6.0f / distance_to_closest_resource_sqr);
+		weight = (0.005f * distance_to_closest_resource_sqr) + (6.0f / distance_to_closest_resource_sqr);
 
 		// Calculate the food attraction vector active for this boid:
 		result = (nearest_resource_vec / nearest_resource_vec.Length()) * weight;
@@ -354,26 +354,24 @@ bool flock::CollisionDetection(float combined_radii_length, float shortest_dista
 	}
 	return false;
 }
-void flock::PhysicsCalculations(std::vector<boid>::iterator iterator_, gef::Vector2 accel, float frame_time)
+void flock::PhysicsCalculations(std::vector<boid>::iterator iterator, gef::Vector2 accel, float frame_time)
 {
 	//iterator_->WrapAround(bound_x_, bound_y_);
-	iterator_->Bounds(bound_x_, bound_y_);
-
-	//gef::Vector2 drag = iterator_->GetVel();
+	iterator->Bounds(bound_x_, bound_y_);
 
 	// Semi-Impicit Euler Method for updated position calculations: 
 	// v = u + at
-	gef::Vector2 velocity = iterator_->GetVel() + (accel * frame_time);
+	gef::Vector2 velocity = iterator->GetVel() + (accel * frame_time);
 	velocity.Limit(max_speed_);
-	gef::Vector2 drag = (velocity / -velocity.Length()) * (velocity.Length() / 2.f);
+	gef::Vector2 drag = (velocity / -velocity.Length()) * (velocity.Length() / 2.0f);
 
 	// x1 = x0 + vt
-	gef::Vector2 new_pos = iterator_->GetPos() + ((velocity - drag) * frame_time);
+	gef::Vector2 new_pos = iterator->GetPos() + ((velocity - drag) * frame_time);
 
 	// Update the transform of the object within the scene:
-	iterator_->SetVel(velocity);
-	iterator_->SetPos(new_pos);
-	iterator_->GetMeshInstance()->set_transform(iterator_->GetTranslationMatrix());
+	iterator->SetVel(velocity);
+	iterator->SetPos(new_pos);
+	iterator->GetMeshInstance()->set_transform(iterator->GetTranslationMatrix());
 }
 
 

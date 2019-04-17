@@ -146,6 +146,7 @@
     <ClInclude Include="flocking_app.h" />
     <ClInclude Include="food.h" />
     <ClInclude Include="genetic_algorithm.h" />
+    <ClInclude Include="Globals.h" />
     <ClInclude Include="leaf.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

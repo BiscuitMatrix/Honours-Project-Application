@@ -14,6 +14,8 @@ boid::~boid()
 
 void boid::Initialise()
 {
+	hunger_bar_ = glo_max_boid_health;
+
 	mesh_ = new gef::Mesh(platform_);
 	mesh_ = CreateCubeMesh();
 
@@ -27,12 +29,9 @@ void boid::Initialise()
 
 void boid::Update(float frame_time)
 {
-	//UpdatePosition(frame_time);
+	hunger_bar_ -= (1.0f * frame_time);
 }
 
-void boid::CollDetect()
-{
-}
 
 void boid::Bounds(float x, float z)
 {

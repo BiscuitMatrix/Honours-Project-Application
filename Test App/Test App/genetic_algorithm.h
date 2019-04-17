@@ -1,6 +1,10 @@
 #pragma once
 
+#include "Globals.h"
+
 #include "DNA.h"
+
+
 
 class genetic_algorithm
 {
@@ -26,7 +30,7 @@ private:
 	int generation_;
 	int population_;
 
-	DNA dna_;
+	DNA dna_[glo_flock_size];
 
 	float boid_health_;
 	float flock_health_;

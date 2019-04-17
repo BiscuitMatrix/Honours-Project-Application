@@ -11,6 +11,8 @@
 #include <maths/vector2.h>
 #include <maths/math_utils.h>
 
+#include "Globals.h"
+
 class boid
 {
 public:
@@ -21,7 +23,6 @@ public:
 
 	void Update(float frame_time);
 
-	void CollDetect();
 	void Bounds(float x, float z);
 	void WrapAround(float x, float z);
 

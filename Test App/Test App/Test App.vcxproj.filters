@@ -98,6 +98,9 @@
     <ClInclude Include="DNA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\gef\d3d11\default_3d_shader_ps.hlsl">

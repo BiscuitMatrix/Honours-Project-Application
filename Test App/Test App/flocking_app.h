@@ -1,5 +1,8 @@
 #pragma once
 
+#include <iostream>
+#include <fstream>
+
 #include <system/application.h>
 #include <graphics/sprite.h>
 #include <maths/vector2.h>
@@ -48,11 +51,8 @@ private:
 
 	flock* flock_1_;
 	gef::Vector2 flock_1_pos_;
-	int flock_size_1_;
-
 	flock* flock_2_;
 	gef::Vector2 flock_2_pos_;
-	int flock_size_2_;
 
 	food* food_;
 	int resource_count_;

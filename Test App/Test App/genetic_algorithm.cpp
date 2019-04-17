@@ -3,7 +3,8 @@
 
 
 genetic_algorithm::genetic_algorithm() :
-	generation_(0)
+	generation_(0),
+	population_(flock_size)
 {
 }
 
