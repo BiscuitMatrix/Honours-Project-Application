@@ -7,6 +7,7 @@
 #include <vector>
 #include <graphics/mesh_instance.h>
 
+#include "genetic_algorithm.h"
 #include "flock.h"
 #include "food.h"
 #include "app_camera.h"
@@ -56,6 +57,7 @@ private:
 	food* food_;
 	int resource_count_;
 
+	genetic_algorithm* genetic_algorithm_;
 
 	app_camera cam_1_;
 };

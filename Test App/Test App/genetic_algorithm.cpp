@@ -2,7 +2,8 @@
 
 
 
-genetic_algorithm::genetic_algorithm()
+genetic_algorithm::genetic_algorithm() :
+	generation_(0)
 {
 }
 
@@ -11,14 +12,8 @@ genetic_algorithm::~genetic_algorithm()
 {
 }
 
-float genetic_algorithm::fitness()
+
+void genetic_algorithm::Initialise()
 {
-	//float result;
 
-	//result = ;
-
-
-
-	//return result;
-	return 0.0f;
 }

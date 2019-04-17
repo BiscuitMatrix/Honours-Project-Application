@@ -62,6 +62,8 @@ void flocking_app::Init()
 	resource_count_ = 50;
 	food_->Initialise(resource_count_);
 
+	// Genetic Algorithm Settings
+
 	// Camera Setup
 	cam_1_.SetupCamera();
 	SetupLights();
@@ -69,6 +71,10 @@ void flocking_app::Init()
 
 void flocking_app::CleanUp()
 {
+	genetic_algorithm_->CleanUp();
+	delete genetic_algorithm_;
+	genetic_algorithm_ = nullptr;
+
 	flock_1_->CleanUp();
 	delete flock_1_;
 	flock_1_ = nullptr;
@@ -94,6 +100,13 @@ void flocking_app::CleanUp()
 
 bool flocking_app::Update(float frame_time)
 {
+	// Here is where we can get the GA to run without rendering if we keep everything enclosed in this function
+	bool something = true;
+	while (something)
+	{
+		something = false;
+	}
+
 	fps_ = 1.0f / frame_time;
 
 	flock_1_->Update(&flock_2_->boids_, &food_->resources_, frame_time);

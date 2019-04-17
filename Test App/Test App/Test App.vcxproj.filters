@@ -60,6 +60,9 @@
     <ClCompile Include="resource.cpp">
       <Filter>Source Files\Complete</Filter>
     </ClCompile>
+    <ClCompile Include="DNA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="flocking_app.h">
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files\Complete</Filter>
+    </ClInclude>
+    <ClInclude Include="DNA.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

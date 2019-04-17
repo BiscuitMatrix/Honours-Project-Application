@@ -127,6 +127,7 @@
     <ClCompile Include="barnes_hut.cpp" />
     <ClCompile Include="boid.cpp" />
     <ClCompile Include="bsp_tree.cpp" />
+    <ClCompile Include="DNA.cpp" />
     <ClCompile Include="flock.cpp" />
     <ClCompile Include="flocking_app.cpp" />
     <ClCompile Include="food.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="barnes_hut.h" />
     <ClInclude Include="boid.h" />
     <ClInclude Include="bsp_tree.h" />
+    <ClInclude Include="DNA.h" />
     <ClInclude Include="flock.h" />
     <ClInclude Include="flocking_app.h" />
     <ClInclude Include="food.h" />

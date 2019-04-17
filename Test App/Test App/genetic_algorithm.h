@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "DNA.h"
 
 class genetic_algorithm
 {
@@ -8,9 +8,26 @@ public:
 	genetic_algorithm();
 	~genetic_algorithm();
 
-	float fitness();
+	// Initialise the algorithm
+	void Initialise();
+	// Evaluate the population at the end of each simulation
+	void Evaluate();
+	// Select top boids from the population
+	void Selection();
+	// Cross-over "mix" the genetic data
+	void Crossover();
+
+	// Take a sample at set intervals of the genetic data of the populace
+	void GeneticSnapshot();
+
+	void CleanUp();
 
 private:
+	int generation_;
+	int population_;
+
+	DNA dna_;
+
 	float boid_health_;
 	float flock_health_;
 	float competing_flock_health_;
