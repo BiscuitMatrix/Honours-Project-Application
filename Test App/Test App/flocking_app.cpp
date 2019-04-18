@@ -55,14 +55,14 @@ void flocking_app::Init()
 	//flock_2_pos_ = gef::Vector2(10.0f, -5.0f);
 	flock_2_->Initialise(flock_2_pos_);
 
+	// Genetic Algorithm Settings
+	//genetic_algorithm_ = new genetic_algorithm();
+	//genetic_algorithm_->Initialise(&flock_2_->boids_);
+
 	// Food settings
 	food_ = new food(platform_);
 	resource_count_ = 50;
 	food_->Initialise(resource_count_);
-
-	// Genetic Algorithm Settings
-	genetic_algorithm_ = new genetic_algorithm();
-	genetic_algorithm_->Initialise(flock_2_->boids_);
 
 	// Camera Setup
 	cam_1_.SetupCamera();

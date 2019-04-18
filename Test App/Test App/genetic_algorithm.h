@@ -14,7 +14,7 @@ public:
 	~genetic_algorithm();
 
 	// Initialise the algorithm
-	void Initialise(std::vector<boid>);
+	void Initialise(std::vector<boid>*);
 	// Evaluate the population at the end of each simulation
 	void Evaluate();
 	// Select top boids from the population
@@ -27,11 +27,14 @@ public:
 
 	void CleanUp();
 
+	std::vector<boid>* boid_ref_;
+
 private:
 	int generation_;
 	int population_;
 
-	std::vector<boid> boids_;
+	
+
 	std::vector<DNA> genetic_information_;
 
 	float boid_health_;
