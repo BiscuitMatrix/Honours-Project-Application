@@ -1,6 +1,7 @@
 #pragma once
 
 #include <system/application.h>
+
 #include <graphics/mesh_instance.h>
 #include <graphics/mesh.h>
 #include <graphics/scene.h>
@@ -12,6 +13,8 @@
 #include <maths/math_utils.h>
 
 #include "Globals.h"
+
+#include "DNA.h"
 
 class boid
 {
@@ -46,6 +49,25 @@ public:
 	gef::Mesh* GetMesh() { return mesh_; };
 	gef::MeshInstance* GetMeshInstance() { return cube_; };
 
+	// Health Mutators
+	int GetHealth() { return health_; }
+	void ResetHealth(int health) { health_ = glo_boid_max_health; }
+	void AddHealth(int add_health)
+	{
+		if ((health_ + add_health) > glo_boid_max_health) health_ = glo_boid_max_health;
+		else health_ += add_health;
+	}
+	float GetHunger() { return hunger_; }
+	void DecreaseHunger(float sub_hunger)
+	{
+		if ((hunger_ + sub_hunger) > glo_boid_max_hunger) hunger_ = glo_boid_max_hunger;
+		else hunger_ += sub_hunger;
+	}
+
+	// Genetic Algorithm Mutators
+	DNA GetDNA() { return dna_; }
+	void SetDNA(DNA dna) { dna_ = dna; }
+
 private:
 	gef::Mesh* CreateCubeMesh();
 
@@ -54,9 +76,12 @@ private:
 	gef::MeshInstance* cube_;
 	UInt32 colour_;
 
-	// Health variables:
+	// Health variables: (Basically a motive to stay alive)
 	int health_;
-	float hunger_bar_;
+	float hunger_;
+
+	// Genetic Algorithm Variables:
+	DNA dna_;
 
 	// Linear Motion Variables:
 	gef::Vector2 vel_;

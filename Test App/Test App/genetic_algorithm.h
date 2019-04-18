@@ -2,6 +2,7 @@
 
 #include "Globals.h"
 
+#include "boid.h"
 #include "DNA.h"
 
 
@@ -13,7 +14,7 @@ public:
 	~genetic_algorithm();
 
 	// Initialise the algorithm
-	void Initialise();
+	void Initialise(std::vector<boid>);
 	// Evaluate the population at the end of each simulation
 	void Evaluate();
 	// Select top boids from the population
@@ -30,7 +31,8 @@ private:
 	int generation_;
 	int population_;
 
-	DNA dna_[glo_flock_size];
+	std::vector<boid> boids_;
+	std::vector<DNA> genetic_information_;
 
 	float boid_health_;
 	float flock_health_;

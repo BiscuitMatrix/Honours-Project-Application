@@ -3,7 +3,8 @@
 // Flocking App
 
 // Boids
-static const float glo_max_boid_health = 100.0f;
+static const int glo_boid_max_health = 100;
+static const float glo_boid_max_hunger = 100.0f;
 
 // Flock
 static const int glo_flock_size = 40;

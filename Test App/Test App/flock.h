@@ -15,8 +15,7 @@
 class flock
 {
 public:
-	flock(gef::Platform& platform);
-	//flock(gef::Platform&, );
+	flock(gef::Platform&, bool);
 	~flock();
 
 	void Initialise(gef::Vector2);
@@ -58,5 +57,8 @@ private:
 	static float bound_x_, bound_y_;
 
 	gef::Platform& platform_;
+
+	// Genetic Algorithm Specific Area:
+	bool GA_enabled_;
 };
 

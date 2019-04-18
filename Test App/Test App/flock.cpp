@@ -9,8 +9,9 @@ float flock::bound_y_ = 30.0f;
 float flock::food_detection_sqr_ = 225.0f;
 float flock::interaction_distance_sqr_ = 100.0f;
 
-flock::flock(gef::Platform& platform) :
-	platform_(platform)
+flock::flock(gef::Platform& platform, bool isGAenabled) :
+	platform_(platform),
+	GA_enabled_(isGAenabled)
 {
 }
 
@@ -26,7 +27,7 @@ void flock::Initialise(gef::Vector2 flock_centre)
 		boid boid_(platform_);
 		boid_.Initialise();
 
-		// Slightly randomise positions: (Surprisingly tiny variations away from a result of 5.0f create a large difference)
+		// Slightly randomise positions: (Surprisingly tiny variations away from a result of 5.0f create a large positional difference)
 		float rand_jiggle = (float)(rand() % 100 + 4950) / 1000.0f;
 
 		#pragma region boid_placement
@@ -34,7 +35,6 @@ void flock::Initialise(gef::Vector2 flock_centre)
 		float y = ((float)i / rand_jiggle) * 3.14159f;
 
 		gef::Vector2 pos;
-
 		// Luke! Use the rounding error ~~~~~~~% *poof*
 		int mult = i / 10;
 		// Generate the concentric cirles of boids
@@ -62,7 +62,6 @@ void flock::Update(std::vector<boid> *enemy_boids, std::vector<resource> *resour
 	resources_ = resources;
 
 	// Run boids algorithm
-	//boid::RunBoidsAlgorithm(&boids_, frame_time); <- This is a good reference, but dont use it in this program
 	RunBoidsAlgorithm(frame_time);
 
 	// Run the Genetic Algorithm
@@ -155,6 +154,9 @@ void flock::RunBoidsAlgorithm(float frame_time)
 		gef::Vector2 acceleration = separation + cohesion + alignment - collision_vector + food_attraction + flock_avoidance;
 		// Update Physics
 		PhysicsCalculations(iterator, acceleration, frame_time);
+
+		// Update boid specific calculations
+		iterator->Update(frame_time);
 	}
 }
 
@@ -172,7 +174,7 @@ gef::Vector2 flock::Cohesion(gef::Vector2 avg_neighbour_pos, gef::Vector2 boid_p
 	}
 	gef::Vector2 lfc_vec = boid_pos - avg_neighbour_pos;
 	// Calculate the appropriate weighting:
-	weight = (pow(boid_pos.Length() - avg_neighbour_pos.Length(), 2)) / neighbour_count;
+	weight = (pow(boid_pos.Length() - avg_neighbour_pos.Length(), 2)) / (30.0f * (float)glo_flock_size*(float)glo_flock_size);
 	// Calculate the cohesion vector active for this boid:
 	result = (lfc_vec / lfc_vec.Length()) * weight;
 
@@ -227,24 +229,27 @@ gef::Vector2 flock::FoodAttraction(std::vector<boid>::iterator iterator)
 	// For each resource in the environment:
 	for (std::vector<resource>::iterator iterator2 = resources_->begin(); iterator2 != resources_->end(); iterator2++)
 	{
-		// Identify the distance between the two boids:
-		gef::Vector2 distance_vector = gef::Vector2(iterator2->GetPos().x - iterator->GetPos().x, iterator2->GetPos().y - iterator->GetPos().y);
-		float shortest_distance_sqr = distance_vector.LengthSqr();
-
-		// If the positions are close enough to interact
-		if (shortest_distance_sqr < food_detection_sqr_)
+		if (iterator2->GetActive())
 		{
-			// Find the vector to the nearest resource:
-			if (distance_to_closest_resource_sqr > shortest_distance_sqr)
-			{
-				closest_resource = iterator2->GetPos();
-				distance_to_closest_resource_sqr = shortest_distance_sqr;
-			}
+			// Identify the distance between the two boids:
+			gef::Vector2 distance_vector = gef::Vector2(iterator2->GetPos().x - iterator->GetPos().x, iterator2->GetPos().y - iterator->GetPos().y);
+			float shortest_distance_sqr = distance_vector.LengthSqr();
 
-			if (CollisionDetection((iterator->GetMesh()->bounding_sphere().radius() - 0.3f), shortest_distance_sqr))
+			// If the positions are close enough to interact
+			if (shortest_distance_sqr < food_detection_sqr_)
 			{
-				iterator2->SetActive(false);
-				iterator->HasEaten();
+				// Find the vector to the nearest resource:
+				if (distance_to_closest_resource_sqr > shortest_distance_sqr)
+				{
+					closest_resource = iterator2->GetPos();
+					distance_to_closest_resource_sqr = shortest_distance_sqr;
+				}
+
+				if (CollisionDetection((iterator->GetMesh()->bounding_sphere().radius() - 0.3f), shortest_distance_sqr))
+				{
+					iterator2->SetActive(false);
+					iterator->HasEaten();
+				}
 			}
 		}
 	}
@@ -254,7 +259,7 @@ gef::Vector2 flock::FoodAttraction(std::vector<boid>::iterator iterator)
 		// Calculate the vector to the nearest resource:
 		gef::Vector2 nearest_resource_vec = closest_resource - iterator->GetPos();
 		// Calculate the appropriate weighting:
-		weight = (0.005f * distance_to_closest_resource_sqr) + (6.0f / distance_to_closest_resource_sqr);
+		weight = (0.0025f * distance_to_closest_resource_sqr) + (36.0f / distance_to_closest_resource_sqr);
 
 		// Calculate the food attraction vector active for this boid:
 		result = (nearest_resource_vec / nearest_resource_vec.Length()) * weight;

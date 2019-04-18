@@ -43,18 +43,14 @@ void flocking_app::Init()
 	environment_->set_width(940.0f);
 	environment_->set_height(524.0f);
 
-	// Genetic Algorithm Settings
-	genetic_algorithm_ = new genetic_algorithm();
-	genetic_algorithm_->Initialise();
-
 	// Flock 1 settings
-	flock_1_ = new flock(platform_);
+	flock_1_ = new flock(platform_, false);
 	flock_1_pos_ = gef::Vector2(-40.0f, 20.0f);
 	//flock_1_pos_ = gef::Vector2(-10.0f, 5.0f);
 	flock_1_->Initialise(flock_1_pos_);
 
 	// Flock 2 settings
-	flock_2_ = new flock(platform_);
+	flock_2_ = new flock(platform_, true);
 	flock_2_pos_ = gef::Vector2(40.0f, -20.0f);
 	//flock_2_pos_ = gef::Vector2(10.0f, -5.0f);
 	flock_2_->Initialise(flock_2_pos_);
@@ -64,6 +60,10 @@ void flocking_app::Init()
 	resource_count_ = 50;
 	food_->Initialise(resource_count_);
 
+	// Genetic Algorithm Settings
+	genetic_algorithm_ = new genetic_algorithm();
+	genetic_algorithm_->Initialise(flock_2_->boids_);
+
 	// Camera Setup
 	cam_1_.SetupCamera();
 	SetupLights();
@@ -72,8 +72,8 @@ void flocking_app::Init()
 void flocking_app::CleanUp()
 {
 	//genetic_algorithm_->CleanUp();
-	//delete genetic_algorithm_;
-	//genetic_algorithm_ = nullptr;
+	delete genetic_algorithm_;
+	genetic_algorithm_ = nullptr;
 
 	flock_1_->CleanUp();
 	delete flock_1_;
