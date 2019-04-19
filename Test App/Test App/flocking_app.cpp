@@ -56,8 +56,8 @@ void flocking_app::Init()
 	flock_2_->Initialise(flock_2_pos_);
 
 	// Genetic Algorithm Settings
-	//genetic_algorithm_ = new genetic_algorithm();
-	//genetic_algorithm_->Initialise(&flock_2_->boids_);
+	genetic_algorithm_ = new genetic_algorithm();
+	genetic_algorithm_->Initialise(&flock_2_->boids_);
 
 	// Food settings
 	food_ = new food(platform_);

@@ -145,9 +145,9 @@ void flock::RunBoidsAlgorithm(float frame_time)
 			if (GA_enabled_)
 			{
 				// Calculate the basic boids forces:
-				cohesion = GACohesion(avg_neighbour_pos, iterator->GetPos(), neighbour_count);
-				alignment = GAAlignment(avg_neighbour_pos, avg_neighbour_vel, iterator->GetPos(), neighbour_count);
-				separation = GASeparation(closest_neighbour, iterator->GetPos(), neighbour_count);
+				cohesion = GACohesion(iterator->GetDNA(), avg_neighbour_pos, iterator->GetPos(), neighbour_count);
+				alignment = GAAlignment(iterator->GetDNA(), avg_neighbour_pos, avg_neighbour_vel, iterator->GetPos(), neighbour_count);
+				separation = GASeparation(iterator->GetDNA(), closest_neighbour, iterator->GetPos(), neighbour_count);
 			}
 			else
 			{
@@ -373,7 +373,7 @@ gef::Vector2 flock::Boundary(std::vector<boid>::iterator iterator)
 }
 
 
-gef::Vector2 flock::GACohesion(gef::Vector2 avg_neighbour_pos, gef::Vector2 boid_pos, int neighbour_count)
+gef::Vector2 flock::GACohesion(DNA dna, gef::Vector2 avg_neighbour_pos, gef::Vector2 boid_pos, int neighbour_count)
 {
 	gef::Vector2 result;
 	float weight;
@@ -386,21 +386,19 @@ gef::Vector2 flock::GACohesion(gef::Vector2 avg_neighbour_pos, gef::Vector2 boid
 	}
 	gef::Vector2 lfc_vec = boid_pos - avg_neighbour_pos;
 	// Calculate the appropriate weighting:
-	// GetCohMult();
-	// GetCohDivMult();
-	weight = (pow(boid_pos.Length() - avg_neighbour_pos.Length(), 2)) / (30.0f * (float)glo_flock_size*(float)glo_flock_size);
+	weight = (dna.GetData(0) * pow(boid_pos.Length() - avg_neighbour_pos.Length(), 2)) / (dna.GetData(1) * (float)glo_flock_size*(float)glo_flock_size);
 	// Calculate the cohesion vector active for this boid:
 	result = (lfc_vec / lfc_vec.Length()) * weight;
 
 	return result;
 }
-gef::Vector2 flock::GAAlignment(gef::Vector2 avg_neighbour_pos, gef::Vector2 avg_neighbour_vel, gef::Vector2 boid_pos, int neighbour_count)
+gef::Vector2 flock::GAAlignment(DNA dna, gef::Vector2 avg_neighbour_pos, gef::Vector2 avg_neighbour_vel, gef::Vector2 boid_pos, int neighbour_count)
 {
 	gef::Vector2 result;
 	float weight;
 
 	// Calculate the appropriate weighting:
-	weight = 1.0f / (10.0f * ((avg_neighbour_pos - boid_pos).Length()));
+	weight = dna.GetData(2) / (dna.GetData(3) * ((avg_neighbour_pos - boid_pos).Length()));
 	// Calculate the alignment vector active for this boid:
 	if (avg_neighbour_vel.LengthSqr() != 0.0f)
 	{
@@ -413,7 +411,7 @@ gef::Vector2 flock::GAAlignment(gef::Vector2 avg_neighbour_pos, gef::Vector2 avg
 
 	return result;
 }
-gef::Vector2 flock::GASeparation(gef::Vector2 closest_neighbour, gef::Vector2 boid_pos, int neighbour_count)
+gef::Vector2 flock::GASeparation(DNA dna, gef::Vector2 closest_neighbour, gef::Vector2 boid_pos, int neighbour_count)
 {
 	gef::Vector2 result;
 	float weight = 0.0f;
@@ -423,7 +421,7 @@ gef::Vector2 flock::GASeparation(gef::Vector2 closest_neighbour, gef::Vector2 bo
 	// Calculate the appropriate weighting:
 	if (neighbour_count != 0 && closest_neighbour.LengthSqr() != 0)
 	{
-		weight = 0.025f * pow(((float)neighbour_count / closest_neighbour.Length()), 2);
+		weight = dna.GetData(4) * pow(((dna.GetData(5) * (float)neighbour_count) / (dna.GetData(6) * closest_neighbour.Length())), 2);
 	}
 	// Calculate the separation vector active for this boid:
 	result = (nearest_neighbour_vec / (-nearest_neighbour_vec.Length())) * weight;
@@ -472,7 +470,7 @@ gef::Vector2 flock::GAFoodAttraction(std::vector<boid>::iterator iterator)
 		// Calculate the vector to the nearest resource:
 		gef::Vector2 nearest_resource_vec = closest_resource - iterator->GetPos();
 		// Calculate the appropriate weighting:
-		weight = (0.0025f * distance_to_closest_resource_sqr) + (36.0f / distance_to_closest_resource_sqr);
+		weight = (iterator->GetDNA().GetData(7) * distance_to_closest_resource_sqr) + (iterator->GetDNA().GetData(8) / (iterator->GetDNA().GetData(9) * distance_to_closest_resource_sqr));
 
 		// Calculate the food attraction vector active for this boid:
 		result = (nearest_resource_vec / nearest_resource_vec.Length()) * weight;
@@ -524,7 +522,7 @@ gef::Vector2 flock::GAFlockAvoidance(std::vector<boid>::iterator iterator)
 		// Calculate the force applied by the other flock:
 		gef::Vector2 other_flock_vec = avg_other_flock_pos - iterator->GetPos();
 		// Calculate the appropriate weighting:
-		weight = 300.0f / (avg_other_flock_pos.Length());
+		weight = iterator->GetDNA().GetData(10) / (iterator->GetDNA().GetData(11) * avg_other_flock_pos.Length());
 
 		// Calculate the repelling force vector active for this boid from the other flock:
 		result = ((other_flock_vec / -other_flock_vec.Length()) * weight);// -other_collision_vector;

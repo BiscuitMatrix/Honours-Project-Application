@@ -1,11 +1,4 @@
-﻿  boid.cpp
-  DNA.cpp
-  flock.cpp
-m:\github\ha_proj\test app\test app\flock.cpp(339): warning C4101: 'weight': unreferenced local variable
-  flocking_app.cpp
-m:\github\ha_proj\test app\test app\flocking_app.cpp(32): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  genetic_algorithm.cpp
-m:\github\ha_proj\test app\test app\genetic_algorithm.cpp(28): warning C4101: 'genetic_variation': unreferenced local variable
-  main.cpp
-  Generating Code...
+﻿  flock.cpp
+m:\github\ha_proj\test app\test app\flock.cpp(354): warning C4101: 'weight': unreferenced local variable
+m:\github\ha_proj\test app\test app\flock.cpp(541): warning C4101: 'weight': unreferenced local variable
   Test App.vcxproj -> M:\GitHub\HA_proj\Test App\Debug\Test App.exe

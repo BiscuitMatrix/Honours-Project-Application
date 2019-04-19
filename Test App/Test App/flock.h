@@ -43,9 +43,9 @@ private:
 	gef::Vector2 FlockAvoidance(std::vector<boid>::iterator);
 	gef::Vector2 Boundary(std::vector<boid>::iterator);
 
-	gef::Vector2 GACohesion(gef::Vector2, gef::Vector2, int);
-	gef::Vector2 GAAlignment(gef::Vector2, gef::Vector2, gef::Vector2, int);
-	gef::Vector2 GASeparation(gef::Vector2, gef::Vector2, int);
+	gef::Vector2 GACohesion(DNA, gef::Vector2, gef::Vector2, int);
+	gef::Vector2 GAAlignment(DNA, gef::Vector2, gef::Vector2, gef::Vector2, int);
+	gef::Vector2 GASeparation(DNA, gef::Vector2, gef::Vector2, int);
 	gef::Vector2 GAFoodAttraction(std::vector<boid>::iterator);
 	gef::Vector2 GAFlockAvoidance(std::vector<boid>::iterator);
 	gef::Vector2 GABoundary(std::vector<boid>::iterator);
