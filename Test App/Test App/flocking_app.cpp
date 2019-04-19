@@ -56,12 +56,12 @@ void flocking_app::Init()
 	flock_2_->Initialise(flock_2_pos_);
 
 	// Genetic Algorithm Settings
-	genetic_algorithm_ = new genetic_algorithm();
-	genetic_algorithm_->Initialise(&flock_2_->boids_);
+	//genetic_algorithm_ = new genetic_algorithm();
+	//genetic_algorithm_->Initialise(&flock_2_->boids_);
 
 	// Food settings
 	food_ = new food(platform_);
-	resource_count_ = 50;
+	resource_count_ = 10;
 	food_->Initialise(resource_count_);
 
 	// Camera Setup
@@ -135,7 +135,7 @@ void flocking_app::Render()
 	// draw meshes here
 	renderer_3d_->Begin();
 	
-	// Set the colour of flock 1 - Blue
+	// Set the colour of flock 1 - Red
 	colour = 0xFF0000FF;
 	object_colour.set_colour(colour);
 	renderer_3d_->set_override_material(&object_colour);
@@ -145,7 +145,7 @@ void flocking_app::Render()
 		renderer_3d_->DrawMesh(*iterator_->GetMeshInstance());
 	}
 
-	// Set the colour of the flock 2 - Red
+	// Set the colour of the flock 2 - Blue
 	colour = 0xFFFF0000;
 	object_colour.set_colour(colour);
 	renderer_3d_->set_override_material(&object_colour);

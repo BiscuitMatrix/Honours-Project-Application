@@ -13,14 +13,17 @@ genetic_algorithm::~genetic_algorithm()
 {
 }
 
+void genetic_algorithm::CleanUp()
+{
+
+}
+
 
 void genetic_algorithm::Initialise(std::vector<boid> *boids)
 {
-	// Give the genetic algorithm a reference to the boids in the scene
-	boid_ref_ = boids;
-
+	int i = 0;
 	// For each boid:
-	for (std::vector<boid>::iterator iterator = boid_ref_->begin(); iterator != boid_ref_->end(); iterator++)
+	for (std::vector<boid>::iterator iterator = boids->begin(); iterator != boids->end(); iterator++)
 	{
 		// populate the genetic data
 			DNA dna = DNA();
@@ -46,34 +49,75 @@ void genetic_algorithm::Initialise(std::vector<boid> *boids)
 			data[11] = 1.0f;		// floav_div_mult_
 
 			dna.UpdateDataSet(data);
-			genetic_information_.push_back(dna);
 
-			iterator->SetDNA(&dna);
+			std::string txt_folder("GeneticDatatxt/Generation_1/boid_data_");
+			std::string txt_base(".txt");
+
+			std::string csv_folder("GeneticDataCSV/Simulation_1/boid_data_");
+			std::string csv_base(".csv");
+
+			dna.StoreData(txt_folder+std::to_string(i)+txt_base, csv_folder+std::to_string(i)+csv_base);
+			i++;
+			//genetic_information_.push_back(dna);
+
+			iterator->SetDNA(dna);
 	}
-	
-	for (std::vector<DNA>::iterator iterator = genetic_information_.begin(); iterator != genetic_information_.end(); iterator++)
+}
+
+void genetic_algorithm::Update(std::vector<boid>* boids)
+{
+	int i = 0;
+	// For each boid:
+	for (std::vector<boid>::iterator iterator = boids->begin(); iterator != boids->end(); iterator++)
 	{
-		// The DNA will affect the weightings of each boid force in a standardised way (but will create a lot of variety!)
+		// populate the genetic data
+		DNA dna = iterator->GetDNA();
 
+		float data[12];
+		float genetic_variation;
+
+		for (int j = 0; j < 12; j++)
+		{
+			// Probability of Mutation
+			// rand (15% chance of mutation for this variable)
+
+			// Modification based off of the percentage, so all modifications are done in the same relative scale
+
+			data[j] = dna.GetData(j);// + mutating factor[j];
+		}
+
+		dna.UpdateDataSet(data);
+
+		std::string txt_folder("GeneticDatatxt/Generation_1/boid_data_");
+		std::string txt_base(".txt");
+
+		std::string csv_folder("GeneticDataCSV/Simulation_1/boid_data_");
+		std::string csv_base(".csv");
+
+		dna.StoreData(txt_folder + std::to_string(i) + txt_base, csv_folder + std::to_string(i) + csv_base);
+		i++;
+		//genetic_information_.push_back(dna);
+
+		iterator->SetDNA(dna);
 	}
-
-	// Add the genetic data to these boids
-	std::vector<DNA>::iterator dna_iterator = genetic_information_.begin();
-	for (std::vector<boid>::iterator iterator = boid_ref_->begin(); iterator != boid_ref_->end(); iterator++)
-	{
-		// Set the DNA for that boid
-		//iterator->SetDNA(*dna_iterator);
-		// Move the DNA iterator along (assumes DNA vector length is the same as boid vector length
-		//if (dna_iterator != genetic_information_.end())
-		//{
-		//	dna_iterator++;
-		//}
-	}
-
-	//boids_ = nullptr;
 }
 
 void genetic_algorithm::Evaluate()
+{
+
+}
+
+void genetic_algorithm::Selection()
+{
+
+}
+
+void genetic_algorithm::Crossover()
+{
+
+}
+
+void genetic_algorithm::GeneticSnapshot()
 {
 
 }

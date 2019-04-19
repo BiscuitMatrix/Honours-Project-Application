@@ -15,6 +15,9 @@ public:
 
 	// Initialise the algorithm
 	void Initialise(std::vector<boid>*);
+	// Update the Algorithm
+	void Update(std::vector<boid>*);
+
 	// Evaluate the population at the end of each simulation
 	void Evaluate();
 	// Select top boids from the population
