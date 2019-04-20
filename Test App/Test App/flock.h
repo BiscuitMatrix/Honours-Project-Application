@@ -22,6 +22,8 @@ public:
 	void Update(std::vector<boid>*, std::vector<resource>*, float);
 	void CleanUp();
 
+	void Reset(int);
+
 	void RunBoidsAlgorithm(float);
 
 	void PhysicsCalculations(std::vector<boid>::iterator, gef::Vector2, float);
@@ -68,5 +70,7 @@ private:
 	// Genetic Algorithm Specific Area:
 	bool GA_enabled_;
 	genetic_algorithm* genetic_algorithm_;
+
+	gef::Vector2 reset_pos_;
 };
 

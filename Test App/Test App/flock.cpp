@@ -22,6 +22,8 @@ flock::~flock()
 
 void flock::Initialise(gef::Vector2 flock_centre)
 {
+	reset_pos_ = flock_centre;
+
 	for (int i = 0; i < glo_flock_size; i++)
 	{
 		boid boid_(platform_);
@@ -74,6 +76,44 @@ void flock::Update(std::vector<boid> *enemy_boids, std::vector<resource> *resour
 	// Run the Genetic Algorithm
 
 
+}
+
+void flock::Reset(int generation)
+{
+	int boid_num = 0;
+	for (std::vector<boid>::iterator iterator = boids_.begin(); iterator != boids_.end(); iterator++)
+	{
+		// Slightly randomise positions: (Surprisingly tiny variations away from a result of 5.0f create a large positional difference)
+		float rand_jiggle = (float)(rand() % 100 + 4950) / 1000.0f;
+
+		float x = ((float)boid_num / rand_jiggle) * 3.14159f;
+		float y = ((float)boid_num / rand_jiggle) * 3.14159f;
+
+		gef::Vector2 pos;
+		// Luke! Use the rounding error ~~~~~~~% *poof*
+		int mult = boid_num / 10;
+		// Generate the concentric cirles of boids
+		if (mult > 0)
+		{
+			pos = gef::Vector2(reset_pos_.x + 2 * ((float)(mult + 1))*sin(x), reset_pos_.y + 2 * ((float)(mult + 1))*cos(y));
+		}
+		else
+		{
+			pos = gef::Vector2(reset_pos_.x + 2 * sin(x), reset_pos_.y + 2 * cos(y));
+		}
+
+		iterator->SetPos(pos);
+		iterator->GetMeshInstance()->set_transform(iterator->GetTranslationMatrix());
+
+		// Update the number so the boid positions work correctly
+		boid_num++;
+	}
+
+	if (GA_enabled_)
+	{
+		// Run the genetic algorithm 
+		genetic_algorithm_->Update(&boids_, generation);
+	}
 }
 
 void flock::RunBoidsAlgorithm(float frame_time)
@@ -596,3 +636,5 @@ void flock::CleanUp()
 		iterator_->CleanUp();
 	}
 }
+
+

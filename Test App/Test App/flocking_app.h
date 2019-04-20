@@ -58,6 +58,8 @@ private:
 	int resource_count_;
 
 	genetic_algorithm* genetic_algorithm_;
+	bool genetic_improvement_;
+	int generation_;
 
 	app_camera cam_1_;
 };

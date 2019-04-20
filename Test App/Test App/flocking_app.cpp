@@ -55,23 +55,22 @@ void flocking_app::Init()
 	//flock_2_pos_ = gef::Vector2(10.0f, -5.0f);
 	flock_2_->Initialise(flock_2_pos_);
 
-	// Genetic Algorithm Settings
-	//genetic_algorithm_ = new genetic_algorithm();
-	//genetic_algorithm_->Initialise(&flock_2_->boids_);
-
 	// Food settings
 	food_ = new food(platform_);
-	resource_count_ = 10;
+	resource_count_ = 50;
 	food_->Initialise(resource_count_);
 
 	// Camera Setup
 	cam_1_.SetupCamera();
 	SetupLights();
+
+	// Genetic Algorithm Setup
+	genetic_improvement_ = false;
+	generation_ = 1;
 }
 
 void flocking_app::CleanUp()
 {
-	//genetic_algorithm_->CleanUp();
 	delete genetic_algorithm_;
 	genetic_algorithm_ = nullptr;
 
@@ -100,17 +99,68 @@ void flocking_app::CleanUp()
 
 bool flocking_app::Update(float frame_time)
 {
-	// Here is where we can get the GA to run without rendering if we keep everything enclosed in this function
-	bool something = true;
-	while (something)
-	{
-		something = false;
-	}
-
 	fps_ = 1.0f / frame_time;
 
-	flock_1_->Update(&flock_2_->boids_, &food_->resources_, frame_time);
-	flock_2_->Update(&flock_1_->boids_, &food_->resources_, frame_time);
+	// Here is where we can get the GA to run without rendering if we keep everything enclosed in this function
+	int generations_left_ = glo_number_of_generations_per_improvement;
+	float time_per_generation = 30.0f;
+	// Skip the rendering process while this occurs
+	while (genetic_improvement_)
+	{
+		// Run, run, as fast as you can! You can't catch meee, i'm the gingerbread man!
+		// Something to do with time etc... Basically stop limiting my movement to per second   >>>>>>   Speed up time!   >>>>>>
+
+		if (rand() % 2 == 1)
+		{
+			flock_1_->Update(&flock_2_->boids_, &food_->resources_, frame_time);
+			flock_2_->Update(&flock_1_->boids_, &food_->resources_, frame_time);
+		}
+		else
+		{
+			flock_2_->Update(&flock_1_->boids_, &food_->resources_, frame_time);
+			flock_1_->Update(&flock_2_->boids_, &food_->resources_, frame_time);
+		}
+
+		if (time_per_generation <= 0.0f)
+		{
+			// Reset time for the next generation
+			time_per_generation = 30.0f;
+			// Reduce the number of generations
+			generations_left_--;
+			// Increase the number of generations in this simulation
+			generation_++;
+			// Reset the simulation
+			flock_1_->Reset(generation_);
+			flock_2_->Reset(generation_);
+			// Also reset food...
+		}
+
+		if (generations_left_ == 0)
+		{
+			genetic_improvement_ = false;
+		}
+	}
+
+	//if (button_press)
+	//{
+		// Reset the simulation
+		// ...
+		//
+		// Run the genetic improvement again
+		// genetic_improvement = true;
+	//}
+
+	// Regular Rendered Simulation
+	if (rand() % 2 == 1)
+	{
+		flock_1_->Update(&flock_2_->boids_, &food_->resources_, frame_time);
+		flock_2_->Update(&flock_1_->boids_, &food_->resources_, frame_time);
+	}
+	else
+	{
+		flock_2_->Update(&flock_1_->boids_, &food_->resources_, frame_time);
+		flock_1_->Update(&flock_2_->boids_, &food_->resources_, frame_time);
+	}
 
 	food_->Update(frame_time);
 

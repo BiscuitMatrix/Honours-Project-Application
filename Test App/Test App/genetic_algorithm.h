@@ -16,8 +16,7 @@ public:
 	// Initialise the algorithm
 	void Initialise(std::vector<boid>*);
 	// Update the Algorithm
-	void Update(std::vector<boid>*);
-
+	void Update(std::vector<boid>*, int);
 	// Evaluate the population at the end of each simulation
 	void Evaluate();
 	// Select top boids from the population
@@ -27,10 +26,6 @@ public:
 
 	// Take a sample at set intervals of the genetic data of the populace
 	void GeneticSnapshot();
-
-	void CleanUp();
-
-	std::vector<boid>* boid_ref_;
 
 private:
 	int generation_;

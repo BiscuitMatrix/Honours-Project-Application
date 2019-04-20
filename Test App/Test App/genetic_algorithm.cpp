@@ -7,21 +7,13 @@ genetic_algorithm::genetic_algorithm() :
 	population_(glo_flock_size)
 {
 }
-
-
 genetic_algorithm::~genetic_algorithm()
 {
 }
 
-void genetic_algorithm::CleanUp()
-{
-
-}
-
-
 void genetic_algorithm::Initialise(std::vector<boid> *boids)
 {
-	int i = 0;
+	int file_num = 0;
 	// For each boid:
 	for (std::vector<boid>::iterator iterator = boids->begin(); iterator != boids->end(); iterator++)
 	{
@@ -50,23 +42,24 @@ void genetic_algorithm::Initialise(std::vector<boid> *boids)
 
 			dna.UpdateDataSet(data);
 
-			std::string txt_folder("GeneticDatatxt/Generation_1/boid_data_");
+			std::string txt_directory("GeneticDatatxt/Generation_1");
+			std::string txt_file_name("/boid_data_");
 			std::string txt_base(".txt");
 
-			std::string csv_folder("GeneticDataCSV/Simulation_1/boid_data_");
+			std::string csv_directory("GeneticDataCSV/Simulation_");
+			std::string csv_file_name("/boid_data_");
 			std::string csv_base(".csv");
 
-			dna.StoreData(txt_folder+std::to_string(i)+txt_base, csv_folder+std::to_string(i)+csv_base);
-			i++;
-			//genetic_information_.push_back(dna);
+			dna.StoreData(txt_directory+txt_file_name+std::to_string(file_num)+txt_base, csv_directory+ std::to_string(glo_simulation_number)+csv_file_name+std::to_string(file_num)+csv_base);
+			file_num++;
 
 			iterator->SetDNA(dna);
 	}
 }
 
-void genetic_algorithm::Update(std::vector<boid>* boids)
+void genetic_algorithm::Update(std::vector<boid>* boids, int generation)
 {
-	int i = 0;
+	int file_num = 0;
 	// For each boid:
 	for (std::vector<boid>::iterator iterator = boids->begin(); iterator != boids->end(); iterator++)
 	{
@@ -76,28 +69,31 @@ void genetic_algorithm::Update(std::vector<boid>* boids)
 		float data[12];
 		float genetic_variation;
 
-		for (int j = 0; j < 12; j++)
+		for (int point = 0; point < 12; point++)
 		{
 			// Probability of Mutation
 			// rand (15% chance of mutation for this variable)
 
 			// Modification based off of the percentage, so all modifications are done in the same relative scale
 
-			data[j] = dna.GetData(j);// + mutating factor[j];
+			data[point] = dna.GetData(point);// + mutating factor[point];
 		}
 
 		dna.UpdateDataSet(data);
 
-		std::string txt_folder("GeneticDatatxt/Generation_1/boid_data_");
+		std::string txt_directory("GeneticDatatxt/Generation_");
+		std::string txt_file_name("/boid_data_");
 		std::string txt_base(".txt");
 
-		std::string csv_folder("GeneticDataCSV/Simulation_1/boid_data_");
+		std::string csv_directory("GeneticDataCSV/Simulation_");
+		std::string csv_file_name("/boid_data_");
 		std::string csv_base(".csv");
 
-		dna.StoreData(txt_folder + std::to_string(i) + txt_base, csv_folder + std::to_string(i) + csv_base);
-		i++;
-		//genetic_information_.push_back(dna);
-
+		dna.StoreData(
+			txt_directory+std::to_string(generation)+txt_file_name+std::to_string(file_num)+txt_base, 
+			csv_directory+std::to_string(glo_simulation_number)+csv_file_name+std::to_string(file_num)+csv_base);
+		file_num++;
+		// Add the newly produced dna to the boid:
 		iterator->SetDNA(dna);
 	}
 }
