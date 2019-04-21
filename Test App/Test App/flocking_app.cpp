@@ -131,8 +131,8 @@ bool flocking_app::Update(float frame_time)
 			generation_++;
 			// Reset the simulation
 			flock_1_->Reset(generation_);
-			flock_2_->Reset(generation_);
-			// Also reset food...
+			flock_2_->GAReset(flock_1_->GetFlockHealth(), generation_);
+			// Also reset food... 
 		}
 
 		if (generations_left_ == 0)

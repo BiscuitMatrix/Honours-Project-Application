@@ -11,7 +11,8 @@ float flock::interaction_distance_sqr_ = 100.0f;
 
 flock::flock(gef::Platform& platform, bool isGAenabled) :
 	platform_(platform),
-	GA_enabled_(isGAenabled)
+	GA_enabled_(isGAenabled),
+	flock_health_(0.0f)
 {
 }
 
@@ -81,8 +82,45 @@ void flock::Update(std::vector<boid> *enemy_boids, std::vector<resource> *resour
 void flock::Reset(int generation)
 {
 	int boid_num = 0;
+	flock_health_ = 0;
 	for (std::vector<boid>::iterator iterator = boids_.begin(); iterator != boids_.end(); iterator++)
 	{
+		flock_health_ += iterator->GetHealth();
+
+		// Slightly randomise positions: (Surprisingly tiny variations away from a result of 5.0f create a large positional difference)
+		float rand_jiggle = (float)(rand() % 100 + 4950) / 1000.0f;
+
+		float x = ((float)boid_num / rand_jiggle) * 3.14159f;
+		float y = ((float)boid_num / rand_jiggle) * 3.14159f;
+
+		gef::Vector2 pos;
+		// Luke! Use the rounding error ~~~~~~~% *poof*
+		int mult = boid_num / 10;
+		// Generate the concentric cirles of boids
+		if (mult > 0)
+		{
+			pos = gef::Vector2(reset_pos_.x + 2 * ((float)(mult + 1))*sin(x), reset_pos_.y + 2 * ((float)(mult + 1))*cos(y));
+		}
+		else
+		{
+			pos = gef::Vector2(reset_pos_.x + 2 * sin(x), reset_pos_.y + 2 * cos(y));
+		}
+
+		iterator->SetPos(pos);
+		iterator->GetMeshInstance()->set_transform(iterator->GetTranslationMatrix());
+
+		// Update the number so the boid positions work correctly
+		boid_num++;
+	}
+}
+void flock::GAReset(float enemy_flock_health, int generation)
+{
+	int boid_num = 0;
+	flock_health_ = 0;
+	for (std::vector<boid>::iterator iterator = boids_.begin(); iterator != boids_.end(); iterator++)
+	{
+		flock_health_ += iterator->GetHealth();
+
 		// Slightly randomise positions: (Surprisingly tiny variations away from a result of 5.0f create a large positional difference)
 		float rand_jiggle = (float)(rand() % 100 + 4950) / 1000.0f;
 
@@ -109,11 +147,8 @@ void flock::Reset(int generation)
 		boid_num++;
 	}
 
-	if (GA_enabled_)
-	{
-		// Run the genetic algorithm 
-		genetic_algorithm_->Update(&boids_, generation);
-	}
+	// Run the genetic algorithm 
+	genetic_algorithm_->Update(&boids_, flock_health_, enemy_flock_health, generation);
 }
 
 void flock::RunBoidsAlgorithm(float frame_time)

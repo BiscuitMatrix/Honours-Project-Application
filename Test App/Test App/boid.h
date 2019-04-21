@@ -67,6 +67,8 @@ public:
 	// Genetic Algorithm Mutators
 	DNA GetDNA() { return dna_; }
 	void SetDNA(DNA dna) { dna_ = dna; }
+	float GetFitness() { return fitness_; }
+	void SetFitness(float fitness) { fitness_ = fitness; }
 
 private:
 	gef::Mesh* CreateCubeMesh();
@@ -82,6 +84,7 @@ private:
 
 	// Genetic Algorithm Variables:
 	DNA dna_;
+	float fitness_;
 
 	// Linear Motion Variables:
 	gef::Vector2 vel_;

@@ -23,12 +23,14 @@ public:
 	void CleanUp();
 
 	void Reset(int);
+	void GAReset(float, int);
 
 	void RunBoidsAlgorithm(float);
 
 	void PhysicsCalculations(std::vector<boid>::iterator, gef::Vector2, float);
 
 	int GetFlockSize() { return flock_size_; }
+	float GetFlockHealth() { return flock_health_; }
 
 	std::vector<boid> boids_;
 	
