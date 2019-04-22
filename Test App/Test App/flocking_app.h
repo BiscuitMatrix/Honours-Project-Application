@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <fstream>
+#include <chrono>
+#include <thread>
 
 #include <system/application.h>
 #include <graphics/sprite.h>
@@ -60,6 +62,8 @@ private:
 	genetic_algorithm* genetic_algorithm_;
 	bool genetic_improvement_;
 	int generation_;
+	// Identify how long it takes to run the GA:
+	typedef std::chrono::high_resolution_clock clock_;
 
 	app_camera cam_1_;
 };

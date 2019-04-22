@@ -132,6 +132,7 @@
     <ClCompile Include="flocking_app.cpp" />
     <ClCompile Include="food.cpp" />
     <ClCompile Include="genetic_algorithm.cpp" />
+    <ClCompile Include="genotype.cpp" />
     <ClCompile Include="leaf.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="resource.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="flocking_app.h" />
     <ClInclude Include="food.h" />
     <ClInclude Include="genetic_algorithm.h" />
+    <ClInclude Include="genotype.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="leaf.h" />
     <ClInclude Include="resource.h" />

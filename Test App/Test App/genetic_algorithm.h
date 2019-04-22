@@ -15,6 +15,7 @@ public:
 
 	// Initialise the algorithm
 	void Initialise(std::vector<boid>*);
+	void Heuristic(float* data);
 	// Update the Algorithm
 	void Update(std::vector<boid>*, float, float, int);
 	// Evaluate the population at the end of each simulation
@@ -47,5 +48,5 @@ private:
 	float lowest_fitness_;
 	float range_fitness_;
 	float mean_fitness_;
+	float sum_fitness_;
 };
-

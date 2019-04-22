@@ -57,7 +57,7 @@ void flocking_app::Init()
 
 	// Food settings
 	food_ = new food(platform_);
-	resource_count_ = 50;
+	resource_count_ = 20;
 	food_->Initialise(resource_count_);
 
 	// Camera Setup
@@ -65,7 +65,7 @@ void flocking_app::Init()
 	SetupLights();
 
 	// Genetic Algorithm Setup
-	genetic_improvement_ = false;
+	genetic_improvement_ = true;
 	generation_ = 1;
 }
 
@@ -101,6 +101,9 @@ bool flocking_app::Update(float frame_time)
 {
 	fps_ = 1.0f / frame_time;
 
+	// Start the timer - This will allow me to record how much faster than time this project works
+	auto start_time = clock_::now();
+
 	// Here is where we can get the GA to run without rendering if we keep everything enclosed in this function
 	int generations_left_ = glo_number_of_generations_per_improvement;
 	float time_per_generation = 30.0f;
@@ -108,18 +111,19 @@ bool flocking_app::Update(float frame_time)
 	while (genetic_improvement_)
 	{
 		// Run, run, as fast as you can! You can't catch meee, i'm the gingerbread man!
-		// Something to do with time etc... Basically stop limiting my movement to per second   >>>>>>   Speed up time!   >>>>>>
 
 		if (rand() % 2 == 1)
 		{
-			flock_1_->Update(&flock_2_->boids_, &food_->resources_, frame_time);
-			flock_2_->Update(&flock_1_->boids_, &food_->resources_, frame_time);
+			flock_1_->Update(&flock_2_->boids_, &food_->resources_, glo_ga_frame_time);
+			flock_2_->Update(&flock_1_->boids_, &food_->resources_, glo_ga_frame_time);
 		}
 		else
 		{
-			flock_2_->Update(&flock_1_->boids_, &food_->resources_, frame_time);
-			flock_1_->Update(&flock_2_->boids_, &food_->resources_, frame_time);
+			flock_2_->Update(&flock_1_->boids_, &food_->resources_, glo_ga_frame_time);
+			flock_1_->Update(&flock_2_->boids_, &food_->resources_, glo_ga_frame_time);
 		}
+
+		time_per_generation -= glo_ga_frame_time;
 
 		if (time_per_generation <= 0.0f)
 		{
@@ -132,7 +136,6 @@ bool flocking_app::Update(float frame_time)
 			// Reset the simulation
 			flock_1_->Reset(generation_);
 			flock_2_->GAReset(flock_1_->GetFlockHealth(), generation_);
-			// Also reset food... 
 		}
 
 		if (generations_left_ == 0)
@@ -140,6 +143,10 @@ bool flocking_app::Update(float frame_time)
 			genetic_improvement_ = false;
 		}
 	}
+
+	auto end_time = clock_::now();
+	double duration = std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
+	float wait_a_minute_i_want_to_see_the_duration = 69.69f;
 
 	//if (button_press)
 	//{
@@ -150,16 +157,18 @@ bool flocking_app::Update(float frame_time)
 		// genetic_improvement = true;
 	//}
 
+	float run_speed_dt = frame_time;
+
 	// Regular Rendered Simulation
 	if (rand() % 2 == 1)
 	{
-		flock_1_->Update(&flock_2_->boids_, &food_->resources_, frame_time);
-		flock_2_->Update(&flock_1_->boids_, &food_->resources_, frame_time);
+		flock_1_->Update(&flock_2_->boids_, &food_->resources_, run_speed_dt);
+		flock_2_->Update(&flock_1_->boids_, &food_->resources_, run_speed_dt);
 	}
 	else
 	{
-		flock_2_->Update(&flock_1_->boids_, &food_->resources_, frame_time);
-		flock_1_->Update(&flock_2_->boids_, &food_->resources_, frame_time);
+		flock_2_->Update(&flock_1_->boids_, &food_->resources_, run_speed_dt);
+		flock_1_->Update(&flock_2_->boids_, &food_->resources_, run_speed_dt);
 	}
 
 	food_->Update(frame_time);

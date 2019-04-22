@@ -21,24 +21,14 @@ void genetic_algorithm::Initialise(std::vector<boid> *boids)
 			DNA dna = DNA();
 
 			float data[12];
-			float genetic_variation;
-			// Cohesion Variables
-			data[0] = 1.0f;			// coh_mult_
-			data[1] = 30.0f;		// coh_div_mult_
-			// Alignment Variables
-			data[2] = 1.0f;			// ali_mult_
-			data[3] = 10.0f;		// ali_div_mult_
-			// Separation Variables
-			data[4] = 0.025f;		// sep_mult_
-			data[5] = 1.0f;			// sep_neigh_mult_
-			data[6] = 1.0f;			// sep_clo_neigh_mult_
-			// Food Attraction Variables
-			data[7] = 0.0025f;		// food_mult_1_
-			data[8] = 1.0f;			// food_mult_2_
-			data[9] = 1.0f;			// food_div_mult_
-			// Flock Avoidance Variables
-			data[10] = 300.0f;		// floav_mult_
-			data[11] = 1.0f;		// floav_div_mult_
+
+			// Intrduce a random amount of variation into the genetic data: (genotype)
+			for (int data_point = 0; data_point < 12; data_point++)
+			{
+				data[data_point] = rand() % 1000;
+			}
+
+			//Heuristic(data);
 
 			dna.UpdateDataSet(data);
 
@@ -57,6 +47,27 @@ void genetic_algorithm::Initialise(std::vector<boid> *boids)
 	}
 }
 
+void genetic_algorithm::Heuristic(float* data)
+{
+	// Cohesion Variables
+	data[0] = 1.0f;			// coh_mult_
+	data[1] = 30.0f;		// coh_div_mult_
+	// Alignment Variables
+	data[2] = 1.0f;			// ali_mult_
+	data[3] = 10.0f;		// ali_div_mult_
+	// Separation Variables
+	data[4] = 0.025f;		// sep_mult_
+	data[5] = 1.0f;			// sep_neigh_mult_
+	data[6] = 1.0f;			// sep_clo_neigh_mult_
+	// Food Attraction Variables
+	data[7] = 0.0025f;		// food_mult_1_
+	data[8] = 1.0f;			// food_mult_2_
+	data[9] = 1.0f;			// food_div_mult_
+	// Flock Avoidance Variables
+	data[10] = 300.0f;		// floav_mult_
+	data[11] = 1.0f;		// floav_div_mult_
+}
+
 void genetic_algorithm::Update(std::vector<boid>* boids, float flock_health, float enemy_flock_health, int generation)
 {
 	Evaluation	(boids, flock_health, enemy_flock_health);
@@ -72,6 +83,7 @@ void genetic_algorithm::Evaluation(std::vector<boid>* boids, float flock_health,
 	lowest_fitness_ = 100000000.0f;
 	range_fitness_ = 0.0f;
 	mean_fitness_ = 0.0f;
+	sum_fitness_ = 0.0f;
 	int boid_num = 0;
 
 	// Evaluate the performance of each flock member
@@ -81,8 +93,7 @@ void genetic_algorithm::Evaluation(std::vector<boid>* boids, float flock_health,
 		float fitfunc = iterator->GetHealth() + flock_health - enemy_flock_health;
 		iterator->SetFitness(fitfunc);
 
-		// Prec-calcs for calculating the mean fitness
-		mean_fitness_ += fitfunc;
+		sum_fitness_ += fitfunc;
 		boid_num++;
 
 		if (highest_fitness_ < fitfunc) // Calculate the highest fitness level
@@ -95,7 +106,7 @@ void genetic_algorithm::Evaluation(std::vector<boid>* boids, float flock_health,
 		}
 	}
 	// Get the value for the mean fitness:
-	mean_fitness_ /= boid_num;
+	mean_fitness_ = sum_fitness_ / (float)boid_num;
 	// Get the value for the fitness range
 	range_fitness_ = highest_fitness_ - lowest_fitness_;
 }
