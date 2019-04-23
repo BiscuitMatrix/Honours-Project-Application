@@ -28,7 +28,6 @@ public:
 	// Select top boids from the population
 	void Selection(std::vector<boid>*);
 	void susSelection(std::vector<boid>*);
-	void AboveAverageSelection(std::vector<boid>*);
 	// Cross-over "mix" the genetic data
 	void Crossover();
 	// Mutate the new gene pool

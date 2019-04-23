@@ -93,8 +93,7 @@ void genetic_algorithm::Update(std::vector<boid>* boids, float flock_health, flo
 {
 	Evaluation	(boids, flock_health, enemy_flock_health);
 	Selection	(boids);
-	//Crossover	();
-	//Mutation	(boids, generation);
+//	susSelection(boids);
 }
 
 
@@ -211,6 +210,84 @@ void genetic_algorithm::Selection(std::vector<boid>* boids)
 				iterator->SetPopID(iterator->GetPopID() + "_" + std::to_string(additional_id));
 				additional_id++;
 				isSegmentFound = true;
+			}
+		}
+		if (!isSegmentFound)
+		{
+			float break_lol = 0.5f;
+		}
+	}
+}
+
+void genetic_algorithm::susSelection(std::vector<boid>* boids)
+{
+	int additional_id = 0;
+
+	for (std::vector<boid>::iterator iterator = boids->begin(); iterator != boids->end(); iterator++)
+	{
+		// Pick a number of the roulette wheel:
+		float roulette_1 = rand() % (int)sum_fitness_;
+		float roulette_2 = rand() % (int)sum_fitness_;
+
+		float segment1 = 0.0f;
+		float segment2 = 0.0f;
+		bool isSegmentFound = false;
+		for (std::vector<Population>::iterator pop_it = populations_.begin(); pop_it != populations_.end(); pop_it++)
+		{
+			segment1 += pop_it->sum_fitness_;
+			// If the random number is in this segment:
+			if (roulette_1 <= (int)segment1 && !isSegmentFound)
+			{
+				for (std::vector<Population>::iterator pop_it2 = populations_.begin(); pop_it2 != populations_.end(); pop_it2++)
+				{
+					segment2 += pop_it->sum_fitness_;
+					if (roulette_2 <= (int)segment2 && !isSegmentFound)
+					{
+						// Crossover:
+						int crossover_point = rand() % 12;
+
+						// Combine the parents DNA:
+						if (crossover_point != 0)
+						{
+							float data[12];
+							for (int gene = 0; gene < crossover_point; gene++)
+							{
+								// Pass on the new data up to the crossover point:
+								pop_it->data[gene] = pop_it2->data[gene];
+								
+							}
+							for (int i = 0; i < 12; i++)
+							{
+								iterator->GetDNA().SetData(i, pop_it->data[i]);
+							}
+						}
+
+						// Mutation: (0.1% chance of mutation)
+						if (rand() % 1000 < mutation_rate_)
+						{
+							int rand_gene = rand() % 12;
+
+							// Produce a + or - 10% change to each gene value:
+							if (rand() % 2)
+							{
+								iterator->GetDNA().SetData(rand_gene, (iterator->GetDNA().GetData(rand_gene) + (iterator->GetDNA().GetData(rand_gene) * 0.1f)));
+							}
+							else
+							{
+								iterator->GetDNA().SetData(rand_gene, (iterator->GetDNA().GetData(rand_gene) - (iterator->GetDNA().GetData(rand_gene) * 0.1f)));
+							}
+
+							if (iterator->GetDNA().GetData(rand_gene) == 0.0f)
+							{
+								iterator->GetDNA().SetData(rand_gene, iterator->GetDNA().GetData(rand_gene) + 0.1f);
+							}
+						}
+						iterator->SetPopID(iterator->GetPopID() + "_" + std::to_string(additional_id));
+						additional_id++;
+						isSegmentFound = true;
+					}
+				}
+				
 			}
 		}
 		if (!isSegmentFound)
