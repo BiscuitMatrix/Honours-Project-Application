@@ -1,5 +1,10 @@
 #include "DNA.h"
 
+#include <stdio.h>
+#include <conio.h>
+#include <process.h>
+#include <direct.h>
+
 DNA::DNA() :
 	coh_mult_			(&data_[0]),
 	coh_div_mult_		(&data_[1]),
@@ -35,7 +40,7 @@ void DNA::CleanUp()
 	floav_div_mult_ = nullptr;
 }
 
-void DNA::StoreData(std::string txt_file, std::string csv_data)
+void DNA::StoreData(int generation, std::string txt_file, std::string csv_data)
 {
 	if ((txt_file.substr(txt_file.find_last_of(".") + 1) == ".txt")
 		|| (csv_data.substr(csv_data.find_last_of(".") + 1) == ".csv"))
@@ -63,7 +68,7 @@ void DNA::StoreData(std::string txt_file, std::string csv_data)
 	}
 	for (int i = 0; i < 12; i++)
 	{
-		excel_data << data_[i] << ",\n";
+		excel_data[generation] << data_[i] << ",\n";
 	}
 	excel_data.close();
 }

@@ -152,7 +152,6 @@ bool flocking_app::Update(float frame_time)
 		ga_timecheck_ = false;
 	}
 	
-
 	//if (button_press)
 	//{
 		// Reset the simulation

@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string>
 
+
 class DNA
 {
 public:
@@ -12,7 +13,7 @@ public:
 	~DNA();
 	void CleanUp();
 
-	void StoreData(std::string, std::string);
+	void StoreData(int, std::string, std::string);
 	void ReadData(std::string);
 
 	float GetData(int access_point) { return data_[access_point]; }

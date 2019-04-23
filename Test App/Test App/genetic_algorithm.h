@@ -19,6 +19,7 @@ public:
 	~genetic_algorithm();
 
 	// Initialise the algorithm
+	void InitialiseFromFiles();
 	void Initialise(std::vector<boid>*);
 	void Heuristic(float* data);
 	// Update the Algorithm
@@ -26,15 +27,8 @@ public:
 	// Evaluate the population at the end of each simulation
 	void Evaluation(std::vector<boid>*, float , float);
 	// Select top boids from the population
-	void Selection(std::vector<boid>*);
-	void susSelection(std::vector<boid>*);
-	// Cross-over "mix" the genetic data
-	void Crossover();
-	// Mutate the new gene pool
-	void Mutation(std::vector<boid>*, int);
-
-	// Take a sample at set intervals of the genetic data of the populace
-	void GeneticSnapshot();
+	void Selection(std::vector<boid>*, int);
+	void susSelection(std::vector<boid>*, int);
 
 private:
 	int generation_;
@@ -55,7 +49,4 @@ private:
 	float range_fitness_;
 	float mean_fitness_;
 	float sum_fitness_;
-
-	// Remember to delete this!!!!!!!!!!!!!!!!!!!!
-	void OldCode(std::vector<boid>*, float, float);
 };

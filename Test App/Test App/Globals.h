@@ -3,7 +3,7 @@
 // Flocking App
 static const int glo_simulation_number = 1;
 //static const float glo_generation_length = ;
-static const int glo_number_of_generations_per_improvement = 150;
+static const int glo_number_of_generations_per_improvement = 100;
 
 // Boids
 static const int glo_boid_max_health = 100;

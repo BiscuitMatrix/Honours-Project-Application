@@ -1,25 +1,18 @@
-﻿  boid.cpp
+﻿  DNA.cpp
+  boid.cpp
   flock.cpp
-c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\flock.cpp(429): warning C4101: 'weight': unreferenced local variable
-c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\flock.cpp(616): warning C4101: 'weight': unreferenced local variable
+m:\github\ha_proj\test app\test app\flock.cpp(429): warning C4101: 'weight': unreferenced local variable
+m:\github\ha_proj\test app\test app\flock.cpp(616): warning C4101: 'weight': unreferenced local variable
   flocking_app.cpp
-c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\flocking_app.cpp(32): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\flocking_app.cpp(149): warning C4244: 'initializing': conversion from '_Rep' to 'double', possible loss of data
-          with
-          [
-              _Rep=__int64
-          ]
+m:\github\ha_proj\test app\test app\flocking_app.cpp(32): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+m:\github\ha_proj\test app\test app\flocking_app.cpp(149): warning C4244: 'initializing': conversion from '__int64' to 'double', possible loss of data
   genetic_algorithm.cpp
-c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\genetic_algorithm.cpp(26): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\genetic_algorithm.cpp(166): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\genetic_algorithm.cpp(182): warning C4101: 'data': unreferenced local variable
-c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\genetic_algorithm.cpp(229): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\genetic_algorithm.cpp(230): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\genetic_algorithm.cpp(252): warning C4101: 'data': unreferenced local variable
-c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\genetic_algorithm.cpp(316): warning C4101: 'genetic_variation': unreferenced local variable
-  genotype.cpp
+m:\github\ha_proj\test app\test app\genetic_algorithm.cpp(32): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+m:\github\ha_proj\test app\test app\genetic_algorithm.cpp(199): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+m:\github\ha_proj\test app\test app\genetic_algorithm.cpp(215): warning C4101: 'data': unreferenced local variable
+m:\github\ha_proj\test app\test app\genetic_algorithm.cpp(286): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+m:\github\ha_proj\test app\test app\genetic_algorithm.cpp(287): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+m:\github\ha_proj\test app\test app\genetic_algorithm.cpp(309): warning C4101: 'data': unreferenced local variable
   main.cpp
   Generating Code...
-  LINK : C:\Users\Matt Hunter\Documents\GitHub\honours-project-application\HA_proj\Test App\Debug\Test App.exe not found or not built by the last incremental link; performing full link
-gef.lib(vector2.obj) : warning LNK4099: PDB 'gef.pdb' was not found with 'gef.lib(vector2.obj)' or at 'C:\Users\Matt Hunter\Documents\GitHub\honours-project-application\HA_proj\Test App\Debug\gef.pdb'; linking object as if no debug info
-  Test App.vcxproj -> C:\Users\Matt Hunter\Documents\GitHub\honours-project-application\HA_proj\Test App\Debug\Test App.exe
+  Test App.vcxproj -> M:\GitHub\HA_proj\Test App\Debug\Test App.exe

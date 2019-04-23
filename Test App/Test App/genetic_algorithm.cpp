@@ -1,5 +1,10 @@
 #include "genetic_algorithm.h"
 
+#include <stdio.h>
+#include <conio.h>
+#include <process.h>
+#include <direct.h>
+
 genetic_algorithm::genetic_algorithm() :
 	generation_(0),
 	population_(glo_flock_size),
@@ -21,10 +26,29 @@ void genetic_algorithm::Initialise(std::vector<boid> *boids)
 	// Intrduce a random amount of variation into the genetic data: (genotype)
 	for (int genotype = 0; genotype < num_of_genotypes_; genotype++)
 	{
+		// This is the randomised method: (produces 5 populations of 10 within the current flock)
 		for (int gene = 0; gene < 12; gene++)
 		{
 			genotypes[genotype][gene] = rand() % 1000;
 		}
+
+		// This would be a heuristic method: (can switch between them using comments)
+		//if (genotype < (num_of_genotypes_ - 1))
+		//{
+		//	for (int gene = 0; gene < 12; gene++)
+		//	{
+		//		genotypes[genotype][gene] = rand() % 1000;
+		//	}
+		//}
+		//else
+		//{
+		//	float data[12];
+		//	Heuristic(data);
+		//	for (int gene = 0; gene < 12; gene++)
+		//	{
+		//		genotypes[genotype][gene] = data[gene];
+		//	}
+		//}
 	}
 
 	int genotype = 0;
@@ -53,7 +77,15 @@ void genetic_algorithm::Initialise(std::vector<boid> *boids)
 		std::string csv_file_name("/boid_data_");
 		std::string csv_base(".csv");
 
-		dna.StoreData(txt_directory+txt_file_name+std::to_string(file_num)+txt_base, csv_directory+ std::to_string(glo_simulation_number)+csv_file_name+std::to_string(file_num)+csv_base);
+		int check_txt;
+		const char* txt_dir = "GeneticDatatxt/Generation_1";
+		check_txt = _mkdir(txt_dir);
+
+		int check_csv;
+		const char* csv_dir = "GeneticDataCSV/Simulation_";
+		check_csv = _mkdir( (csv_dir + std::to_string(glo_simulation_number)).c_str() );
+
+		dna.StoreData(1, txt_directory+txt_file_name+std::to_string(file_num)+txt_base, csv_directory+ std::to_string(glo_simulation_number)+csv_file_name+std::to_string(file_num)+csv_base);
 		file_num++;
 
 		iterator->SetDNA(dna);
@@ -92,8 +124,8 @@ void genetic_algorithm::Heuristic(float* data)
 void genetic_algorithm::Update(std::vector<boid>* boids, float flock_health, float enemy_flock_health, int generation)
 {
 	Evaluation	(boids, flock_health, enemy_flock_health);
-	Selection	(boids);
-//	susSelection(boids);
+	Selection	(boids, generation);
+//	susSelection(boids, generation);
 }
 
 
@@ -156,8 +188,9 @@ void genetic_algorithm::Evaluation(std::vector<boid>* boids, float flock_health,
 	}
 }
 
-void genetic_algorithm::Selection(std::vector<boid>* boids)
+void genetic_algorithm::Selection(std::vector<boid>* boids, int generation)
 {
+	int file_num = 0;
 	int additional_id = 0;
 
 	for (std::vector<boid>::iterator iterator = boids->begin(); iterator != boids->end(); iterator++)
@@ -213,14 +246,38 @@ void genetic_algorithm::Selection(std::vector<boid>* boids)
 			}
 		}
 		if (!isSegmentFound)
+		{	// Fun breakpoints are fun! Meeeeoooowwwww!!
+			float just_keep_it = 0.5f;
+		}
+
+		// Every tenth generation check up on the data:
+		if (generation % 10 == 0)
 		{
-			float break_lol = 0.5f;
+			std::string txt_directory("GeneticDatatxt/Generation_");
+			std::string txt_file_name("/boid_data_");
+			std::string txt_base(".txt");
+
+			std::string csv_directory("GeneticDataCSV/Simulation_");
+			std::string csv_file_name("/boid_data_");
+			std::string csv_base(".csv");
+
+
+			int check_txt;
+			const char* txt_dir = "GeneticDatatxt/Generation_";
+			check_txt = _mkdir((txt_dir + std::to_string(generation)).c_str());
+
+
+			iterator->GetDNA().StoreData(generation,
+				txt_directory + std::to_string(generation) + txt_file_name + std::to_string(file_num) + txt_base,
+				csv_directory + std::to_string(glo_simulation_number) + csv_file_name + std::to_string(file_num) + csv_base);
+			file_num++;
 		}
 	}
 }
 
-void genetic_algorithm::susSelection(std::vector<boid>* boids)
+void genetic_algorithm::susSelection(std::vector<boid>* boids, int generation)
 {
+	int file_num = 0;
 	int additional_id = 0;
 
 	for (std::vector<boid>::iterator iterator = boids->begin(); iterator != boids->end(); iterator++)
@@ -291,41 +348,9 @@ void genetic_algorithm::susSelection(std::vector<boid>* boids)
 			}
 		}
 		if (!isSegmentFound)
-		{
-			float break_lol = 0.5f;
+		{	// Fun breakpoints are fun! Meeeeoooowwwww!!
+			float just_keep_it = 0.5f;
 		}
-	}
-}
-
-void genetic_algorithm::Crossover()
-{
-	
-}
-
-void genetic_algorithm::Mutation(std::vector<boid>* boids, int generation)
-{
-	int file_num = 0;
-
-	// For each boid:
-	for (std::vector<boid>::iterator iterator = boids->begin(); iterator != boids->end(); iterator++)
-	{
-		// populate the genetic data
-		DNA dna = iterator->GetDNA();
-
-		float data[12];
-		float genetic_variation;
-
-		for (int point = 0; point < 12; point++)
-		{
-			// Probability of Mutation
-			// rand (15% chance of mutation for this variable)
-
-			// Modification based off of the percentage, so all modifications are done in the same relative scale
-
-			data[point] = dna.GetData(point);// + mutating factor[point];
-		}
-
-		dna.UpdateDataSet(data);
 
 		std::string txt_directory("GeneticDatatxt/Generation_");
 		std::string txt_file_name("/boid_data_");
@@ -335,21 +360,13 @@ void genetic_algorithm::Mutation(std::vector<boid>* boids, int generation)
 		std::string csv_file_name("/boid_data_");
 		std::string csv_base(".csv");
 
-		dna.StoreData(
+		int check_txt;
+		const char* txt_dir = "GeneticDatatxt/Generation_";
+		check_txt = _mkdir((txt_dir + std::to_string(generation)).c_str());
+
+		iterator->GetDNA().StoreData(generation,
 			txt_directory + std::to_string(generation) + txt_file_name + std::to_string(file_num) + txt_base,
 			csv_directory + std::to_string(glo_simulation_number) + csv_file_name + std::to_string(file_num) + csv_base);
 		file_num++;
-		// Add the newly produced dna to the boid:
-		iterator->SetDNA(dna);
 	}
-}
-
-void genetic_algorithm::GeneticSnapshot()
-{
-
-}
-
-void genetic_algorithm::OldCode(std::vector<boid>* boids, float flock_health, float enemy_flock_health)
-{
-	
 }
