@@ -5,7 +5,12 @@
 #include "boid.h"
 #include "DNA.h"
 
-
+struct Population
+{
+	float sum_fitness_;
+	float data[12];
+	std::string id_;
+};
 
 class genetic_algorithm
 {
@@ -36,8 +41,10 @@ private:
 	int generation_;
 	int population_;
 
-	std::vector<boid> top_boid_strains_;
-	//std::vector<DNA> genetic_information_;
+	int num_of_genotypes_;
+
+	std::vector<Population> populations_;
+	int mutation_rate_;
 
 	float boid_health_;
 	float flock_health_;
@@ -49,4 +56,7 @@ private:
 	float range_fitness_;
 	float mean_fitness_;
 	float sum_fitness_;
+
+	// Remember to delete this!!!!!!!!!!!!!!!!!!!!
+	void OldCode(std::vector<boid>*, float, float);
 };

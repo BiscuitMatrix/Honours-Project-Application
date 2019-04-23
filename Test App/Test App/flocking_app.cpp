@@ -67,6 +67,7 @@ void flocking_app::Init()
 	// Genetic Algorithm Setup
 	genetic_improvement_ = true;
 	generation_ = 1;
+	ga_timecheck_ = true;
 }
 
 void flocking_app::CleanUp()
@@ -146,7 +147,11 @@ bool flocking_app::Update(float frame_time)
 
 	auto end_time = clock_::now();
 	double duration = std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
-	float wait_a_minute_i_want_to_see_the_duration = 69.69f;
+	if (ga_timecheck_)
+	{
+		ga_timecheck_ = false;
+	}
+	
 
 	//if (button_press)
 	//{

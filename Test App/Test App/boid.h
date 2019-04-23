@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <system/application.h>
 
 #include <graphics/mesh_instance.h>
@@ -69,6 +71,8 @@ public:
 	void SetDNA(DNA dna) { dna_ = dna; }
 	float GetFitness() { return fitness_; }
 	void SetFitness(float fitness) { fitness_ = fitness; }
+	std::string GetPopID() { return pop_id_; }
+	void SetPopID(std::string pop_id) { pop_id_ = pop_id; }
 
 private:
 	gef::Mesh* CreateCubeMesh();
@@ -85,6 +89,7 @@ private:
 	// Genetic Algorithm Variables:
 	DNA dna_;
 	float fitness_;
+	std::string pop_id_;
 
 	// Linear Motion Variables:
 	gef::Vector2 vel_;

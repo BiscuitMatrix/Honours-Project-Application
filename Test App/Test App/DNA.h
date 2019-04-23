@@ -16,6 +16,7 @@ public:
 	void ReadData(std::string);
 
 	float GetData(int access_point) { return data_[access_point]; }
+	void SetData(int access_point, float val) { data_[access_point] = val; }
 	void UpdateDataPoint(int index, float data_point) { data_[index] = data_point; }
 	void UpdateDataSet(float data[]) 
 	{ 

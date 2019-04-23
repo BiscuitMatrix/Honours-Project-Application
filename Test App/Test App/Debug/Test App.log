@@ -1,13 +1,19 @@
 ﻿  boid.cpp
   flock.cpp
-m:\github\ha_proj\test app\test app\flock.cpp(429): warning C4101: 'weight': unreferenced local variable
-m:\github\ha_proj\test app\test app\flock.cpp(616): warning C4101: 'weight': unreferenced local variable
+c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\flock.cpp(429): warning C4101: 'weight': unreferenced local variable
+c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\flock.cpp(616): warning C4101: 'weight': unreferenced local variable
   flocking_app.cpp
-m:\github\ha_proj\test app\test app\flocking_app.cpp(32): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-m:\github\ha_proj\test app\test app\flocking_app.cpp(148): warning C4244: 'initializing': conversion from '__int64' to 'double', possible loss of data
+c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\flocking_app.cpp(32): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\flocking_app.cpp(149): warning C4244: 'initializing': conversion from '_Rep' to 'double', possible loss of data
+          with
+          [
+              _Rep=__int64
+          ]
   genetic_algorithm.cpp
-m:\github\ha_proj\test app\test app\genetic_algorithm.cpp(28): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-m:\github\ha_proj\test app\test app\genetic_algorithm.cpp(153): warning C4101: 'genetic_variation': unreferenced local variable
+c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\genetic_algorithm.cpp(26): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\genetic_algorithm.cpp(167): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\genetic_algorithm.cpp(183): warning C4101: 'data': unreferenced local variable
+c:\users\matt hunter\documents\github\honours-project-application\ha_proj\test app\test app\genetic_algorithm.cpp(239): warning C4101: 'genetic_variation': unreferenced local variable
   main.cpp
   Generating Code...
-  Test App.vcxproj -> M:\GitHub\HA_proj\Test App\Debug\Test App.exe
+  Test App.vcxproj -> C:\Users\Matt Hunter\Documents\GitHub\honours-project-application\HA_proj\Test App\Debug\Test App.exe

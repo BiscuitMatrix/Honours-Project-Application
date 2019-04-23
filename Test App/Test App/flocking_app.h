@@ -64,6 +64,7 @@ private:
 	int generation_;
 	// Identify how long it takes to run the GA:
 	typedef std::chrono::high_resolution_clock clock_;
+	bool ga_timecheck_;
 
 	app_camera cam_1_;
 };
