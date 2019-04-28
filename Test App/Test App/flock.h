@@ -34,6 +34,7 @@ public:
 
 	std::vector<boid> boids_;
 	
+	void CloseFiles();
 
 private:
 	// References to other entities:

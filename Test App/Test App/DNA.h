@@ -42,6 +42,10 @@ public:
 
 
 private:
+
+	//std::vector<float> row;
+	//std::vector<float> column;
+
 	// Data will be in this order in the text files!
 	// Cohesion
 	float* coh_mult_;				// data[0]

@@ -42,18 +42,8 @@ void DNA::CleanUp()
 
 void DNA::StoreData(int generation, std::string txt_file, std::string csv_data)
 {
-	if ((txt_file.substr(txt_file.find_last_of(".") + 1) == ".txt")
-		|| (csv_data.substr(csv_data.find_last_of(".") + 1) == ".csv"))
-	{
-		float whyohwhy = 0;
-	}
-
 	std::ofstream stored_data;
 	stored_data.open(txt_file);
-	if (stored_data.fail())
-	{
-		float whyohwhy = 0;
-	}
 	for (int i = 0; i < 12; i++)
 	{
 		stored_data << data_[i] << "\n";
@@ -62,31 +52,18 @@ void DNA::StoreData(int generation, std::string txt_file, std::string csv_data)
 
 	std::ofstream excel_data;
 	excel_data.open(csv_data);
-	if (excel_data.fail())
-	{
-		float whyohwhy = 0;
-	}
 	for (int i = 0; i < 12; i++)
 	{
-		excel_data[generation] << data_[i] << ",\n";
+		//excel_data[generation] << data_[i] << ",\n";
+		excel_data << data_[i] << ",\n";
 	}
 	excel_data.close();
 }
 
 void DNA::ReadData(std::string data_file)
 {
-	if (data_file.substr(data_file.find_last_of(".") + 1) == ".txt")
-	{
-		float whyohwhy = 0;
-	}
-
 	std::ifstream stored_data;
 	stored_data.open(data_file);
-	if (stored_data.fail())
-	{
-		float whyohwhy = 0;
-	}
-
 	if (stored_data.is_open())
 	{
 		for (int i = 0; i < 12; i++)

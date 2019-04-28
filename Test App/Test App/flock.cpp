@@ -15,7 +15,6 @@ flock::flock(gef::Platform& platform, bool isGAenabled) :
 	flock_health_(0.0f)
 {
 }
-
 flock::~flock()
 {
 }
@@ -73,10 +72,6 @@ void flock::Update(std::vector<boid> *enemy_boids, std::vector<resource> *resour
 
 	// Run boids algorithm
 	RunBoidsAlgorithm(frame_time);
-
-	// Run the Genetic Algorithm
-
-
 }
 
 void flock::Reset(int generation)
@@ -272,9 +267,9 @@ gef::Vector2 flock::Cohesion(gef::Vector2 avg_neighbour_pos, gef::Vector2 boid_p
 		result = gef::Vector2(0.0f, 0.0f);
 		return result;
 	}
-	gef::Vector2 lfc_vec = boid_pos - avg_neighbour_pos;
+	gef::Vector2 lfc_vec = avg_neighbour_pos - boid_pos;
 	// Calculate the appropriate weighting:
-	weight = (pow(boid_pos.Length() - avg_neighbour_pos.Length(), 2)) / (30.0f * (float)glo_flock_size*(float)glo_flock_size);
+	weight = (pow((avg_neighbour_pos - boid_pos).Length(), 2)) / (30.0f * (float)glo_flock_size);
 	// Calculate the cohesion vector active for this boid:
 	result = (lfc_vec / lfc_vec.Length()) * weight;
 
@@ -459,9 +454,9 @@ gef::Vector2 flock::GACohesion(DNA dna, gef::Vector2 avg_neighbour_pos, gef::Vec
 		result = gef::Vector2(0.0f, 0.0f);
 		return result;
 	}
-	gef::Vector2 lfc_vec = boid_pos - avg_neighbour_pos;
+	gef::Vector2 lfc_vec = avg_neighbour_pos - boid_pos;
 	// Calculate the appropriate weighting:
-	weight = (dna.GetData(0) * pow(boid_pos.Length() - avg_neighbour_pos.Length(), 2)) / (dna.GetData(1) * (float)glo_flock_size*(float)glo_flock_size);
+	weight = (dna.GetData(0) * pow((avg_neighbour_pos - boid_pos).Length(), 2)) / (dna.GetData(1) * (float)glo_flock_size);
 	// Calculate the cohesion vector active for this boid:
 	result = (lfc_vec / lfc_vec.Length()) * weight;
 
@@ -661,6 +656,11 @@ void flock::PhysicsCalculations(std::vector<boid>::iterator iterator, gef::Vecto
 	iterator->SetVel(velocity);
 	iterator->SetPos(new_pos);
 	iterator->GetMeshInstance()->set_transform(iterator->GetTranslationMatrix());
+}
+
+void flock::CloseFiles()
+{
+	genetic_algorithm_->CloseFiles();
 }
 
 

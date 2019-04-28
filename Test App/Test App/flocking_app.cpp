@@ -141,6 +141,7 @@ bool flocking_app::Update(float frame_time)
 
 		if (generations_left_ == 0)
 		{
+			
 			genetic_improvement_ = false;
 		}
 	}

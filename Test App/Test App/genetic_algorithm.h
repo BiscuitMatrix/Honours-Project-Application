@@ -30,6 +30,8 @@ public:
 	void Selection(std::vector<boid>*, int);
 	void susSelection(std::vector<boid>*, int);
 
+	void CloseFiles();
+
 private:
 	int generation_;
 	int population_;
@@ -49,4 +51,6 @@ private:
 	float range_fitness_;
 	float mean_fitness_;
 	float sum_fitness_;
+
+	std::ofstream excel_data_[glo_flock_size];
 };

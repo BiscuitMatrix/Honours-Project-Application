@@ -6,7 +6,8 @@ boid::boid(gef::Platform& platform) :
 	cube_(nullptr),
 	vel_(0.0f, 0.0f),
 	health_(glo_boid_max_health),
-	hunger_(glo_boid_max_hunger)
+	hunger_(glo_boid_max_hunger),
+	active_(true)
 {
 }
 
@@ -31,7 +32,15 @@ void boid::Initialise()
 
 void boid::Update(float frame_time)
 {
-	hunger_ -= (1.0f * frame_time);
+	hunger_ -= (5.0f * frame_time);
+	if (hunger_ < 80.0f)
+	{
+		health_ -= (0.5f*(100.0f - hunger_) * frame_time);
+		if (health_ <= 0.0f)
+		{
+			active_ = false;
+		}
+	}
 }
 
 
@@ -79,7 +88,7 @@ void boid::CleanUp()
 void boid::HasEaten()
 {
 	hunger_ += 50.0f;
-	//if (health_)
+	health_ += 15.0f;
 }
 
 gef::Mesh* boid::CreateCubeMesh()

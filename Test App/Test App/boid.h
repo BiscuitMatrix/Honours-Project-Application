@@ -85,6 +85,7 @@ private:
 	// Health variables: (Basically a motive to stay alive)
 	int health_;
 	float hunger_;
+	bool active_;
 
 	// Genetic Algorithm Variables:
 	DNA dna_;

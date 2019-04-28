@@ -53,7 +53,7 @@ void genetic_algorithm::Initialise(std::vector<boid> *boids)
 
 	int genotype = 0;
 	int iteration_counter = 0;
-	float population_size = 0.2f * glo_flock_size;
+	int population_size = glo_flock_size / num_of_genotypes_;
 
 	// For each boid:
 	for (std::vector<boid>::iterator iterator = boids->begin(); iterator != boids->end(); iterator++)
@@ -68,26 +68,6 @@ void genetic_algorithm::Initialise(std::vector<boid> *boids)
 		}
 		dna.UpdateDataSet(data);
 
-		// This kind of needs some changing later to record the data properly:
-		std::string txt_directory("GeneticDatatxt/Generation_1");
-		std::string txt_file_name("/boid_data_");
-		std::string txt_base(".txt");
-
-		std::string csv_directory("GeneticDataCSV/Simulation_");
-		std::string csv_file_name("/boid_data_");
-		std::string csv_base(".csv");
-
-		int check_txt;
-		const char* txt_dir = "GeneticDatatxt/Generation_1";
-		check_txt = _mkdir(txt_dir);
-
-		int check_csv;
-		const char* csv_dir = "GeneticDataCSV/Simulation_";
-		check_csv = _mkdir( (csv_dir + std::to_string(glo_simulation_number)).c_str() );
-
-		dna.StoreData(1, txt_directory+txt_file_name+std::to_string(file_num)+txt_base, csv_directory+ std::to_string(glo_simulation_number)+csv_file_name+std::to_string(file_num)+csv_base);
-		file_num++;
-
 		iterator->SetDNA(dna);
 		iterator->SetPopID(std::to_string(genotype));
 
@@ -97,6 +77,79 @@ void genetic_algorithm::Initialise(std::vector<boid> *boids)
 			iteration_counter = 0;
 			genotype++;
 		}
+
+		///////////////////////////////////////////////////////////////////////
+		// This kind of needs some changing later to record the data properly:
+		//std::string txt_directory("GeneticDatatxt/Generation_1");
+		//std::string txt_file_name("/boid_data_");
+		//std::string txt_base(".txt");
+
+		//std::string csv_directory("GeneticDataCSV/Simulation_");
+		//std::string csv_file_name("/boid_data_");
+		//std::string csv_base(".csv");
+
+		//int check_txt;
+		//const char* txt_dir = "GeneticDatatxt/Generation_1";
+		//check_txt = _mkdir(txt_dir);
+
+		//int check_csv;
+		//const char* csv_dir = "GeneticDataCSV/Simulation_";
+		//check_csv = _mkdir( (csv_dir + std::to_string(glo_simulation_number)).c_str() );
+
+		//dna.StoreData(1, txt_directory+txt_file_name+std::to_string(file_num)+txt_base, csv_directory+ std::to_string(glo_simulation_number)+csv_file_name+std::to_string(file_num)+csv_base);
+		//file_num++;
+
+		// Point to the correct directory to store the data:
+		std::string csv_directory("GeneticDataCSV/Simulation_");
+		std::string csv_file_name("/boid_data_");
+		std::string csv_base(".csv");
+
+		// If there is no folder for the simulation then make one:
+		int check_csv;
+		const char* csv_dir = "GeneticDataCSV/Simulation_";
+		check_csv = _mkdir((csv_dir + std::to_string(glo_simulation_number)).c_str());
+
+		// Open the csv file to be ready for data entry:
+		std::string csv_file = csv_directory + std::to_string(glo_simulation_number) + csv_file_name + std::to_string(file_num) + csv_base;
+		excel_data_[file_num].open(csv_file);
+
+		// Titles for each column of data:
+		std::string data_info[12] = 
+		{
+			"cohesion multiplier",
+			"cohesion division multiplier",
+			"alignment multiplier",
+			"alignment division multiplier",
+			"separation multiplier",
+			"separation neighbour multiplier",
+			"separation closest neighbour multiplier",
+			"food multiplier section 1",
+			"food multiplier section 2",
+			"food division multiplier",
+			"flock avoidance multiplier",
+			"flock avoidance division multiplier"
+		};
+
+		for (int name = 0; name < 12; name++)
+		{
+			// Enter the information:
+			excel_data_[file_num] << data_info[name];
+			// Move on to the next column:
+			excel_data_[file_num] << ",";
+		}
+
+		// Move to next row:
+		excel_data_[file_num] << "\n";
+
+		for (int i = 0; i < 12; i++)
+		{
+			// Enter the data:
+			excel_data_[file_num] << data[i];
+			// Move on to the next column:
+			excel_data_[file_num] << ",";
+		}
+		// Move to the next boids file:
+		file_num++;
 	}
 }
 void genetic_algorithm::Heuristic(float* data)
@@ -221,7 +274,7 @@ void genetic_algorithm::Selection(std::vector<boid>* boids, int generation)
 				}
 
 				// Mutation: (0.1% chance of mutation)
-				if (rand() % 1000 < mutation_rate_)
+				if (rand() % 10 < mutation_rate_)
 				{
 					int rand_gene = rand() % 12;
 
@@ -250,28 +303,18 @@ void genetic_algorithm::Selection(std::vector<boid>* boids, int generation)
 			float just_keep_it = 0.5f;
 		}
 
-		// Every tenth generation check up on the data:
-		if (generation % 10 == 0)
+		// Move to next row:
+		excel_data_[file_num] << "\n";
+
+		for (int i = 0; i < 12; i++)
 		{
-			std::string txt_directory("GeneticDatatxt/Generation_");
-			std::string txt_file_name("/boid_data_");
-			std::string txt_base(".txt");
-
-			std::string csv_directory("GeneticDataCSV/Simulation_");
-			std::string csv_file_name("/boid_data_");
-			std::string csv_base(".csv");
-
-
-			int check_txt;
-			const char* txt_dir = "GeneticDatatxt/Generation_";
-			check_txt = _mkdir((txt_dir + std::to_string(generation)).c_str());
-
-
-			iterator->GetDNA().StoreData(generation,
-				txt_directory + std::to_string(generation) + txt_file_name + std::to_string(file_num) + txt_base,
-				csv_directory + std::to_string(glo_simulation_number) + csv_file_name + std::to_string(file_num) + csv_base);
-			file_num++;
+			// Enter the data:
+			excel_data_[file_num] << iterator->GetDNA().GetData(i);
+			// Move on to the next row:
+			excel_data_[file_num] << ",";
 		}
+		// Move to the next boids file:
+		file_num++;
 	}
 }
 
@@ -368,5 +411,13 @@ void genetic_algorithm::susSelection(std::vector<boid>* boids, int generation)
 			txt_directory + std::to_string(generation) + txt_file_name + std::to_string(file_num) + txt_base,
 			csv_directory + std::to_string(glo_simulation_number) + csv_file_name + std::to_string(file_num) + csv_base);
 		file_num++;
+	}
+}
+
+void genetic_algorithm::CloseFiles()
+{
+	for (int i = 0; i < glo_flock_size; i++)
+	{
+		excel_data_[i].close();
 	}
 }
