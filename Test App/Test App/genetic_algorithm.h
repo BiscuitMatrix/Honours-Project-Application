@@ -27,8 +27,8 @@ public:
 	// Evaluate the population at the end of each simulation
 	void Evaluation(float , float);
 	// Select top boids from the population
-	void Selection(int);
-	void susSelection(int);
+	void Selection(int, float, float);
+	void susSelection(int, float, float);
 
 	void CloseFiles();
 

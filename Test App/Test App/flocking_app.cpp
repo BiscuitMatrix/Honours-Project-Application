@@ -107,7 +107,7 @@ bool flocking_app::Update(float frame_time)
 
 	// Here is where we can get the GA to run without rendering if we keep everything enclosed in this function
 	int generations_left_ = glo_number_of_generations_per_improvement;
-	float time_per_generation = 30.0f;
+	float time_per_generation = 120.0f;
 	// Skip the rendering process while this occurs
 	while (genetic_improvement_)
 	{
@@ -124,12 +124,14 @@ bool flocking_app::Update(float frame_time)
 			flock_1_->Update(&flock_2_->boids_, &food_->resources_, glo_ga_frame_time);
 		}
 
+		food_->Update(frame_time);
+
 		time_per_generation -= glo_ga_frame_time;
 
 		if (time_per_generation <= 0.0f)
 		{
 			// Reset time for the next generation
-			time_per_generation = 30.0f;
+			time_per_generation = 120.0f;
 			// Reduce the number of generations
 			generations_left_--;
 			// Increase the number of generations in this simulation
@@ -141,7 +143,7 @@ bool flocking_app::Update(float frame_time)
 
 		if (generations_left_ == 0)
 		{
-			
+			flock_2_->CloseFiles();
 			genetic_improvement_ = false;
 		}
 	}

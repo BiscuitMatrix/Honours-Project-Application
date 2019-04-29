@@ -116,6 +116,7 @@ void flock::GAReset(float enemy_flock_health, int generation)
 {
 	int boid_num = 0;
 	flock_health_ = 0;
+
 	for (std::vector<boid>::iterator iterator = boids_.begin(); iterator != boids_.end(); iterator++)
 	{
 		flock_health_ += iterator->GetHealth();
@@ -142,15 +143,20 @@ void flock::GAReset(float enemy_flock_health, int generation)
 		iterator->SetPos(pos);
 		iterator->GetMeshInstance()->set_transform(iterator->GetTranslationMatrix());
 
-		iterator->SetActive(true);
-		iterator->ResetHealth(100.0f);
-		iterator->DecreaseHunger(10000.0f);
-
 		// Update the number so the boid positions work correctly
 		boid_num++;
 	}
+
 	// Run the genetic algorithm 
 	genetic_algorithm_->Update(&boids_, flock_health_, enemy_flock_health, generation);
+
+	// Reset variables:
+	for (std::vector<boid>::iterator iterator = boids_.begin(); iterator != boids_.end(); iterator++)
+	{
+		iterator->SetActive(true);
+		iterator->ResetHealth(100.0f);
+		iterator->DecreaseHunger(10000.0f);
+	}
 }
 
 void flock::RunBoidsAlgorithm(float frame_time)

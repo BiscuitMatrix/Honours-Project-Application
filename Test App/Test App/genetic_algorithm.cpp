@@ -108,7 +108,7 @@ void genetic_algorithm::Initialise(std::vector<boid> *boids)
 			"flock avoidance multiplier",
 			"flock avoidance division multiplier"
 		};
-
+		excel_data_[file_num] << "Generation" << ",";
 		for (int name = 0; name < 12; name++)
 		{
 			// Enter the information:
@@ -116,10 +116,15 @@ void genetic_algorithm::Initialise(std::vector<boid> *boids)
 			// Move on to the next column:
 			excel_data_[file_num] << ",";
 		}
+		excel_data_[file_num] << "Fitness" << ",";
+		excel_data_[file_num] << "Boid Health" << ",";
+		excel_data_[file_num] << "Flock Health" << ",";
+		excel_data_[file_num] << "Other Flock Health";
 
 		// Move to next row:
 		excel_data_[file_num] << "\n";
 
+		excel_data_[file_num] << 1 << ",";
 		for (int i = 0; i < 12; i++)
 		{
 			// Enter the data:
@@ -127,6 +132,11 @@ void genetic_algorithm::Initialise(std::vector<boid> *boids)
 			// Move on to the next column:
 			excel_data_[file_num] << ",";
 		}
+		excel_data_[file_num] << "na" << ",";
+		excel_data_[file_num] << "na" << ",";
+		excel_data_[file_num] << "na" << ",";
+		excel_data_[file_num] << "na";
+
 		// Move to the next boids file:
 		file_num++;
 	}
@@ -158,8 +168,8 @@ void genetic_algorithm::Update(std::vector<boid>* boids, float flock_health, flo
 	boids_ = boids;
 
 	Evaluation	(flock_health, enemy_flock_health);
-//	Selection	(generation);
-	susSelection(generation);
+//	Selection	(generation, flock_health, enemy_flock_health);
+	susSelection(generation, flock_health, enemy_flock_health);
 }
 
 
@@ -173,7 +183,11 @@ void genetic_algorithm::Evaluation(float flock_health, float enemy_flock_health)
 	for (std::vector<boid>::iterator iterator = boids_->begin(); iterator != boids_->end(); iterator++)
 	{
 		// Evaluate the boid against the fitness function:
-		float fitfunc = iterator->GetHealth() + (5.0f*flock_health) - (0.25f * enemy_flock_health);
+		float fitfunc = iterator->GetHealth() + flock_health - (0.25f * enemy_flock_health);
+		if (fitfunc < 0.0f)
+		{
+			fitfunc = 0.0f;
+		}
 		iterator->SetFitness(fitfunc);
 
 		// Produce the roulette wheel:
@@ -222,7 +236,7 @@ void genetic_algorithm::Evaluation(float flock_health, float enemy_flock_health)
 	}
 }
 
-void genetic_algorithm::Selection(int generation)
+void genetic_algorithm::Selection(int generation, float flock_health, float enemy_flock_health)
 {
 	int file_num = 0;
 	int additional_id = 0;
@@ -303,6 +317,7 @@ void genetic_algorithm::Selection(int generation)
 		// Move to next row:
 		excel_data_[file_num] << "\n";
 
+		excel_data_[file_num] << generation << ",";
 		for (int i = 0; i < 12; i++)
 		{
 			// Enter the data:
@@ -310,12 +325,17 @@ void genetic_algorithm::Selection(int generation)
 			// Move on to the next row:
 			excel_data_[file_num] << ",";
 		}
+		excel_data_[file_num] << iterator->GetFitness() << ",";
+		excel_data_[file_num] << iterator->GetHealth() << ",";
+		excel_data_[file_num] << flock_health << ",";
+		excel_data_[file_num] << enemy_flock_health;
+
 		// Move to the next boids_ file:
 		file_num++;
 	}
 }
 
-void genetic_algorithm::susSelection(int generation)
+void genetic_algorithm::susSelection(int generation, float flock_health, float enemy_flock_health)
 {
 	int file_num = 0;
 	int additional_id = 0;
@@ -395,6 +415,7 @@ void genetic_algorithm::susSelection(int generation)
 		// Move to next row:
 		excel_data_[file_num] << "\n";
 
+		excel_data_[file_num] << generation << ",";
 		for (int i = 0; i < 12; i++)
 		{
 			// Enter the data:
@@ -402,6 +423,11 @@ void genetic_algorithm::susSelection(int generation)
 			// Move on to the next row:
 			excel_data_[file_num] << ",";
 		}
+		excel_data_[file_num] << iterator->GetFitness() << ",";
+		excel_data_[file_num] << iterator->GetHealth() << ",";
+		excel_data_[file_num] << flock_health << ",";
+		excel_data_[file_num] << enemy_flock_health;
+
 		// Move to the next boids_ file:
 		file_num++;
 	}
