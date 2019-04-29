@@ -1,9 +1,9 @@
 #pragma once
 
 // Flocking App
-static const int glo_simulation_number = 1;
+static const int glo_simulation_number = 2;
 //static const float glo_generation_length = ;
-static const int glo_number_of_generations_per_improvement = 50;
+static const int glo_number_of_generations_per_improvement = 10000;
 
 // Boids
 static const int glo_boid_max_health = 100;

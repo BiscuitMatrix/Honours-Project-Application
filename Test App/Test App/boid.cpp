@@ -32,13 +32,17 @@ void boid::Initialise()
 
 void boid::Update(float frame_time)
 {
-	hunger_ -= (5.0f * frame_time);
-	if (hunger_ < 80.0f)
+	if (active_)
 	{
-		health_ -= (0.5f*(100.0f - hunger_) * frame_time);
-		if (health_ <= 0.0f)
+		hunger_ -= (0.5f * frame_time);
+		if (hunger_ < 80.0f)
 		{
-			active_ = false;
+			health_ -= (0.0005f*(100.0f - hunger_) * frame_time);
+			if (health_ <= 0.0f)
+			{
+				health_ = 0;
+				active_ = false;
+			}
 		}
 	}
 }
@@ -87,8 +91,10 @@ void boid::CleanUp()
 
 void boid::HasEaten()
 {
-	hunger_ += 50.0f;
-	health_ += 15.0f;
+	hunger_ += 100.0f;
+	health_ += 25.0f;
+	if (hunger_ > 100.0f) hunger_ = 100.0f;
+	if (health_ > 100.0f) health_ = 100.0f;
 }
 
 gef::Mesh* boid::CreateCubeMesh()

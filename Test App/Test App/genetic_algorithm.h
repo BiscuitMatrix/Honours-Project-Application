@@ -25,12 +25,14 @@ public:
 	// Update the Algorithm
 	void Update(std::vector<boid>*, float, float, int);
 	// Evaluate the population at the end of each simulation
-	void Evaluation(std::vector<boid>*, float , float);
+	void Evaluation(float , float);
 	// Select top boids from the population
-	void Selection(std::vector<boid>*, int);
-	void susSelection(std::vector<boid>*, int);
+	void Selection(int);
+	void susSelection(int);
 
 	void CloseFiles();
+
+	std::vector<boid>* GetBoids() { return boids_; }
 
 private:
 	int generation_;
@@ -38,6 +40,7 @@ private:
 
 	int num_of_genotypes_;
 
+	std::vector<boid>* boids_;
 	std::vector<Population> populations_;
 	int mutation_rate_;
 

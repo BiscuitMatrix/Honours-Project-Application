@@ -206,7 +206,7 @@ void flocking_app::Render()
 	// Iterate through the vector list of boids within the flock in order to render them all
 	for (std::vector<boid>::iterator iterator_ = flock_1_->boids_.begin(); iterator_ != flock_1_->boids_.end(); iterator_++)
 	{
-		renderer_3d_->DrawMesh(*iterator_->GetMeshInstance());
+		if(iterator_->GetActive()) renderer_3d_->DrawMesh(*iterator_->GetMeshInstance());
 	}
 
 	// Set the colour of the flock 2 - Blue
@@ -216,7 +216,7 @@ void flocking_app::Render()
 	// Iterate through the vector list of boids within the flock in order to render them all
 	for (std::vector<boid>::iterator iterator_ = flock_2_->boids_.begin(); iterator_ != flock_2_->boids_.end(); iterator_++)
 	{
-		renderer_3d_->DrawMesh(*iterator_->GetMeshInstance());
+		if (iterator_->GetActive()) renderer_3d_->DrawMesh(*iterator_->GetMeshInstance());
 	}
 
 	// Set the colour of the food - Green

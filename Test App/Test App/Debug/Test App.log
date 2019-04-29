@@ -1,8 +1,22 @@
-﻿  genetic_algorithm.cpp
+﻿  boid.cpp
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\boid.cpp(40): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\boid.cpp(95): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\boid.cpp(97): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  flock.cpp
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\flock.cpp(108): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\flock.cpp(146): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\flock.cpp(434): warning C4101: 'weight': unreferenced local variable
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\flock.cpp(621): warning C4101: 'weight': unreferenced local variable
+  flocking_app.cpp
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\flocking_app.cpp(32): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\flocking_app.cpp(150): warning C4244: 'initializing': conversion from '__int64' to 'double', possible loss of data
+  genetic_algorithm.cpp
 \\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\genetic_algorithm.cpp(32): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\genetic_algorithm.cpp(252): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\genetic_algorithm.cpp(268): warning C4101: 'data': unreferenced local variable
-\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\genetic_algorithm.cpp(329): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\genetic_algorithm.cpp(330): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\genetic_algorithm.cpp(352): warning C4101: 'data': unreferenced local variable
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\genetic_algorithm.cpp(242): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\genetic_algorithm.cpp(263): warning C4101: 'data': unreferenced local variable
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\genetic_algorithm.cpp(326): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\genetic_algorithm.cpp(327): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+\\stuhome\homedrive2$\1401562\github\honours-project-application\test app\test app\genetic_algorithm.cpp(349): warning C4101: 'data': unreferenced local variable
+  main.cpp
+  Generating Code...
   Test App.vcxproj -> \\StuHome\HomeDrive2$\1401562\GitHub\Honours-Project-Application\Test App\Debug\Test App.exe

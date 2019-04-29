@@ -65,9 +65,11 @@ public:
 		if ((hunger_ + sub_hunger) > glo_boid_max_hunger) hunger_ = glo_boid_max_hunger;
 		else hunger_ += sub_hunger;
 	}
+	bool GetActive() { return active_; }
+	void SetActive(bool active) { active_ = active; }
 
 	// Genetic Algorithm Mutators
-	DNA GetDNA() { return dna_; }
+	DNA* GetDNA() { return &dna_; }
 	void SetDNA(DNA dna) { dna_ = dna; }
 	float GetFitness() { return fitness_; }
 	void SetFitness(float fitness) { fitness_ = fitness; }

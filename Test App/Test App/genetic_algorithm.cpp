@@ -78,27 +78,6 @@ void genetic_algorithm::Initialise(std::vector<boid> *boids)
 			genotype++;
 		}
 
-		///////////////////////////////////////////////////////////////////////
-		// This kind of needs some changing later to record the data properly:
-		//std::string txt_directory("GeneticDatatxt/Generation_1");
-		//std::string txt_file_name("/boid_data_");
-		//std::string txt_base(".txt");
-
-		//std::string csv_directory("GeneticDataCSV/Simulation_");
-		//std::string csv_file_name("/boid_data_");
-		//std::string csv_base(".csv");
-
-		//int check_txt;
-		//const char* txt_dir = "GeneticDatatxt/Generation_1";
-		//check_txt = _mkdir(txt_dir);
-
-		//int check_csv;
-		//const char* csv_dir = "GeneticDataCSV/Simulation_";
-		//check_csv = _mkdir( (csv_dir + std::to_string(glo_simulation_number)).c_str() );
-
-		//dna.StoreData(1, txt_directory+txt_file_name+std::to_string(file_num)+txt_base, csv_directory+ std::to_string(glo_simulation_number)+csv_file_name+std::to_string(file_num)+csv_base);
-		//file_num++;
-
 		// Point to the correct directory to store the data:
 		std::string csv_directory("GeneticDataCSV/Simulation_");
 		std::string csv_file_name("/boid_data_");
@@ -176,23 +155,25 @@ void genetic_algorithm::Heuristic(float* data)
 
 void genetic_algorithm::Update(std::vector<boid>* boids, float flock_health, float enemy_flock_health, int generation)
 {
-	Evaluation	(boids, flock_health, enemy_flock_health);
-	Selection	(boids, generation);
-//	susSelection(boids, generation);
+	boids_ = boids;
+
+	Evaluation	(flock_health, enemy_flock_health);
+//	Selection	(generation);
+	susSelection(generation);
 }
 
 
 // Maybe also collect data here too, this will be useful in terms of getting useful data:
-void genetic_algorithm::Evaluation(std::vector<boid>* boids, float flock_health, float enemy_flock_health)
+void genetic_algorithm::Evaluation(float flock_health, float enemy_flock_health)
 {
 	bool first_iteration = true;
 	sum_fitness_ = 0.0f;
 	populations_.clear();
 
-	for (std::vector<boid>::iterator iterator = boids->begin(); iterator != boids->end(); iterator++)
+	for (std::vector<boid>::iterator iterator = boids_->begin(); iterator != boids_->end(); iterator++)
 	{
 		// Evaluate the boid against the fitness function:
-		float fitfunc = iterator->GetHealth() + flock_health - enemy_flock_health;
+		float fitfunc = iterator->GetHealth() + (5.0f*flock_health) - (0.25f * enemy_flock_health);
 		iterator->SetFitness(fitfunc);
 
 		// Produce the roulette wheel:
@@ -205,7 +186,7 @@ void genetic_algorithm::Evaluation(std::vector<boid>* boids, float flock_health,
 		{
 			for (int i = 0; i < 12; i++)
 			{
-				pop.data[i] = iterator->GetDNA().GetData(i);
+				pop.data[i] = iterator->GetDNA()->GetData(i);
 			}
 			pop.id_ = iterator->GetPopID();
 			pop.sum_fitness_ += fitfunc;
@@ -221,7 +202,7 @@ void genetic_algorithm::Evaluation(std::vector<boid>* boids, float flock_health,
 				{
 					for (int i = 0; i < 12; i++)
 					{
-						pop.data[i] = iterator->GetDNA().GetData(i);
+						pop.data[i] = iterator->GetDNA()->GetData(i);
 					}
 					pop.sum_fitness_ += fitfunc;
 					isNewPop = false;
@@ -231,7 +212,7 @@ void genetic_algorithm::Evaluation(std::vector<boid>* boids, float flock_health,
 			{
 				for (int i = 0; i < 12; i++)
 				{
-					pop.data[i] = iterator->GetDNA().GetData(i);
+					pop.data[i] = iterator->GetDNA()->GetData(i);
 				}
 				pop.id_ = iterator->GetPopID();
 				pop.sum_fitness_ += fitfunc;
@@ -241,20 +222,34 @@ void genetic_algorithm::Evaluation(std::vector<boid>* boids, float flock_health,
 	}
 }
 
-void genetic_algorithm::Selection(std::vector<boid>* boids, int generation)
+void genetic_algorithm::Selection(int generation)
 {
 	int file_num = 0;
 	int additional_id = 0;
 
-	for (std::vector<boid>::iterator iterator = boids->begin(); iterator != boids->end(); iterator++)
+	for (std::vector<boid>::iterator iterator = boids_->begin(); iterator != boids_->end(); iterator++)
 	{
 		// Pick a number of the roulette wheel:
-		float roulette = rand() % (int)sum_fitness_;
+		float roulette;
+		
 
 		float segment = 0.0f;
 		bool isSegmentFound = false;
 		for (std::vector<Population>::iterator pop_it = populations_.begin(); pop_it != populations_.end(); pop_it++)
 		{
+			if ((int)sum_fitness_ != 0)
+			{
+				roulette = rand() % (int)sum_fitness_;
+			}
+			else if ((int)sum_fitness_ < 0)
+			{
+				float somethingiswronghere = 5;
+			}
+			else
+			{
+				roulette = 0;
+			}
+
 			segment += pop_it->sum_fitness_;
 			// If the random number is in this segment:
 			if (roulette <= (int)segment && !isSegmentFound)
@@ -269,28 +264,30 @@ void genetic_algorithm::Selection(std::vector<boid>* boids, int generation)
 					for (int gene = 0; gene < crossover_point; gene++)
 					{
 						// Pass on the new data up to the crossover point:
-						iterator->GetDNA().SetData(gene, pop_it->data[gene]);
+						iterator->GetDNA()->SetData(gene, pop_it->data[gene]);
 					}
 				}
 
 				// Mutation: (0.1% chance of mutation)
-				if (rand() % 10 < mutation_rate_)
+				if (rand() % 1000 < mutation_rate_)
 				{
 					int rand_gene = rand() % 12;
+					float dna_current_val = iterator->GetDNA()->GetData(rand_gene);
 
 					// Produce a + or - 10% change to each gene value:
 					if (rand() % 2)
 					{
-						iterator->GetDNA().SetData(rand_gene, (iterator->GetDNA().GetData(rand_gene) + (iterator->GetDNA().GetData(rand_gene) * 0.1f)));
+						
+						iterator->GetDNA()->SetData(rand_gene, (dna_current_val + (dna_current_val  * 0.1f)));
 					}
 					else
 					{
-						iterator->GetDNA().SetData(rand_gene, (iterator->GetDNA().GetData(rand_gene) - (iterator->GetDNA().GetData(rand_gene) * 0.1f)));
+						iterator->GetDNA()->SetData(rand_gene, (dna_current_val - (dna_current_val * 0.1f)));
 					}
 
-					if (iterator->GetDNA().GetData(rand_gene) == 0.0f)
+					if (iterator->GetDNA()->GetData(rand_gene) == 0.0000f)
 					{
-						iterator->GetDNA().SetData(rand_gene, iterator->GetDNA().GetData(rand_gene) + 0.1f);
+						iterator->GetDNA()->SetData(rand_gene, iterator->GetDNA()->GetData(rand_gene) + 0.001f);
 					}
 				}
 				iterator->SetPopID(iterator->GetPopID() + "_" + std::to_string(additional_id));
@@ -309,21 +306,21 @@ void genetic_algorithm::Selection(std::vector<boid>* boids, int generation)
 		for (int i = 0; i < 12; i++)
 		{
 			// Enter the data:
-			excel_data_[file_num] << iterator->GetDNA().GetData(i);
+			excel_data_[file_num] << iterator->GetDNA()->GetData(i);
 			// Move on to the next row:
 			excel_data_[file_num] << ",";
 		}
-		// Move to the next boids file:
+		// Move to the next boids_ file:
 		file_num++;
 	}
 }
 
-void genetic_algorithm::susSelection(std::vector<boid>* boids, int generation)
+void genetic_algorithm::susSelection(int generation)
 {
 	int file_num = 0;
 	int additional_id = 0;
 
-	for (std::vector<boid>::iterator iterator = boids->begin(); iterator != boids->end(); iterator++)
+	for (std::vector<boid>::iterator iterator = boids_->begin(); iterator != boids_->end(); iterator++)
 	{
 		// Pick a number of the roulette wheel:
 		float roulette_1 = rand() % (int)sum_fitness_;
@@ -358,7 +355,7 @@ void genetic_algorithm::susSelection(std::vector<boid>* boids, int generation)
 							}
 							for (int i = 0; i < 12; i++)
 							{
-								iterator->GetDNA().SetData(i, pop_it->data[i]);
+								iterator->GetDNA()->SetData(i, pop_it->data[i]);
 							}
 						}
 
@@ -370,16 +367,16 @@ void genetic_algorithm::susSelection(std::vector<boid>* boids, int generation)
 							// Produce a + or - 10% change to each gene value:
 							if (rand() % 2)
 							{
-								iterator->GetDNA().SetData(rand_gene, (iterator->GetDNA().GetData(rand_gene) + (iterator->GetDNA().GetData(rand_gene) * 0.1f)));
+								iterator->GetDNA()->SetData(rand_gene, (iterator->GetDNA()->GetData(rand_gene) + (iterator->GetDNA()->GetData(rand_gene) * 0.1f)));
 							}
 							else
 							{
-								iterator->GetDNA().SetData(rand_gene, (iterator->GetDNA().GetData(rand_gene) - (iterator->GetDNA().GetData(rand_gene) * 0.1f)));
+								iterator->GetDNA()->SetData(rand_gene, (iterator->GetDNA()->GetData(rand_gene) - (iterator->GetDNA()->GetData(rand_gene) * 0.1f)));
 							}
 
-							if (iterator->GetDNA().GetData(rand_gene) == 0.0f)
+							if (iterator->GetDNA()->GetData(rand_gene) == 0.0f)
 							{
-								iterator->GetDNA().SetData(rand_gene, iterator->GetDNA().GetData(rand_gene) + 0.1f);
+								iterator->GetDNA()->SetData(rand_gene, iterator->GetDNA()->GetData(rand_gene) + 0.1f);
 							}
 						}
 						iterator->SetPopID(iterator->GetPopID() + "_" + std::to_string(additional_id));
@@ -395,21 +392,17 @@ void genetic_algorithm::susSelection(std::vector<boid>* boids, int generation)
 			float just_keep_it = 0.5f;
 		}
 
-		std::string txt_directory("GeneticDatatxt/Generation_");
-		std::string txt_file_name("/boid_data_");
-		std::string txt_base(".txt");
+		// Move to next row:
+		excel_data_[file_num] << "\n";
 
-		std::string csv_directory("GeneticDataCSV/Simulation_");
-		std::string csv_file_name("/boid_data_");
-		std::string csv_base(".csv");
-
-		int check_txt;
-		const char* txt_dir = "GeneticDatatxt/Generation_";
-		check_txt = _mkdir((txt_dir + std::to_string(generation)).c_str());
-
-		iterator->GetDNA().StoreData(generation,
-			txt_directory + std::to_string(generation) + txt_file_name + std::to_string(file_num) + txt_base,
-			csv_directory + std::to_string(glo_simulation_number) + csv_file_name + std::to_string(file_num) + csv_base);
+		for (int i = 0; i < 12; i++)
+		{
+			// Enter the data:
+			excel_data_[file_num] << iterator->GetDNA()->GetData(i);
+			// Move on to the next row:
+			excel_data_[file_num] << ",";
+		}
+		// Move to the next boids_ file:
 		file_num++;
 	}
 }
