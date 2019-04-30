@@ -1,0 +1,105 @@
+﻿gef.lib(matrix44.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:ICF' specification
+gef.lib(mesh_instance.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(mesh_instance.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(mesh.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(mesh.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(aabb.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(aabb.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(font.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(font.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(default_3d_shader_data.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(default_3d_shader_data.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(application.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(application.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(sprite.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(sprite.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(primitive.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(primitive.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(platform.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(platform.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(png_loader.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(png_loader.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(image_data.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(image_data.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(memory_stream_buffer.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(memory_stream_buffer.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_d3d11.lib(sprite_renderer_d3d11.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_d3d11.lib(sprite_renderer_d3d11.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_d3d11.lib(renderer_3d_d3d11.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_d3d11.lib(renderer_3d_d3d11.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_d3d11.lib(platform_d3d11.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_d3d11.lib(platform_d3d11.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_d3d11.lib(vertex_buffer_d3d11.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_d3d11.lib(vertex_buffer_d3d11.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_d3d11.lib(texture_d3d11.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_d3d11.lib(texture_d3d11.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_d3d11.lib(index_buffer_d3d11.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_d3d11.lib(index_buffer_d3d11.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_d3d11.lib(render_target_d3d11.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_d3d11.lib(render_target_d3d11.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_d3d11.lib(input_manager_d3d11.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_d3d11.lib(input_manager_d3d11.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_d3d11.lib(touch_input_manager_d3d11.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_d3d11.lib(touch_input_manager_d3d11.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_d3d11.lib(keyboard_d3d11.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_d3d11.lib(keyboard_d3d11.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_d3d11.lib(sony_controller_input_manager_d3d11.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_d3d11.lib(sony_controller_input_manager_d3d11.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_win32.lib(file_win32.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_win32.lib(file_win32.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(default_sprite_shader.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(default_sprite_shader.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(sprite_renderer.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(sprite_renderer.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(texture.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(texture.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(default_3d_shader.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(default_3d_shader.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(renderer_3d.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(renderer_3d.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(touch_input_manager.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(touch_input_manager.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(render_target.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(render_target.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(input_manager.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(input_manager.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(file.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(file.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(shader.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(shader.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(shader_interface.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(shader_interface.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(skinned_mesh_shader_data.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(skinned_mesh_shader_data.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef.lib(default_3d_skinning_shader.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef.lib(default_3d_skinning_shader.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_d3d11.lib(shader_interface_d3d11.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_d3d11.lib(shader_interface_d3d11.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+gef_win32.lib(debug_log_win32.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in boid.obj
+gef_win32.lib(debug_log_win32.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in boid.obj
+LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; use /NODEFAULTLIB:library
+gef.lib(shader.obj) : error LNK2001: unresolved external symbol __imp___invalid_parameter
+gef.lib(shader_interface.obj) : error LNK2001: unresolved external symbol __imp___invalid_parameter
+gef.lib(default_3d_skinning_shader.obj) : error LNK2001: unresolved external symbol __imp___invalid_parameter
+gef_d3d11.lib(shader_interface_d3d11.obj) : error LNK2001: unresolved external symbol __imp___invalid_parameter
+gef_d3d11.lib(touch_input_manager_d3d11.obj) : error LNK2001: unresolved external symbol __imp___invalid_parameter
+gef.lib(default_3d_shader.obj) : error LNK2001: unresolved external symbol __imp___invalid_parameter
+gef.lib(renderer_3d.obj) : error LNK2001: unresolved external symbol __imp___invalid_parameter
+gef.lib(touch_input_manager.obj) : error LNK2001: unresolved external symbol __imp___invalid_parameter
+gef.lib(font.obj) : error LNK2001: unresolved external symbol __imp___invalid_parameter
+gef.lib(default_3d_shader_data.obj) : error LNK2001: unresolved external symbol __imp___invalid_parameter
+gef.lib(platform.obj) : error LNK2001: unresolved external symbol __imp___invalid_parameter
+gef_d3d11.lib(platform_d3d11.obj) : error LNK2001: unresolved external symbol __imp___invalid_parameter
+gef.lib(shader.obj) : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+gef.lib(shader_interface.obj) : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+gef.lib(default_3d_skinning_shader.obj) : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+gef_d3d11.lib(shader_interface_d3d11.obj) : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+gef_d3d11.lib(touch_input_manager_d3d11.obj) : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+gef.lib(default_3d_shader.obj) : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+gef.lib(renderer_3d.obj) : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+gef.lib(touch_input_manager.obj) : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+gef.lib(font.obj) : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+gef.lib(default_3d_shader_data.obj) : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+gef.lib(platform.obj) : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+gef_d3d11.lib(platform_d3d11.obj) : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+\\StuHome\HomeDrive2$\1401562\GitHub\Honours-Project-Application\Test App\Release\Test App.exe : fatal error LNK1120: 2 unresolved externals
